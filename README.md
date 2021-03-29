@@ -5,7 +5,6 @@
 
 
 ### 환경
-* npm >= 7.0.14
-* Node.JS = 12.19.0
-* TypeScript >= 4.0.3
+* npm >= 6.14.11
+* Node.JS = 14.16.0 
 * Database: 아직 미정..
