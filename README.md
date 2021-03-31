@@ -7,4 +7,4 @@
 ### 환경
 * npm >= 6.14.11
 * Node.JS = 14.16.0 
-* Database: 아직 미정..
+* Database: MongoDb 2.6.10
