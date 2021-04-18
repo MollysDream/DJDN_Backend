@@ -22,6 +22,7 @@ const postSchema=new post_Schema({
         type:String,
         required: true
     }],
+    //게시물에 붙이는 태그
     tag:[{
         type:String,
         required: true
@@ -38,10 +39,10 @@ const postSchema=new post_Schema({
         default:Date.now,
         required: true
     },
-    chatRoomList:[{
+    user:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'chatRoom'
-    }]
+    }
 
 })
 

@@ -32,21 +32,10 @@ const userSchema=new user_Schema({
         type:Boolean,
         required:true
     },
-    addressList:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'address'
-    }],
-    postList:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'post'
-    }],
     keyword:{
         type:String
     },
-    tradeList:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'trade'
-    }],
+
 })
 
 userSchema.plugin(mongooseAutoInc.plugin, 'user');

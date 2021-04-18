@@ -8,11 +8,13 @@ const addressSchema=new address_Schema({
         type:Boolean,
         required:true
     },
+    //넓은범위주소, ex)우만동, 원천동
     addressName:{
         type:String,
         required:true
     },
-    location:{
+    //상세주소
+    detailLocation:{
         type:String,
         required:true
     },

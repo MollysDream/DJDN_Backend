@@ -2,6 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2d512b5-978b-4632-8372-39b6d6a6ba44" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/address.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/address.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/advertisement.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/advertisement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/autoReport.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/autoReport.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/chat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/chatRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/chatRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/post.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/shopOwner.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/shopOwner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +56,8 @@
       <updated>1617001319583</updated>
       <workItem from="1617001320657" duration="1067000" />
       <workItem from="1618629434929" duration="1661000" />
-      <workItem from="1618640046063" duration="11849000" />
+      <workItem from="1618640046063" duration="12106000" />
+      <workItem from="1618722027272" duration="2579000" />
     </task>
     <servers />
   </component>

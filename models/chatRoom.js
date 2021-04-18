@@ -8,7 +8,8 @@ const chatRoomSchema=new chatRoom_Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }],
-    postList:{
+    // 하나의 게시물에 연결
+    post:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'post'
     }

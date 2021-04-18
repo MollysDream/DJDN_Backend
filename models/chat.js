@@ -12,17 +12,19 @@ const chatSchema=new chat_Schema({
             type:String
         }
     }],
+    //채팅 각각의 시간
     timeStamp:[{
         type:Date,
         default:Date.now,
     }],
-    userList:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
-    }],
     chatRoom:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'chatRoom'}
+        ref: 'chatRoom'
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    }
 })
 
 chatSchema.plugin(mongooseAutoInc.plugin, 'chat');

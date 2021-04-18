@@ -18,6 +18,7 @@ const tradeSchema=new trade_Schema({
         type:String,
         required:true
     },
+    //거래장소
     location:{
         type:String,
         required:true
@@ -29,7 +30,11 @@ const tradeSchema=new trade_Schema({
     userList:[{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'user'
-    }]
+    }],
+    post:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'post'
+    }
 })
 
 tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');

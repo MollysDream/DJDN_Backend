@@ -4,10 +4,7 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const advertisement_Schema=mongoose.Schema;
 
 const advertisementSchema=new advertisement_Schema({
-    shopOwner:{
-        type:String,
-        required: true
-    },
+
     active:{
         type:Boolean,
         default:true,
@@ -33,7 +30,11 @@ const advertisementSchema=new advertisement_Schema({
             type:String,
             required:true
         }
-    }]
+    }],
+    shopOwner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'shopOwner'
+    }
 })
 
 advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');

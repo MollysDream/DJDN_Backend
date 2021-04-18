@@ -4,6 +4,18 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const shopOwner_Schema=mongoose.Schema;
 
 const shopOwnerSchema=new shopOwner_Schema({
+    name:{
+        type:String,
+        required: true
+    },
+    email:{
+        type:String,
+        required: true
+    },
+    password:{
+        type:String,
+        required: true
+    },
     shopName:[{
         type:String,
         required: true
