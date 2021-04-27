@@ -9,10 +9,10 @@ const postSchema=new post_Schema({
         required: true
     },
     content:{
-       image:{
+       image:[{
            type:String,
            required: false
-       },
+       }],
         text:{
             type:String,
             required: false
