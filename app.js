@@ -3,11 +3,27 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const mongooseAutoInc = require('mongoose-auto-increment');
+
+mongoose.connect('mongodb://localhost:27017/DJDN',{
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+mongooseAutoInc.initialize(mongoose.connection);
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var userRouter = require('./routes/user');
+var dataRouter = require('./routes/data');
 
 var app = express();
+
+app.use(cors());
+app.options('*', cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+//사용자 관련 서버요청 ('/user')
+app.use('/user', userRouter);
+app.use('/data', dataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
