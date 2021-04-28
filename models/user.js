@@ -4,15 +4,16 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const user_Schema=mongoose.Schema;
 
 const userSchema=new user_Schema({
-    nickname:{
+
+    nickName:{
         type:String,
         required: true
     },
     name:{
         type:String,
         required: true
-    }
-    /*email:{
+    },
+    email:{
         type:String,
         required: true
     },
@@ -20,15 +21,21 @@ const userSchema=new user_Schema({
         type:String,
         required: true
     },
-    profile_image:{
+    profileImage:{
         type:String,
         required: true
-    }*/
-    /*average_rating:{
-        type:Float32Array,
+    },
+    averageRating:{
+        type:Number,
         required: true
-    }*/
-
+    },
+    ban:{
+        type:Boolean,
+        required:true
+    },
+    keyword:{
+        type:String
+    },
 
 })
 

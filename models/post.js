@@ -11,10 +11,10 @@ const postSchema=new post_Schema({
         required: true
     },
     content:{
-        image:{
-            type:String,
-            required: false
-        },
+       image:[{
+           type:String,
+           required: false
+       }],
         text:{
             type:String,
             required: false
@@ -24,14 +24,20 @@ const postSchema=new post_Schema({
         type:String,
         required: true
     }],
+
+    //게시물에 붙이는 태그
     tag:[{
         type:String,
         required: true
     }],
+
+    //조회수
     view:{
         type:Number,
+        default:0,
         required: true
     },
+    //게시날짜
     date:{
         type:Date,
         default:Date.now,
@@ -42,10 +48,10 @@ const postSchema=new post_Schema({
         ref: 'chatRoom'
     }
 
-
 })
 
 postSchema.index({title:'text', content:'text'});
 
 postSchema.plugin(mongooseAutoInc.plugin, 'post');
 module.exports = mongoose.model('post',postSchema);
+
