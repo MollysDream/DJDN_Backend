@@ -3,7 +3,8 @@ const router = express.Router();
 const User = require("../schemas/user");
 const crypto = require("crypto");
 
-//회원가입
+// 회원가입
+
 router.post("/join", async (req, res) => {
     console.log("hi")
     try {
