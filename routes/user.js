@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 const User = require("../models/user");
+const Post = require("../models/post");
+
 
 /* GET users listing. */
 router.get('/test', function(req, res, next) {
@@ -27,13 +29,23 @@ router.get('/signup', function(req, res, next) {
 });
 
 router.post('/write', function(req,res,next){
-    const{title, content} = req.body;
+    //const{title, content} = req.body;
     console.log("서버 /user/write POST실행");
-    console.log({title, content})
 
-    const user=new User({
+    /*const user=new User({
         nickname: title,
         name: content
+    })*/
+
+    const{title,content,category,tag,view,date} = req.body;
+    const user=new Post({
+        title: title,
+        content: content,
+        category: category,
+        tag: tag,
+        view: view,
+        date: date
+
     })
 
     user.save((err, user)=>{

@@ -3,6 +3,8 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 
 const post_Schema=mongoose.Schema;
 
+//게시물 Schema
+
 const postSchema=new post_Schema({
     title:{
         type:String,
@@ -22,11 +24,13 @@ const postSchema=new post_Schema({
         type:String,
         required: true
     }],
+
     //게시물에 붙이는 태그
     tag:[{
         type:String,
         required: true
     }],
+
     //조회수
     view:{
         type:Number,
@@ -46,5 +50,8 @@ const postSchema=new post_Schema({
 
 })
 
+postSchema.index({title:'text', content:'text'});
+
 postSchema.plugin(mongooseAutoInc.plugin, 'post');
 module.exports = mongoose.model('post',postSchema);
+
