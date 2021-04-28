@@ -10,15 +10,13 @@ const postSchema=new post_Schema({
         type:String,
         required: true
     },
-    content:{
-       image:[{
-           type:String,
-           required: false
-       }],
-        text:{
-            type:String,
-            required: false
-        }
+    image:[{
+        type:String,
+        required: false
+    }],
+    text:{
+        type:String,
+        required: false
     },
     category:[{
         type:String,
