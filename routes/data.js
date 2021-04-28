@@ -35,6 +35,21 @@ router.get('/getPostBySearch', function(req,res,next){
 
 })
 
+router.get('/getPostByCategory', function(req,res,next){
+    //const category = req.query.category;
+    const category = ['애견', '도움'];
+    console.log(`**/data/getPostByCategory/서버통신** ${category} 카테고리 검색 게시물 요청`);
+
+    console.log(category);
+    Post.find({category: {$in:category}}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getPostByCategory DB오류"});
+    })
+
+})
+
 router.post('/createPost', function(req,res,next){
 
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
