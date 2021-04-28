@@ -36,6 +36,10 @@ const userSchema=new user_Schema({
     keyword:{
         type:String
     },
+    salt:{
+        type:String,
+        required: true
+    }
 
 })
 
