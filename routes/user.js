@@ -4,6 +4,7 @@ var router = express.Router();
 const User = require("../models/user");
 const Post = require("../models/post");
 
+
 /* GET users listing. */
 router.get('/test', function(req, res, next) {
     console.log('/user/test 서버통신 TEST')
