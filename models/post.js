@@ -18,6 +18,11 @@ const postSchema=new post_Schema({
         type:String,
         required: false
     },
+    price:{
+        type:Number,
+        required: true,
+        default: 0
+    },
     category:[{
         type:String,
         required: true

@@ -39,7 +39,7 @@ router.post('/createPost', function(req,res,next){
 
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
 
-    const{title,image,text,category,tag, user_id} = req.body;
+    const{title,image,text, price, category,tag, user_id} = req.body;
     const user=new Post({
         title: title,
         image: image,
