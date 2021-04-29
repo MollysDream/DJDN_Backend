@@ -5,7 +5,7 @@ const crypto = require("crypto");
 
 //회원가입
 router.post("/join", async (req, res) => {
-  console.log("hi")
+  // console.log("hi")
   try {
     let obj = { email: req.body.email };
 

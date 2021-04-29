@@ -18,8 +18,8 @@ const addressSchema = new Schema({
       type:Number,
       required:true
   },
-  user_id: {
-      type: ObjectId,
+  email: {
+      type: String,
       ref : "User"
     },
 });
