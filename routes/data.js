@@ -35,6 +35,31 @@ router.get('/getPostBySearch', function(req,res,next){
 
 })
 
+router.post('/createPost', function(req,res,next){
 
+    console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
+
+    const{title,image,text, price, category,tag, user_id} = req.body;
+    const user=new Post({
+        title: title,
+        image: image,
+        text: text,
+        category: category,
+        tag: tag,
+        date: Date.now()
+    })
+
+    user.save((err, user)=>{
+        if(err){
+            console.log(err);
+            res.status(500).send({error:"DB오류"});
+        }else {
+            console.log("DB 저장완료");
+            res.status(200).json(user);
+        }
+    })
+
+
+})
 
 module.exports = router;
