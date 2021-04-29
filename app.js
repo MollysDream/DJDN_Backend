@@ -42,7 +42,8 @@ app.use('/users', usersRouter);
 //사용자 관련 서버요청 ('/user')
 app.use('/user', userRouter);
 app.use('/data', dataRouter);
-app.use('/member',memberRouter);
+app.use('/member', memberRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
