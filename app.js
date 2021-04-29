@@ -19,6 +19,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var userRouter = require('./routes/user');
 var dataRouter = require('./routes/data');
+var memberRouter = require('./routes/memberRouter');
 
 
 var app = express();
@@ -41,6 +42,7 @@ app.use('/users', usersRouter);
 //사용자 관련 서버요청 ('/user')
 app.use('/user', userRouter);
 app.use('/data', dataRouter);
+app.use('/member',memberRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
