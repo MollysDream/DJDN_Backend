@@ -5,7 +5,7 @@ const user_Schema=mongoose.Schema;
 
 const userSchema=new user_Schema({
 
-    nickName:{
+    nickname:{
         type:String,
         required: true
     },
@@ -23,15 +23,12 @@ const userSchema=new user_Schema({
     },
     profileImage:{
         type:String,
-        required: true
     },
     averageRating:{
         type:Number,
-        required: true
     },
     ban:{
         type:Boolean,
-        required:true
     },
     keyword:{
         type:String
