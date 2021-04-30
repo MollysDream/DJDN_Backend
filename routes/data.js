@@ -1,13 +1,14 @@
 let express = require('express');
 let router = express.Router();
 
-const Post = require("../models/post");
+const Post = require('../models/post');
+const Category = require('../models/category');
 
 /* GET users listing. */
 router.get('/getPost', function(req, res, next) {
     const page = req.query.page;
     console.log(`**/data/getPost/서버통신** ${page} 페이지 게시물 요청`)
-    const LIMIT = 1
+    const LIMIT = 4
     //let page = req.params.page;
     //console.log(page);
     Post.find({}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
@@ -73,8 +74,17 @@ router.post('/createPost', function(req,res,next){
             res.status(200).json(user);
         }
     })
-
-
 })
+
+router.get('/getCategoryList', function(req, res, next) {
+    console.log('**/data/getCategoryList/서버통신** 카테고리 리스트 요청')
+
+    Category.findOne({}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getCategory DB오류"});
+    })
+});
 
 module.exports = router;
