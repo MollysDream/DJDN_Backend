@@ -56,16 +56,18 @@ router.post('/createPost', function(req,res,next){
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
 
     const{title,image,text, price, category,tag, user_id} = req.body;
-    const user=new Post({
+    const post=new Post({
         title: title,
         image: image,
         text: text,
         category: category,
         tag: tag,
+        price: price,
         date: Date.now()
     })
+    console.log(post);
 
-    user.save((err, user)=>{
+    post.save((err, user)=>{
         if(err){
             console.log(err);
             res.status(500).send({error:"DB오류"});
