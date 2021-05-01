@@ -36,7 +36,11 @@ const userSchema=new user_Schema({
     salt:{
         type:String,
         required: true
-    }
+    },
+    category: {
+        type:Object,
+        required: true
+    },
 
 })
 
