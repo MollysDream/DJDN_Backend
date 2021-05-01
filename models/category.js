@@ -4,56 +4,15 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const category_Schema=mongoose.Schema;
 
 //게시물 Schema
-const postSchema=new post_Schema({
-    title:{
-        type:String,
-        required: true
-    },
-    image:[{
-        type:String,
-        required: false
-    }],
-    text:{
-        type:String,
-        required: false
-    },
-    price:{
-        type:Number,
-        required: true,
-        default: 0
-    },
+const categorySchema=new category_Schema({
+
     category:[{
-        type:String,
+        type:Object,
         required: true
-    }],
-
-    //게시물에 붙이는 태그
-    tag:[{
-        type:String,
-        required: true
-    }],
-
-    //조회수
-    view:{
-        type:Number,
-        default:0,
-        required: true
-    },
-    //게시날짜
-    date:{
-        type:Date,
-        default:Date.now,
-        required: true
-    },
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'chatRoom'
-    }
+    }]
 
 })
 
-postSchema.index({title:'text', content:'text'});
-
-postSchema.plugin(mongooseAutoInc.plugin, 'post');
-module.exports = mongoose.model('post',postSchema);
+categorySchema.plugin(mongooseAutoInc.plugin, 'category');
+module.exports = mongoose.model('category',categorySchema);
 
