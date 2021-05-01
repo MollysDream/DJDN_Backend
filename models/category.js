@@ -54,6 +54,12 @@ const postSchema=new post_Schema({
 
 postSchema.index({title:'text', content:'text'});
 
-postSchema.plugin(mongooseAutoInc.plugin, 'post');
+// postSchema.plugin(mongooseAutoInc.plugin, 'post');
+postSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'postSchema',
+    field: 'postSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('post',postSchema);
 

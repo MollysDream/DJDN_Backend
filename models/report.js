@@ -27,5 +27,11 @@ const reportSchema=new report_Schema({
     }
 })
 
-reportSchema.plugin(mongooseAutoInc.plugin, 'report');
+// reportSchema.plugin(mongooseAutoInc.plugin, 'report');
+reportSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'reportSchema',
+    field: 'reportSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('report',reportSchema);

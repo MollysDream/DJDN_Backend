@@ -30,5 +30,11 @@ const shopOwnerSchema=new shopOwner_Schema({
     }]
 })
 
-shopOwnerSchema.plugin(mongooseAutoInc.plugin, 'shopOwner');
+// shopOwnerSchema.plugin(mongooseAutoInc.plugin, 'shopOwner');
+shopOwnerSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'shopOwnerSchema',
+    field: 'shopOwnerSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('shopOwner',shopOwnerSchema);

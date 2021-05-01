@@ -27,5 +27,11 @@ const chatSchema=new chat_Schema({
     }
 })
 
-chatSchema.plugin(mongooseAutoInc.plugin, 'chat');
+// chatSchema.plugin(mongooseAutoInc.plugin, 'chat');
+chatSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'chatSchema',
+    field: 'chatSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('chat',chatSchema);
