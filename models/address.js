@@ -28,5 +28,12 @@ const addressSchema=new address_Schema({
     }
 })
 
-addressSchema.plugin(mongooseAutoInc.plugin, 'address');
+mongooseAutoInc.initialize(mongoose.connection);
+addressSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'addressSchema',
+    field: 'addressSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
+
 module.exports = mongoose.model('address',addressSchema);

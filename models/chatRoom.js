@@ -15,5 +15,11 @@ const chatRoomSchema=new chatRoom_Schema({
     }
 })
 
-chatRoomSchema.plugin(mongooseAutoInc.plugin, 'chatRoom');
+// chatRoomSchema.plugin(mongooseAutoInc.plugin, 'chatRoom');
+chatRoomSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'chatRoomSchema',
+    field: 'chatRoomSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('chatRoom',chatRoomSchema);

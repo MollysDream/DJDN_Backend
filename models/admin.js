@@ -18,5 +18,13 @@ const adminSchema=new admin_Schema({
     }
 })
 
-adminSchema.plugin(mongooseAutoInc.plugin, 'admin');
+// adminSchema.plugin(mongooseAutoInc.plugin, 'admin');
+mongooseAutoInc.initialize(mongoose.connection);
+adminSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'adminSchema',
+    field: 'adminSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
+
 module.exports = mongoose.model('admin',adminSchema);

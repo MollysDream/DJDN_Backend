@@ -12,7 +12,14 @@ const categorySchema=new category_Schema({
     }]
 
 })
-
-categorySchema.plugin(mongooseAutoInc.plugin, 'category');
+ 
+// categorySchema.plugin(mongooseAutoInc.plugin, 'category');
+categorySchema.plugin(mongooseAutoInc.plugin, {
+    model: 'categorySchema',
+    field: 'categorySchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('category',categorySchema);
+
 

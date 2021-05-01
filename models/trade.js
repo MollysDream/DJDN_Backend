@@ -37,5 +37,11 @@ const tradeSchema=new trade_Schema({
     }
 })
 
-tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');
+// tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');
+tradeSchema.plugin(mongooseAutoInc.plugin, {
+    model: 'tradeSchema',
+    field: 'tradeSchema_id',
+    startAt: 1,
+    incrementBy: 1
+});
 module.exports = mongoose.model('trade',tradeSchema);
