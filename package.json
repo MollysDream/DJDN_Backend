@@ -7,6 +7,7 @@
     "test": "mocha ./test/connectionTest.js test/postTest.js --exit"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "chai": "^4.3.4",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
