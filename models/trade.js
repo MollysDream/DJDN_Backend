@@ -38,6 +38,7 @@ const tradeSchema=new trade_Schema({
 })
 
 // tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');
+mongooseAutoInc.initialize(mongoose.connection);
 tradeSchema.plugin(mongooseAutoInc.plugin, {
     model: 'tradeSchema',
     field: 'tradeSchema_id',

@@ -11,6 +11,7 @@ const autoReportSchema=new autoReport_Schema({
 })
 
 // autoReportSchema.plugin(mongooseAutoInc.plugin, 'autoReport');
+mongooseAutoInc.initialize(mongoose.connection);
 autoReportSchema.plugin(mongooseAutoInc.plugin, {
     model: 'autoReportSchema',
     field: 'autoReportSchema_id',

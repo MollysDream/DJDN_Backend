@@ -28,6 +28,7 @@ const reportSchema=new report_Schema({
 })
 
 // reportSchema.plugin(mongooseAutoInc.plugin, 'report');
+mongooseAutoInc.initialize(mongoose.connection);
 reportSchema.plugin(mongooseAutoInc.plugin, {
     model: 'reportSchema',
     field: 'reportSchema_id',

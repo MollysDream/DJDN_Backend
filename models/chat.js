@@ -28,6 +28,7 @@ const chatSchema=new chat_Schema({
 })
 
 // chatSchema.plugin(mongooseAutoInc.plugin, 'chat');
+mongooseAutoInc.initialize(mongoose.connection);
 chatSchema.plugin(mongooseAutoInc.plugin, {
     model: 'chatSchema',
     field: 'chatSchema_id',

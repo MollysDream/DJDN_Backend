@@ -16,6 +16,7 @@ const chatRoomSchema=new chatRoom_Schema({
 })
 
 // chatRoomSchema.plugin(mongooseAutoInc.plugin, 'chatRoom');
+mongooseAutoInc.initialize(mongoose.connection);
 chatRoomSchema.plugin(mongooseAutoInc.plugin, {
     model: 'chatRoomSchema',
     field: 'chatRoomSchema_id',

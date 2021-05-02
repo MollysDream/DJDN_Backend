@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha ./test/connectionTest.js test/postTest.js --exit"
+    "test": "mocha ./test/connectionTest.js test/postTest.js test/tradeTest.js --exit"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -20,7 +20,8 @@ var usersRouter = require('./routes/users');
 var userRouter = require('./routes/user');
 var dataRouter = require('./routes/data');
 var memberRouter = require('./routes/memberRouter');
-var addressRouter = require('./routes/addressRouter')
+var addressRouter = require('./routes/addressRouter');
+var tradeRouter = require('./routes/trade');
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use('/user', userRouter);
 app.use('/data', dataRouter);
 app.use('/member', memberRouter);
 app.use('/address',addressRouter);
+app.use('/trade', tradeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
