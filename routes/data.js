@@ -89,4 +89,18 @@ router.get('/getCategoryList', function(req, res, next) {
     })
 });
 
+router.post('/updatePostView', function(req, res, next) {
+    const {postId, view} = req.body;
+    console.log(`**/data/updatePostView/서버통신** 게시글 ID:${postId} 조회수: ${view}로 수정`)
+
+    Post.findOneAndUpdate({'_id':postId}, {view:view})
+        .then((result)=>{
+            console.log(`${postId} 게시글 조회수 수정 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getPost DB오류"});
+    })
+});
+
 module.exports = router;
