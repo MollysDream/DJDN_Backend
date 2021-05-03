@@ -30,9 +30,10 @@ const userSchema=new user_Schema({
     ban:{
         type:Boolean,
     },
-    keyword:{
+    keyword:[{
         type:String
-    },
+    }],
+    // 비밀번호 암호화
     salt:{
         type:String,
         required: true
