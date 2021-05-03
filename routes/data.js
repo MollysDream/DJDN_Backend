@@ -11,7 +11,7 @@ router.get('/getPost', function(req, res, next) {
     const LIMIT = 4
     //let page = req.params.page;
     //console.log(page);
-    Post.find({}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
+    Post.find({}).sort({$natural:-1}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
