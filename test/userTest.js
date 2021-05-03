@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const assert = require('assert');
-const Post = require("../models/post");
+const Trade = require("../models/trade");
+const User = require('../models/user');
 const app = require('../app.js');
 const request = require('supertest');
 
@@ -11,64 +12,55 @@ mongoose.set('useCreateIndex', true)
 describe('Drop all collections before each test',()=>{
     it('Before start, drop all collections',(done)=>{
         // Drop the collection
-        mongoose.connection.collections.posts.drop(()=>{
+        mongoose.connection.collections.users.drop(()=>{
             done();
         });
     });
 });
 
 
-describe('Create a Post instance', ()=>{
+describe('Create a User instance', ()=>{
 
-    it('Saves a record to the DB',()=>{
-        let samplePost = new Post({
-            title : "몰리 산책시키기",
-            price : 123,
-            category : ['애완동물'],
-            tag : ['몰리','산책','귀여움','사나움'],
-            view : 3,
-            date : Date.now()
+    it('Saves a user to the DB',()=>{
+        let sampleTrade = new User({
+            nickname:'대장 강아지',
+            name:'몰리',
+            email:'molly@ajou.ac.kr',
+            password:'qwerty1234@@',
+            // profileImage:,
+            averageRating:4.5,
+            ban:false,
+            // keyword:,
+            // salt:,
+            // category:
         });
-        samplePost.save().then(()=>{
-            assert(samplePost.isNew === false);
+        sampleTrade.save().then(()=>{
+            assert(sampleTrade.isNew === false);
+            // console.log(sampleTrade);
             done();
         });
     });
 });
 
 
-describe('GET /getPost',()=>{
-   it('Ok, fine',(done)=>{
-       request(app)
-           .get('/data/getPost')
-           .expect(200)
-           .then((res)=>{
-               const body = res.body;
-               console.log(body);
-               expect(body.length).to.equal(1);
-               done();
-       })
-           .catch((err)=> done(err));
-    }) ;
-});
-
-
-describe('GET /getPostBySearch',()=>{
+describe('POST /login',()=>{
     it('Ok, fine',(done)=>{
-        request(app).get('/data/getPostBySearch')
-            .send('몰리 산책시키기')
+        request(app).get('/member/login')
             .then((res)=>{
-                const body = res.body;
-                console.log(body);
-                expect(body.length).to.equal(1);
+                // const body = res.body;
+                // console.log(body);
+                console.log(res.email);
+
+                // console.log(res.json);
+
+                // expect(body.length).to.equal(1);
                 done();
             })
             .catch((err)=> done(err));
     }) ;
 });
 
-
-describe('Post /createPost',()=>{
+describe.skip('Post /createPost',()=>{
     it('Ok, fine',(done)=>{
         request(app).post('/data/createPost')
             .send({   title : "몰리 산책시키기22",
@@ -88,5 +80,6 @@ describe('Post /createPost',()=>{
             .catch((err)=> done(err));
     }) ;
 });
+
 
 

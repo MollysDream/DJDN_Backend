@@ -11,10 +11,11 @@ const autoReportSchema=new autoReport_Schema({
 })
 
 // autoReportSchema.plugin(mongooseAutoInc.plugin, 'autoReport');
-autoReportSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'autoReportSchema',
-    field: 'autoReportSchema_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// autoReportSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'autoReportSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('autoReport',autoReportSchema);

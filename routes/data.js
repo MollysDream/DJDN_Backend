@@ -59,7 +59,7 @@ router.get('/getPostBySearch', function(req,res,next){
 })
 
 router.get('/getPostByCategory', function(req,res,next){
-    //const category = req.query.category;
+    // const category = req.query.category;
     const category = ['애견', '도움'];
     console.log(`**/data/getPostByCategory/서버통신** ${category} 카테고리 검색 게시물 요청`);
 
@@ -125,5 +125,4 @@ router.post('/updatePostView', function(req, res, next) {
         res.status(500).send({error:"getPost DB오류"});
     })
 });
-
 module.exports = router;

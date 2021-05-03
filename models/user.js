@@ -30,25 +30,27 @@ const userSchema=new user_Schema({
     ban:{
         type:Boolean,
     },
-    keyword:{
+    keyword:[{
         type:String
-    },
+    }],
+    // 비밀번호 암호화
     salt:{
         type:String,
         required: true
     },
     category: {
         type:Object,
-        required: true
+        required: false
     },
 
 })
 
 // userSchema.plugin(mongooseAutoInc.plugin, 'user');
-userSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'userSchema',
-    field: 'userSchema_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// userSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'userSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('user',userSchema);
