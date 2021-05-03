@@ -25,7 +25,7 @@ router.get('/getPostBySearch', function(req,res,next){
 
     const searchOption = [
         {title: new RegExp(searchValue)},
-        {content: new RegExp(searchValue)}
+        {text: new RegExp(searchValue)}
     ]
     Post.find({$or:searchOption}).then((data)=>{
         res.status(200).json(data);
