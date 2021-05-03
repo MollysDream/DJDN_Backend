@@ -16,11 +16,11 @@ const chatRoomSchema=new chatRoom_Schema({
 })
 
 // chatRoomSchema.plugin(mongooseAutoInc.plugin, 'chatRoom');
-mongooseAutoInc.initialize(mongoose.connection);
-chatRoomSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'chatRoomSchema',
-    field: '_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// chatRoomSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'chatRoomSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('chatRoom',chatRoomSchema);

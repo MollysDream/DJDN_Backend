@@ -32,12 +32,12 @@ const addressSchema=new address_Schema({
     }
 })
 
-mongooseAutoInc.initialize(mongoose.connection);
-addressSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'addressSchema',
-    field: '_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// addressSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'addressSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 
 module.exports = mongoose.model('address',addressSchema);

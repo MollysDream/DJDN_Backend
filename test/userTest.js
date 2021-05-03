@@ -43,20 +43,24 @@ describe('Create a User instance', ()=>{
 });
 
 
-describe('GET /getUserData',()=>{
+describe('POST /login',()=>{
     it('Ok, fine',(done)=>{
-        request(app).get('/user/getUserData')
+        request(app).get('/member/login')
             .then((res)=>{
-                const body = res.body;
-                console.log(body);
-                expect(body.length).to.equal(1);
+                // const body = res.body;
+                // console.log(body);
+                console.log(res.email);
+
+                // console.log(res.json);
+
+                // expect(body.length).to.equal(1);
                 done();
             })
             .catch((err)=> done(err));
     }) ;
 });
 
-describe('Post /createPost',()=>{
+describe.skip('Post /createPost',()=>{
     it('Ok, fine',(done)=>{
         request(app).post('/data/createPost')
             .send({   title : "몰리 산책시키기22",

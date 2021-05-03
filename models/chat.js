@@ -28,11 +28,11 @@ const chatSchema=new chat_Schema({
 })
 
 // chatSchema.plugin(mongooseAutoInc.plugin, 'chat');
-mongooseAutoInc.initialize(mongoose.connection);
-chatSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'chatSchema',
-    field: '_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// chatSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'chatSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('chat',chatSchema);

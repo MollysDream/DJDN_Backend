@@ -46,11 +46,11 @@ const userSchema=new user_Schema({
 })
 
 // userSchema.plugin(mongooseAutoInc.plugin, 'user');
-mongooseAutoInc.initialize(mongoose.connection);
-userSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'userSchema',
-    field: '_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// userSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'userSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('user',userSchema);

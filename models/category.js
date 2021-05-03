@@ -14,13 +14,13 @@ const categorySchema=new category_Schema({
 })
 
 // categorySchema.plugin(mongooseAutoInc.plugin, 'category');
-mongooseAutoInc.initialize(mongoose.connection);
-categorySchema.plugin(mongooseAutoInc.plugin, {
-    model: 'categorySchema',
-    field: '_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// categorySchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'categorySchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('category',categorySchema);
 
 
