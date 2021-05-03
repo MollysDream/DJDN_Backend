@@ -31,11 +31,11 @@ const shopOwnerSchema=new shopOwner_Schema({
 })
 
 // shopOwnerSchema.plugin(mongooseAutoInc.plugin, 'shopOwner');
-mongooseAutoInc.initialize(mongoose.connection);
-shopOwnerSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'shopOwnerSchema',
-    field: 'shopOwnerSchema_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// shopOwnerSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'shopOwnerSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('shopOwner',shopOwnerSchema);

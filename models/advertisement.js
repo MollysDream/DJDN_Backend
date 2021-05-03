@@ -38,11 +38,11 @@ const advertisementSchema=new advertisement_Schema({
 })
 
 // advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');
-mongooseAutoInc.initialize(mongoose.connection);
-advertisementSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'advertisementSchema',
-    field: 'advertisementSchema_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// advertisementSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'advertisementSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('advertisement',advertisementSchema);

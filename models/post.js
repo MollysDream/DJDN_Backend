@@ -49,6 +49,17 @@ const postSchema=new post_Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'chatRoom'
+    },
+
+    latitude:{
+        type:String,
+    },
+    longitude:{
+        type:String,
+    },
+    // ~~동 ex) 우만동, 원천동
+    addressName:{
+        type:String,
     }
 
 })
@@ -56,12 +67,12 @@ const postSchema=new post_Schema({
 postSchema.index({title:'text', text:'text'});
 
 // postSchema.plugin(mongooseAutoInc.plugin, 'post');
-mongooseAutoInc.initialize(mongoose.connection);
-postSchema.plugin(mongooseAutoInc.plugin, {
-    model: 'postSchema',
-    field: 'postSchema_id',
-    startAt: 1,
-    incrementBy: 1
-});
+// mongooseAutoInc.initialize(mongoose.connection);
+// postSchema.plugin(mongooseAutoInc.plugin, {
+//     model: 'postSchema',
+//     field: '_id',
+//     startAt: 1,
+//     incrementBy: 1
+// });
 module.exports = mongoose.model('post',postSchema);
 

@@ -18,8 +18,8 @@ mongooseAutoInc.initialize(mongoose.connection);
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var dataRouter = require('./routes/data');
-var memberRouter = require('./routes/memberRouter');
-var addressRouter = require('./routes/addressRouter');
+var memberRouter = require('./routes/member');
+var addressRouter = require('./routes/address');
 var tradeRouter = require('./routes/trade');
 
 var app = express();

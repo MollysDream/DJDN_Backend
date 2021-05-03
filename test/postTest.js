@@ -19,8 +19,8 @@ describe('Drop all collections before each test',()=>{
 
 
 describe('Create a Post instance', ()=>{
-    it('Saves a record to the DB',()=>{
 
+    it('Saves a record to the DB',()=>{
         let samplePost = new Post({
             title : "몰리 산책시키기",
             price : 123,
