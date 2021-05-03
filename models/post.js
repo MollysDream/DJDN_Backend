@@ -53,7 +53,7 @@ const postSchema=new post_Schema({
 
 })
 
-postSchema.index({title:'text', content:'text'});
+postSchema.index({title:'text', text:'text'});
 
 // postSchema.plugin(mongooseAutoInc.plugin, 'post');
 mongooseAutoInc.initialize(mongoose.connection);

@@ -11,7 +11,7 @@ router.get('/getPost', function(req, res, next) {
     const LIMIT = 4
     //let page = req.params.page;
     //console.log(page);
-    Post.find({}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
+    Post.find({}).sort({$natural:-1}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
@@ -25,7 +25,7 @@ router.get('/getPostBySearch', function(req,res,next){
 
     const searchOption = [
         {title: new RegExp(searchValue)},
-        {content: new RegExp(searchValue)}
+        {text: new RegExp(searchValue)}
     ]
     Post.find({$or:searchOption}).then((data)=>{
         res.status(200).json(data);
@@ -86,6 +86,20 @@ router.get('/getCategoryList', function(req, res, next) {
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"getCategory DB오류"});
+    })
+});
+
+router.post('/updatePostView', function(req, res, next) {
+    const {postId, view} = req.body;
+    console.log(`**/data/updatePostView/서버통신** 게시글 ID:${postId} 조회수: ${view}로 수정`)
+
+    Post.findOneAndUpdate({'_id':postId}, {view:view})
+        .then((result)=>{
+            console.log(`${postId} 게시글 조회수 수정 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getPost DB오류"});
     })
 });
 
