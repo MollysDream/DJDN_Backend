@@ -24,6 +24,7 @@ const reviewSchema=new review_Schema({
 })
 
 // reviewSchema.plugin(mongooseAutoInc.plugin, 'review');
+mongooseAutoInc.initialize(mongoose.connection);
 reviewSchema.plugin(mongooseAutoInc.plugin, {
     model: 'reviewSchema',
     field: 'reviewSchema_id',

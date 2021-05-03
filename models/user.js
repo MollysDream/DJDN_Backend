@@ -39,12 +39,13 @@ const userSchema=new user_Schema({
     },
     category: {
         type:Object,
-        required: true
+        required: false
     },
 
 })
 
 // userSchema.plugin(mongooseAutoInc.plugin, 'user');
+mongooseAutoInc.initialize(mongoose.connection);
 userSchema.plugin(mongooseAutoInc.plugin, {
     model: 'userSchema',
     field: 'userSchema_id',
