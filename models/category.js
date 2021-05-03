@@ -17,7 +17,7 @@ const categorySchema=new category_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 categorySchema.plugin(mongooseAutoInc.plugin, {
     model: 'categorySchema',
-    field: 'categorySchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

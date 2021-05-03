@@ -58,14 +58,12 @@ router.post('/createTradeTime',function (req, res, next){
 * 선언만 해놓음, instance 조회 & 수정 작성 필요
 * */
 router.post('/updateTradeTime',function (req, res, next){
-
     console.log('/trade/updateTradeTime 통신');
     // req.body 저장
     let{endTime, workTime} = req.body;
     // instance 수정
     let fixedTrade;
     console.log(fixedTrade);
-
 });
 
 /*

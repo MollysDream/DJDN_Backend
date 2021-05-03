@@ -49,7 +49,7 @@ const userSchema=new user_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 userSchema.plugin(mongooseAutoInc.plugin, {
     model: 'userSchema',
-    field: 'userSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

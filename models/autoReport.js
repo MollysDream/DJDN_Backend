@@ -14,7 +14,7 @@ const autoReportSchema=new autoReport_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 autoReportSchema.plugin(mongooseAutoInc.plugin, {
     model: 'autoReportSchema',
-    field: 'autoReportSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

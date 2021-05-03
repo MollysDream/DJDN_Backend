@@ -41,7 +41,7 @@ const advertisementSchema=new advertisement_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 advertisementSchema.plugin(mongooseAutoInc.plugin, {
     model: 'advertisementSchema',
-    field: 'advertisementSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

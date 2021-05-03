@@ -59,7 +59,7 @@ postSchema.index({title:'text', text:'text'});
 mongooseAutoInc.initialize(mongoose.connection);
 postSchema.plugin(mongooseAutoInc.plugin, {
     model: 'postSchema',
-    field: 'postSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

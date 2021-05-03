@@ -22,7 +22,7 @@ const adminSchema=new admin_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 adminSchema.plugin(mongooseAutoInc.plugin, {
     model: 'adminSchema',
-    field: 'adminSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

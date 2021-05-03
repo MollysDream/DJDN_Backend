@@ -41,7 +41,7 @@ const tradeSchema=new trade_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 tradeSchema.plugin(mongooseAutoInc.plugin, {
     model: 'tradeSchema',
-    field: 'tradeSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

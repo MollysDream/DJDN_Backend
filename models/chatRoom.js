@@ -19,7 +19,7 @@ const chatRoomSchema=new chatRoom_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 chatRoomSchema.plugin(mongooseAutoInc.plugin, {
     model: 'chatRoomSchema',
-    field: 'chatRoomSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

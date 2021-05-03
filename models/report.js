@@ -31,7 +31,7 @@ const reportSchema=new report_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 reportSchema.plugin(mongooseAutoInc.plugin, {
     model: 'reportSchema',
-    field: 'reportSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

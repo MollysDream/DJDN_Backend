@@ -31,7 +31,7 @@ const chatSchema=new chat_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 chatSchema.plugin(mongooseAutoInc.plugin, {
     model: 'chatSchema',
-    field: 'chatSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

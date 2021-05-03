@@ -102,5 +102,4 @@ router.post('/updatePostView', function(req, res, next) {
         res.status(500).send({error:"getPost DB오류"});
     })
 });
-
 module.exports = router;

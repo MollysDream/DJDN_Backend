@@ -35,7 +35,7 @@ const addressSchema=new address_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 addressSchema.plugin(mongooseAutoInc.plugin, {
     model: 'addressSchema',
-    field: 'addressSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });

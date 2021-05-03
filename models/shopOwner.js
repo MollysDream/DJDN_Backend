@@ -34,7 +34,7 @@ const shopOwnerSchema=new shopOwner_Schema({
 mongooseAutoInc.initialize(mongoose.connection);
 shopOwnerSchema.plugin(mongooseAutoInc.plugin, {
     model: 'shopOwnerSchema',
-    field: 'shopOwnerSchema_id',
+    field: '_id',
     startAt: 1,
     incrementBy: 1
 });
