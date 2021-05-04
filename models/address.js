@@ -1,5 +1,6 @@
 const mongoose =require('mongoose');
 const mongooseAutoInc = require('mongoose-auto-increment');
+const user = require('./user');
 
 const address_Schema=mongoose.Schema;
 
@@ -26,9 +27,9 @@ const addressSchema=new address_Schema({
         type:String,
         required:false
     },
-    email:{
-        type:String,
-        required:false
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
     }
 })
 

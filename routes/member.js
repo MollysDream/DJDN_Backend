@@ -80,8 +80,6 @@ router.post("/login", async (req, res) => {
                             if (err) {
                                 console.log(err);
                             } else {
-                                // console.log(key.toString('base64')); // 'dWhPkH6c4X1Y71A/DrAHhML3DyKQdEkUOIaSmYCI7xZkD5bLZhPF0dOSs2YZA/Y4B8XNfWd3DHIqR5234RtHzw=='
-
                                 const obj = {
                                     email: req.body.email,
                                     password: key.toString("base64")
@@ -90,12 +88,10 @@ router.post("/login", async (req, res) => {
                                 const user2 = await User.findOne(obj);
                                 console.log(user2);
                                 if (user2) {
-                                    // 있으면 로그인 처리
-                                    // console.log(req.body._id);
                                     res.json({
                                         message: "로그인 되었습니다!",
                                         login: "1",
-                                        email: user2.email
+                                        userId: user2._id
                                     });
                                 } else{
                                     res.json({ message: "아이디나 패스워드가 일치하지 않습니다.", login:"0" });
