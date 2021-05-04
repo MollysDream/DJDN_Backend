@@ -7,10 +7,10 @@ const Category = require("../models/category");
 
 
 router.get('/getUserData', function(req, res, next) {
-    const email = req.query.email;
-    console.log(`**/user/getUserData/서버통신** ${email}의 사용자 정보 요청`)
+    const userId = req.query.userId;
+    console.log(`**/user/getUserData/서버통신** userID: ${userId}의 사용자 정보 요청`);
 
-    User.findOne({'email':email}).then((data)=>{
+    User.findOne({'_id': userId}).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);

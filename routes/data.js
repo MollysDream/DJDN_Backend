@@ -19,6 +19,28 @@ router.get('/getPost', function(req, res, next) {
     })
 });
 
+// 홈화면에서 필터 적용하여 게시글 불러옴
+router.get('/getPostFinal', function(req,res,next){
+    //한번에 불러올 게시물 갯수
+    const LIMIT = 4;
+
+    const page = req.query.page;
+    const category = req.query.category;
+    const view = req.query.view;
+
+    console.log(`**/data/getPostWithFilter/서버통신** ${page} 페이지 게시물 요청`)
+
+    Post.find({category: {$in:category}})
+        .sort({'view':-1}).sort({$natural:-1})
+        .skip(page*LIMIT).limit(LIMIT).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getPost DB오류"});
+    })
+})
+
+
 router.get('/getPostBySearch', function(req,res,next){
     const searchValue = req.query.searchValue;
     console.log(`**/data/getPostBySearch/서버통신** ${searchValue} 검색 게시물 요청`);
@@ -27,7 +49,7 @@ router.get('/getPostBySearch', function(req,res,next){
         {title: new RegExp(searchValue)},
         {text: new RegExp(searchValue)}
     ]
-    Post.find({$or:searchOption}).then((data)=>{
+    Post.find({$or:searchOption}).sort({$natural:-1}).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
@@ -52,18 +74,24 @@ router.get('/getPostByCategory', function(req,res,next){
 })
 
 router.post('/createPost', function(req,res,next){
-
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
 
-    const{title,image,text, price, category,tag, user_id} = req.body;
+    const postData = req.body;
+    //console.log(postData.userAddress['latitude']);
+
     const post=new Post({
-        title: title,
-        image: image,
-        text: text,
-        category: category,
-        tag: tag,
-        price: price,
-        date: Date.now()
+        title: postData.title,
+        image: postData.image,
+        text: postData.text,
+        category: postData.category,
+        tag: postData.tag,
+        price: postData.price,
+        date: Date.now(),
+        user_id: postData.user_id,
+        latitude: postData.userAddress['latitude'],
+        longitude: postData.userAddress['longitude'],
+        addressName: postData.userAddress['addressName'],
+
     })
     console.log(post);
 
@@ -82,6 +110,7 @@ router.get('/getCategoryList', function(req, res, next) {
     console.log('**/data/getCategoryList/서버통신** 카테고리 리스트 요청')
 
     Category.findOne({}).then((data)=>{
+        console.log(data);
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
