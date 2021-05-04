@@ -38,10 +38,11 @@ const userSchema=new user_Schema({
         type:String,
         required: true
     },
-    category: {
-        type:Object,
-        required: false
-    },
+    category: [{
+        type:String,
+        required: false,
+        default:[]
+    }],
 
 })
 
