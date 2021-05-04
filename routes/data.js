@@ -74,18 +74,24 @@ router.get('/getPostByCategory', function(req,res,next){
 })
 
 router.post('/createPost', function(req,res,next){
-
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
 
-    const{title,image,text, price, category,tag, user_id} = req.body;
+    const postData = req.body;
+    //console.log(postData.userAddress['latitude']);
+
     const post=new Post({
-        title: title,
-        image: image,
-        text: text,
-        category: category,
-        tag: tag,
-        price: price,
-        date: Date.now()
+        title: postData.title,
+        image: postData.image,
+        text: postData.text,
+        category: postData.category,
+        tag: postData.tag,
+        price: postData.price,
+        date: Date.now(),
+        user_id: postData.user_id,
+        latitude: postData.userAddress['latitude'],
+        longitude: postData.userAddress['longitude'],
+        addressName: postData.userAddress['addressName'],
+
     })
     console.log(post);
 

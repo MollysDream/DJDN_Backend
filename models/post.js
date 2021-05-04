@@ -60,6 +60,10 @@ const postSchema=new post_Schema({
     // ~~동 ex) 우만동, 원천동
     addressName:{
         type:String,
+    },
+    user_id:{
+        type:String,
+        required: true
     }
 
 })
