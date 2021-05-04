@@ -30,8 +30,11 @@ router.post("/certifyAddress", async (req, res) => {
   console.log("hi "+req.body.email)
   try{
     obj = {
-      email: req.body.email,
+      isAuth : true,
+      userId: req.body.userId,
       addressName: req.body.address,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude
     };
     address = new Address(obj);
     await address.save();
@@ -44,7 +47,7 @@ router.post("/certifyAddress", async (req, res) => {
 //사용자 인증 동네 가져오기
 router.post("/checkAddress", async (req, res) => {
   try{
-    const address= await Address.find({email:req.body.email})
+    const address= await Address.find({userId:req.body.userId})
     res.json({address:address})
   } catch (err) {
     console.log(err);
