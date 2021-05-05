@@ -20,7 +20,7 @@ router.get('/getPost', function(req, res, next) {
 });
 
 // 홈화면에서 필터 적용하여 게시글 불러옴
-router.get('/getPostFinal', function(req,res,next){
+router.get('/getFilteredPost', function(req,res,next){
     //한번에 불러올 게시물 갯수
     const LIMIT = 4;
 
@@ -28,7 +28,7 @@ router.get('/getPostFinal', function(req,res,next){
     const category = req.query.category;
     const view = req.query.view;
 
-    console.log(`**/data/getPostWithFilter/서버통신** ${page} 페이지 게시물 요청`)
+    console.log(`**/data/getFilteredPost/서버통신** ${page} 페이지 게시물 요청`)
 
     Post.find({category: {$in:category}})
         .sort({'view':-1}).sort({$natural:-1})
