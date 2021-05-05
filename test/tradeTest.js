@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const assert = require('assert');
 const Trade = require("../models/trade");
+const Post = require("../models/post");
+const User = require("../models/user");
 const app = require('../app.js');
 const request = require('supertest');
 
@@ -18,6 +20,7 @@ describe('Drop all collections before each test',()=>{
 });
 
 
+// ++ 테스트용 User 2명이상, Post 1개 이상 생성할것
 describe('Create a Trade instance', ()=>{
 
     it('Saves a trade to the DB',()=>{
@@ -27,8 +30,8 @@ describe('Create a Trade instance', ()=>{
             workTime:Date.now(),
             location: "우만2동",
             complete: false,
-            // userList:[],
-            // post:[]
+            userList:['6092ca8ecd624853f80503ca'],
+            post:'608fe4836afed10b5c352344'
         });
         sampleTrade.save().then(()=>{
             assert(sampleTrade.isNew === false);
@@ -45,7 +48,7 @@ describe('GET /getTrade',()=>{
             .then((res)=>{
                 const body = res.body;
                 console.log(body);
-                expect(body.length).to.equal(1);
+                // expect(body.userList).to.equal(1);
                 done();
             })
             .catch((err)=> done(err));

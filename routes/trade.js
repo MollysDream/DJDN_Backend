@@ -11,12 +11,16 @@ router.get('/getTrade', function(req, res, next) {
     console.log(`/trade/getTrade/서버통신 : trade 조회`)
     //let page = req.params.page;
     //console.log(page);
-    Trade.find({}).then((data)=>{
-        res.status(200).json(data);
-    }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
-    })
+    Trade.find()
+        .populate('userList')
+        .populate('post')
+        .then((data)=>{
+            // console.log('무야호'+data.userList.length);
+             res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+             res.status(500).send({error:"getPost DB오류"});
+        })
 });
 
 
@@ -28,9 +32,11 @@ router.post('/createTradeTime',function (req, res, next){
 
     // req.body 저장
     const{
-        startTime, endTime, workTime, location, complete
-    //userList, post
+        startTime, endTime, workTime, location, complete, userList, post
     } = req.body;
+
+    // User.findOne({name:'user1'}).populate('')
+
     // 새 instance 생성
     const newTrade = new Trade({
         startTime:startTime,
@@ -38,9 +44,12 @@ router.post('/createTradeTime',function (req, res, next){
         workTime:workTime,
         location:location,
         complete:complete,
-        //userList, post
+        userList:userList,
+        post: post
     })
+
     console.log(newTrade);
+
     newTrade.save(err,trade=>{
         if(err){
             console.log(err);

@@ -5,24 +5,37 @@ const crypto = require("crypto");
 
 // 회원가입
 
+/*
+send_param = {
+    email: userId,
+    password: userPassword,
+    name: userName,
+    nickname: userNickName
+};*/
 router.post("/join", async (req, res) => {
-    console.log("hi")
+    console.log("router에서 실행된 API");
     try {
         let obj = { email: req.body.email };
-
         let user = await User.findOne(obj);
         console.log(user);
 
+        // 중복되는 항목이 이미 DB에 있는지 검사
         if (user) {
             res.json({
                 message: "이메일이 중복되었습니다. 새로운 이메일을 입력해주세요.",
                 dupYn: "1"
             });
-        } else {
+        }
+
+        // 중복되는 항목 없다면 생성
+        else {
             crypto.randomBytes(64, (err, buf) => {
                 if (err) {
                     console.log(err);
-                } else {
+                }
+
+                // password 암호화 후 생성
+                else {
                     crypto.pbkdf2(
                         req.body.password,
                         buf.toString("base64"),
@@ -58,6 +71,13 @@ router.post("/join", async (req, res) => {
 });
 
 //로그인
+
+/*
+* send_param = {
+      email: userId,
+      password: userPassword
+    }
+*/
 router.post("/login", async (req, res) => {
     try {
         //이메일 값으로 아이디가 존재하는지 확인
@@ -68,8 +88,11 @@ router.post("/login", async (req, res) => {
                 console.log(user);
                 if (user) {
                     //아이디가 존재할 경우 이메일과 패스워드가 일치하는 회원이 있는지 확인
-                    console.log(req.body.password);
-                    console.log(user.salt);
+
+
+                    // console.log(req.body.password);
+                    // console.log(user.salt);
+
                     crypto.pbkdf2(
                         req.body.password,
                         user.salt,
@@ -86,7 +109,9 @@ router.post("/login", async (req, res) => {
                                 };
 
                                 const user2 = await User.findOne(obj);
-                                console.log(user2);
+
+                                // console.log(user2);
+
                                 if (user2) {
                                     res.json({
                                         message: "로그인 되었습니다!",
