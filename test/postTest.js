@@ -20,14 +20,15 @@ describe('Drop all collections before each test',()=>{
 
 describe('Create a Post instance', ()=>{
 
-    it('Saves a record to the DB',()=>{
+    it('Saves a post to the DB',()=>{
         let samplePost = new Post({
             title : "몰리 산책시키기",
             price : 123,
             category : ['애완동물'],
             tag : ['몰리','산책','귀여움','사나움'],
             view : 3,
-            date : Date.now()
+            date : Date.now(),
+            user_id: '60938664e295f534a0e4c771'
         });
         samplePost.save().then(()=>{
             assert(samplePost.isNew === false);
@@ -45,7 +46,7 @@ describe('GET /getPost',()=>{
            .then((res)=>{
                const body = res.body;
                console.log(body);
-               expect(body.length).to.equal(1);
+               expect(200);
                done();
        })
            .catch((err)=> done(err));
@@ -60,8 +61,7 @@ describe('GET /getPostBySearch',()=>{
             .then((res)=>{
                 const body = res.body;
                 console.log(body);
-                expect(body.length).to.equal(1);
-                done();
+              expect(200);                done();
             })
             .catch((err)=> done(err));
     }) ;
@@ -71,19 +71,26 @@ describe('GET /getPostBySearch',()=>{
 describe('Post /createPost',()=>{
     it('Ok, fine',(done)=>{
         request(app).post('/data/createPost')
-            .send({   title : "몰리 산책시키기22",
+            .send({
+                title : "몰리 산책시키기22",
+                image : 'url',
+                text : '몰리 산책시키기입니다. 연락주세요.',
                 price : 123,
                 category : ['애완동물'],
                 tag : ['몰리','산책','귀여움','사나움'],
                 view : 3,
-                date : Date.now() })
-            .expect(200)
+                date : Date.now(),
+                user_id: '60938664e295f534a0e4c771',
+                latitude: '100',
+                longitude: '200',
+                addressName: '우만동',
+            })
             // .expect({ title: "몰리 산책시키기22" })
             .then((res)=>{
                 const body = res.body;
                 console.log(body);
-                expect(body.title).equal("몰리 산책시키기22");
-                done();
+              expect(200);
+              done();
             })
             .catch((err)=> done(err));
     }) ;

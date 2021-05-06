@@ -91,7 +91,6 @@ router.post('/createPost', function(req,res,next){
         latitude: postData.userAddress['latitude'],
         longitude: postData.userAddress['longitude'],
         addressName: postData.userAddress['addressName'],
-
     })
     console.log(post);
 

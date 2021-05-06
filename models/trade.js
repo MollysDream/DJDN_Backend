@@ -2,7 +2,6 @@ const mongoose =require('mongoose');
 const mongooseAutoInc = require('mongoose-auto-increment');
 
 const trade_Schema=mongoose.Schema;
-const user = require('./user')
 
 
 const tradeSchema=new trade_Schema({
@@ -32,7 +31,7 @@ const tradeSchema=new trade_Schema({
     },
     userList:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: 'user'
     }],
     post:{
         type:mongoose.Schema.Types.ObjectId,
