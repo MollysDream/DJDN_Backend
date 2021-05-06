@@ -18,11 +18,11 @@ router.get('/getUserData', function(req, res, next) {
     })
 });
 
-router.post('/updateUserCategory', function(req, res, next) {
-    const {userId, newUserCategory} = req.body;
-    console.log(`**/user/updateUserCategory/서버통신** ${newUserCategory} 사용자 ID:${userId} 카테고리 정보 수정`)
+router.post('/updateUserCategoryAndSort', function(req, res, next) {
+    const {userId, newUserCategory, newSort} = req.body;
+    console.log(`**/user/updateUserCategoryAndSort/서버통신** ${newUserCategory} ${newSort} 사용자 ID:${userId} 카테고리 정보 수정`)
 
-    User.findOneAndUpdate({'_id':userId}, {category:newUserCategory})
+    User.findOneAndUpdate({'_id':userId}, {category:newUserCategory, sort:newSort})
         .then((result)=>{
         console.log(`${userId} 사용자 카테고리 수정 완료`);
         res.status(200).json(result);

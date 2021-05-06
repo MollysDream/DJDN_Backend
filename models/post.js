@@ -56,6 +56,10 @@ const postSchema=new post_Schema({
     longitude:{
         type:String,
     },
+    location: {
+        type:{type:String, default: 'Point'},
+        coordinates:{type:[Number]}
+        },
     // ~~동 ex) 우만동, 원천동
     addressName:{
         type:String,
@@ -67,7 +71,7 @@ const postSchema=new post_Schema({
 
 })
 
-postSchema.index({title:'text', text:'text'});
+postSchema.index({location:'2dsphere', title:'text', text:'text'});
 
 // postSchema.plugin(mongooseAutoInc.plugin, 'post');
 // mongooseAutoInc.initialize(mongoose.connection);
