@@ -4,6 +4,8 @@ let router = express.Router();
 const Post = require('../models/post');
 const User = require('../models/user')
 const Category = require('../models/category');
+const Address = require('../models/address')
+
 
 /* GET users listing. */
 router.get('/getPost',function(req, res, next) {
@@ -15,83 +17,69 @@ router.get('/getPost',function(req, res, next) {
 
     /*const userData = User.findOne({_id:userId});
     console.log(userData);*/
+    Address.findOne({userId:userId}).then((addressData)=>{
+        console.log(addressData.longitude);
+        const LONGITUDE = addressData.longitude;
+        const LATITUDE = addressData.latitude;
+        User.findOne({_id:userId}).then((data)=>{
+            //console.log(data);
+            const category = data.category
+            const sort = data.sort
 
-    User.findOne({_id:userId}).then((data)=>{
-        console.log(data);
-        const category = data.category
-        const sort = data.sort
 
+            const MAXDISTANCE = 12000;
 
-        const LATITUDE = 37.279323;
-        const LONGITUDE = 127.038798;
-        const MAXDISTANCE = 12000;
-
-        if(sort == 0) {//최신순 정렬이면
-            console.log("*****최신순 정렬*****")
-            Post.find({category: {$in:category}})
-                .sort({$natural:-1})
-                .skip(page*LIMIT).limit(LIMIT).then((data)=>{
-                res.status(200).json(data);
-            }).catch((err)=>{
-                console.log(err);
-                res.status(500).send({error:"getPost DB오류"});
-            })
-        }else{
-            console.log("*****거리순 정렬*****")
-            Post.find({
-                location: {
-                    $nearSphere: {
-                        $geometry: {
-                            type: 'Point',
-                            coordinates: [LONGITUDE, LATITUDE]
-                        },
-                        $maxDistance: MAXDISTANCE
+            if(sort == 0) {//최신순 정렬이면
+                console.log("*****최신순 정렬*****")
+                Post.find({
+                    location: {
+                        $geoWithin: {
+                            $centerSphere: [[LONGITUDE, LATITUDE], (MAXDISTANCE/1000) / 6378.1]
+                        }
                     }
-                },
-                category: {$in:category}
-            }).skip(page*LIMIT).limit(LIMIT).then((data)=>{
-                res.status(200).json(data);
-            }).catch((err)=>{
-                console.log(err);
-                res.status(500).send({error:"getPost DB오류"});
-            })
-        }
+                    ,category: {$in:category}
+                })
+                    .sort({date:-1})
+                    .skip(page*LIMIT).limit(LIMIT).then((data)=>{
+                    res.status(200).json(data);
+                }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPost DB오류"});
+                })
+            }else{ // 거리순 정렬
+                console.log("*****거리순 정렬*****")
+                Post.find({
+                    location: {
+                        $nearSphere: {
+                            $geometry: {
+                                type: 'Point',
+                                coordinates: [LONGITUDE, LATITUDE]
+                            },
+                            $maxDistance: MAXDISTANCE
+                        }
+                    },
+                    category: {$in:category}
+                }).skip(page*LIMIT).limit(LIMIT).then((data)=>{
+                    res.status(200).json(data);
+                }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPost DB오류"});
+                })
+            }
 
 
 
-    }).catch((err)=>{
-        console.log(err);
-        console.log('사용자 userId Find 실패');
+        }).catch((err)=>{ // User.findOne()
+            console.log(err);
+            console.log('사용자 userId Find 실패');
+        })
+    }).catch(err=>{ //Address.findOne()
+      console.log(err);
+      console.log('위치정보 Find 에러')
     })
-
-    //let page = req.params.page;
-    //console.log(page);
-
-
 
     //.sort({$natural:-1})
 });
-
-// 홈화면에서 필터 적용하여 게시글 불러옴
-/*router.get('/getFilteredPost', function(req,res,next){
-    //한번에 불러올 게시물 갯수
-    const LIMIT = 4;
-
-    const page = req.query.page;
-    const category = req.query.category;
-    const view = req.query.view;
-
-    console.log(`**!/data/getFilteredPost/서버통신** ${page} 페이지 게시물 요청`)
-
-    Post.find({category: {$in:category}})
-        .sort({'view':-1}).sort({$natural:-1})
-        .skip(page*LIMIT).limit(LIMIT).then((data)=>{
-        res.status(200).json(data);
-    }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
-    })
-})*/
 
 
 router.get('/getPostBySearch', function(req,res,next){
