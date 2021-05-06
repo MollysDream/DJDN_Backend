@@ -99,6 +99,20 @@ router.get('/getPostBySearch', function(req,res,next){
 
 })
 
+router.get('/getUserPost', function(req,res,next){
+    const userId = req.query.userId;
+    console.log(`**/data/getUserPost/서버통신** ID: ${userId}의 검색 게시물 요청`);
+
+
+    Post.find({user_id:userId}).sort({Date:-1}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getUserPost DB오류"});
+    })
+
+})
+
 router.get('/getPostByCategory', function(req,res,next){
     // const category = req.query.category;
     const category = ['애견', '도움'];
@@ -149,6 +163,32 @@ router.post('/createPost', function(req,res,next){
     })
 })
 
+router.post('/updatePost', function(req,res,next){
+    console.log(`**/data/updatePost/서버통신** 게시물 작성 요청`);
+
+    const postData = req.body;
+
+    console.log(postData);
+
+    Post.findOneAndUpdate({'_id':postData.postId},
+        {
+            title:postData.title,
+            image: postData.image,
+            text:postData.text,
+            category:postData.category,
+            price:postData.price,
+
+        })
+        .then((result)=>{
+            console.log(`${postData.postId} 게시글 조회수 수정 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"postData DB오류"});
+    })
+
+})
+
 router.get('/getCategoryList', function(req, res, next) {
     console.log('**/data/getCategoryList/서버통신** 카테고리 리스트 요청')
 
@@ -171,7 +211,7 @@ router.post('/updatePostView', function(req, res, next) {
             res.status(200).json(result);
         }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
+        res.status(500).send({error:"updatePostView DB오류"});
     })
 });
 module.exports = router;
