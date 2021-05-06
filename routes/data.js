@@ -214,4 +214,19 @@ router.post('/updatePostView', function(req, res, next) {
         res.status(500).send({error:"updatePostView DB오류"});
     })
 });
+
+router.delete('/deletePost', function(req, res, next) {
+    const postId = req.query.postId;
+    console.log(`**/data/deletePost/서버통신** 게시글 ID:${postId} 게시글 삭제`)
+
+    Post.findOneAndDelete({'_id':postId})
+        .then((result)=>{
+            console.log(`${postId} 게시글 삭제 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"deletePost DB오류"});
+    })
+});
+
 module.exports = router;
