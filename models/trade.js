@@ -3,6 +3,7 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 
 const trade_Schema=mongoose.Schema;
 
+
 const tradeSchema=new trade_Schema({
     startTime:{
         type:Date,

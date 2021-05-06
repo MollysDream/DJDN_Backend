@@ -129,6 +129,7 @@ router.post('/createPost', function(req,res,next){
         price: postData.price,
         date: Date.now(),
         user_id: postData.user_id,
+
         latitude: postData.userAddress.latitude,
         longitude: postData.userAddress.longitude,
         addressName: postData.userAddress.addressName,

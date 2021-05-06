@@ -50,7 +50,6 @@ const postSchema=new post_Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'chatRoom'
     },
-
     latitude:{
         type:String,
     },
