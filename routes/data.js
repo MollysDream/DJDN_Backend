@@ -2,25 +2,78 @@ let express = require('express');
 let router = express.Router();
 
 const Post = require('../models/post');
+const User = require('../models/user')
 const Category = require('../models/category');
 
 /* GET users listing. */
-router.get('/getPost', function(req, res, next) {
-    const page = req.query.page;
-    console.log(`**/data/getPost/서버통신** ${page} 페이지 게시물 요청`)
+router.get('/getPost',function(req, res, next) {
     const LIMIT = 4
-    //let page = req.params.page;
-    //console.log(page);
-    Post.find({}).sort({$natural:-1}).skip(page*LIMIT).limit(LIMIT).then((data)=>{
-        res.status(200).json(data);
+
+    const page = req.query.page;
+    const userId = req.query.userId;
+    console.log(`**/data/getPost/서버통신** ${page} 페이지 게시물 요청/ 사용자 ID: ${userId}`)
+
+    /*const userData = User.findOne({_id:userId});
+    console.log(userData);*/
+
+    User.findOne({_id:userId}).then((data)=>{
+        console.log(data);
+        const category = data.category
+        const sort = data.sort
+
+
+        const LATITUDE = 37.279323;
+        const LONGITUDE = 127.038798;
+        const MAXDISTANCE = 12000;
+
+        if(sort == 0) {//최신순 정렬이면
+            console.log("*****최신순 정렬*****")
+            Post.find({category: {$in:category}})
+                .sort({$natural:-1})
+                .skip(page*LIMIT).limit(LIMIT).then((data)=>{
+                res.status(200).json(data);
+            }).catch((err)=>{
+                console.log(err);
+                res.status(500).send({error:"getPost DB오류"});
+            })
+        }else{
+            console.log("*****거리순 정렬*****")
+            Post.find({
+                location: {
+                    $nearSphere: {
+                        $geometry: {
+                            type: 'Point',
+                            coordinates: [LONGITUDE, LATITUDE]
+                        },
+                        $maxDistance: MAXDISTANCE
+                    }
+                },
+                category: {$in:category}
+            }).skip(page*LIMIT).limit(LIMIT).then((data)=>{
+                res.status(200).json(data);
+            }).catch((err)=>{
+                console.log(err);
+                res.status(500).send({error:"getPost DB오류"});
+            })
+        }
+
+
+
     }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
+        console.log('사용자 userId Find 실패');
     })
+
+    //let page = req.params.page;
+    //console.log(page);
+
+
+
+    //.sort({$natural:-1})
 });
 
 // 홈화면에서 필터 적용하여 게시글 불러옴
-router.get('/getFilteredPost', function(req,res,next){
+/*router.get('/getFilteredPost', function(req,res,next){
     //한번에 불러올 게시물 갯수
     const LIMIT = 4;
 
@@ -28,7 +81,7 @@ router.get('/getFilteredPost', function(req,res,next){
     const category = req.query.category;
     const view = req.query.view;
 
-    console.log(`**/data/getFilteredPost/서버통신** ${page} 페이지 게시물 요청`)
+    console.log(`**!/data/getFilteredPost/서버통신** ${page} 페이지 게시물 요청`)
 
     Post.find({category: {$in:category}})
         .sort({'view':-1}).sort({$natural:-1})
@@ -38,7 +91,7 @@ router.get('/getFilteredPost', function(req,res,next){
         console.log(err);
         res.status(500).send({error:"getPost DB오류"});
     })
-})
+})*/
 
 
 router.get('/getPostBySearch', function(req,res,next){
@@ -77,7 +130,7 @@ router.post('/createPost', function(req,res,next){
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
 
     const postData = req.body;
-    //console.log(postData.userAddress['latitude']);
+    console.log(postData.userAddress);
 
     const post=new Post({
         title: postData.title,
@@ -88,9 +141,11 @@ router.post('/createPost', function(req,res,next){
         price: postData.price,
         date: Date.now(),
         user_id: postData.user_id,
-        latitude: postData.userAddress['latitude'],
-        longitude: postData.userAddress['longitude'],
-        addressName: postData.userAddress['addressName'],
+        latitude: postData.userAddress.latitude,
+        longitude: postData.userAddress.longitude,
+        addressName: postData.userAddress.addressName,
+        location:{coordinates: [postData.userAddress.longitude, postData.userAddress.latitude]}
+
 
     })
     console.log(post);
