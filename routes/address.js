@@ -57,4 +57,18 @@ router.post("/checkAddress", async (req, res) => {
   }
 })
 
+//게시글 검색 반경값 변경
+router.post("/updateRadius", async (req, res) => {
+  const {userId, radius} = req.body;
+  console.log(`**/address/updateRadius/서버통신** 사용자 ID:${userId} 반경: ${radius}m로 수정`)
+  try{
+    const address= await Address.updateMany({userId:userId},{radius:radius})
+    console.log(`${radius}m로 반경 수정 완료`)
+    res.status(200).json(address)
+  } catch (err) {
+    console.log(err);
+    res.status(300).send({error:err})
+  }
+})
+
 module.exports = router;

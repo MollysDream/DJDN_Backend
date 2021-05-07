@@ -27,6 +27,10 @@ const addressSchema=new address_Schema({
         type:String,
         required:false
     },
+    radius:{
+        type:Number,
+        default: 500
+    },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'user'
