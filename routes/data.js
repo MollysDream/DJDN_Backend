@@ -21,13 +21,13 @@ router.get('/getPost',function(req, res, next) {
         console.log(addressData.longitude);
         const LONGITUDE = addressData.longitude;
         const LATITUDE = addressData.latitude;
+        const MAXDISTANCE = addressData.radius;
+        console.log(MAXDISTANCE);
+
         User.findOne({_id:userId}).then((data)=>{
             //console.log(data);
             const category = data.category
             const sort = data.sort
-
-
-            const MAXDISTANCE = 12000;
 
             if(sort == 0) {//최신순 정렬이면
                 console.log("*****최신순 정렬*****")
