@@ -19,20 +19,7 @@ var users = {};
 // For this example purpose, there is only one chatroom;
 var chatRoomId = 1;
 
-// io.on('connection', (socket) => {
-// 	clients[socket.id] = socket;
-// 	socket.on('userJoined', (userId) => onUserJoined(userId, socket));
-// 	socket.on('message', (message) => onMessageReceived(message, socket));
-//
-// });
-//
-// io.on('connect', (socket) => {
-// 	var user = db.collection('users').insert({}, (err, user) => {
-// 		socket.emit('userJoined', user._id);
-// 		users[socket.id] = user._id;
-// 		_sendExistingMessages(socket);
-// 	});
-// });
+let numUsers = 0;
 
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/chat.html');
@@ -65,6 +52,9 @@ io.on('connection', (socket)=>{
 	});
 });
 
+setInterval(() => {
+	io.emit('message', new Date().toISOString());
+}, 1000);
 
 
 
