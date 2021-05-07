@@ -28,18 +28,33 @@
 	var messages = document.getElementById('messages');
 	var form = document.getElementById('form');
 	var input = document.getElementById('input');
-
 	form.addEventListener('submit', function(e) {
 		e.preventDefault();
 		if (input.value) {
-			socket.emit('chat message', input.value);
+			socket.emit('newMessage',
+							[
+								{
+									text: input.value,
+									createdAt: new Date(),
+									user: {
+										_id: '609597c853f5a70c2c23a380',
+										name: 'React Native 2',
+										avatar: 'https://placeimg.com/140/140/any',
+									},
+								},
+							]
+              );
+			console.log('html',input.value);
 			input.value = '';
 		}
 	});
 
-	socket.on('chat message', function(msg) {
+	socket.on('newMessage', function(msg) {
 		var item = document.createElement('li');
-		item.textContent = msg;
+
+		// 이게 페이지에서 보여지는것
+		item.textContent = msg[0].text;
+
 		messages.appendChild(item);
 		window.scrollTo(0, document.body.scrollHeight);
 	});

@@ -39,21 +39,30 @@ io.on('connection', (socket)=>{
 		socket.join(chatRoomId);
 	});
 
-	socket.on('disconnect', () => {
+
+	socket.on('disconnect', (chatRoomId) => {
 		console.log('user disconnected: ', socket.id);
 		console.log('dcnnt chatRoomId : ',chatRoomId)
-		socket.leave((chatRoomId)=>{
-		});
+		socket.leave(chatRoomId);
 	});
 
-	socket.on('chat message', msg => {
+	socket.on('chat message', (msg) => {
 		console.log(msg);
 		io.emit('chat message', msg);
+	});
+
+	socket.on('newMessage', (msg) => {
+		// we tell the client to execute 'new message'
+		// io.emit('newMessage', msg)
+		socket.broadcast.emit('newMessage', msg);
+		console.log(msg);
+		console.log("server에서 지금 메세지 보내는 중");
 	});
 });
 
 setInterval(() => {
 	io.emit('message', new Date().toISOString());
+	// console.log("지금 시간 보내는 중");
 }, 1000);
 
 
