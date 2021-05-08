@@ -47,6 +47,9 @@ const userSchema=new user_Schema({
         type:Number,   //최신순: 0, 거리순: 1
         required: false,
         default:0
+    },
+    addressIndex:{
+        type:Number
     }
 
 })

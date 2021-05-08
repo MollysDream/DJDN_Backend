@@ -34,6 +34,9 @@ const addressSchema=new address_Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'user'
+    },
+    addressIndex:{
+        type:Number
     }
 })
 
