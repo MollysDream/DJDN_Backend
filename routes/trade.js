@@ -4,7 +4,6 @@ let router = express.Router();
 const Trade = require('../models/trade');
 const User = require("../models/user");
 
-
 // 거래 조회
 router.get('/getTrade', function(req, res, next) {
     console.log(`/trade/getTrade/서버통신 : trade 조회`)
@@ -25,39 +24,36 @@ router.get('/getTrade', function(req, res, next) {
 
 // 거래 설정
 // location, userList, post ??
-router.post('/createTradeTime',function (req, res, next){
-    console.log('/trade/createTradeTime 통신');
+router.post('/createTradeTime',async (req, res) => {
+    try{
+        console.log('/trade/createTradeTime 통신');
 
-    // req.body 저장
-    const{
-        startTime, endTime, workTime, location,  user1, user2, post
-    } = req.body;
+        // req.body 저장
+        const{
+            startTime, endTime, location
+        } = req.body;
 
-    // User.findOne({name:'user1'}).populate('')
+        // User.findOne({name:'user1'}).populate('')
 
-    // 새 instance 생성
-    const newTrade = new Trade({
-        startTime: startTime,
-        endTime: endTime,
-        workTime: workTime,
-        location: location,
-        complete: false,
-        userList:[user1, user2],
-        post: post
-    })
+        console.log(startTime)
 
-    console.log(newTrade);
-
-    newTrade.save(err,(trade)=>{
-        if(err){
-            console.log(err);
-            console.log("  무야호\n"+trade);
-            res.status(500).send({error:"DB오류"});
-        }else {
-            console.log("DB 저장완료");
-            res.status(200).json(trade);
+        // 새 instance 생성
+        obj = {
+            startTime: startTime,
+            endTime: endTime,
+            // workTime: workTime,
+            location: location,
+            isSave: true,
+            complete: false,
+            // userList:[user1, user2],
+            // chatRoom: chatRoom
         }
-    });
+        trade = new Trade(obj);
+        await trade.save();
+        res.json({ message: "거래 시간 및 장소가 설정되었습니다!" });
+    } catch(err){
+        console.log(err);
+    }
 });
 
 
