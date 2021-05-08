@@ -46,40 +46,8 @@ router.post("/certifyAddress", async (req, res) => {
     console.log(err);
     res.status(300).send({error:err});
   }
-  /*try{
-    obj = {
-      isAuth : true,
-      userId: req.body.userId,
-      addressName: req.body.address,
-      latitude: req.body.latitude,
-      longitude: req.body.longitude
-    };
-    address = new Address(obj);
-    await address.save();
-    res.json({ message: "동네 인증을 완료했습니다!" });
-  } catch (err) {
-    console.log(err);
-  }*/
-});
 
-/*//내 동네 인증
-router.post("/certifyAddress", async (req, res) => {
-  console.log("hi "+req.body.email)
-  try{
-    obj = {
-      isAuth : true,
-      userId: req.body.userId,
-      addressName: req.body.address,
-      latitude: req.body.latitude,
-      longitude: req.body.longitude
-    };
-    address = new Address(obj);
-    await address.save();
-    res.json({ message: "동네 인증을 완료했습니다!" });
-  } catch (err) {
-    console.log(err);
-  }
-});*/
+});
 
 //사용자 인증 동네 가져오기
 router.post("/checkAddress", async (req, res) => {
@@ -108,13 +76,13 @@ router.post("/updateRadius", async (req, res) => {
 
 // **동 저장 ( 새로운 address 생성 )
 router.post("/createAddress", async (req, res) => {
-  const {userId, addressName, chooseIndex} = req.body;
-  console.log(`**/address/createAddress/서버통신** 사용자 ID:${userId} 동네: ${addressName} 인덱스: ${chooseIndex} 저장`)
+  const {userId, addressName, addressIndex} = req.body;
+  console.log(`**/address/createAddress/서버통신** 사용자 ID:${userId} 동네: ${addressName} 인덱스: ${addressIndex} 저장`)
   try{
     obj = {
       userId: userId,
       addressName: addressName,
-      chooseIndex: chooseIndex
+      addressIndex: addressIndex
     };
     let address = new Address(obj);
     await address.save();
@@ -123,6 +91,21 @@ router.post("/createAddress", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+router.delete('/deleteAddress', function(req, res, next) {
+  const userId = req.query.userId;
+  const addressIndex = req.query.addressIndex;
+  console.log(`**/data/deleteAddress/서버통신** 사용자 ID:${userId} 인덱스:${addressIndex} 주소 삭제`)
+
+  Address.findOneAndDelete({'userId':userId, 'addressIndex':addressIndex})
+      .then((result)=>{
+        console.log(`사용자 ID:${userId} 인덱스:${addressIndex} 주소 삭제 완료`);
+        res.status(200).json(result);
+      }).catch((err)=>{
+    console.log(err);
+    res.status(500).send({error:"deleteAddress DB오류"});
+  })
 });
 
 module.exports = router;
