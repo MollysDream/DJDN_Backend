@@ -14,7 +14,7 @@ router.get('/getUserData', function(req, res, next) {
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
+        res.status(500).send({error:"getUserData DB오류"});
     })
 });
 
@@ -28,7 +28,21 @@ router.post('/updateUserCategoryAndSort', function(req, res, next) {
         res.status(200).json(result);
     }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
+        res.status(500).send({error:"updateUserCategoryAndSort DB오류"});
+    })
+});
+
+router.post('/updateUserAddressIndex', function(req, res, next) {
+    const {userId, addressIndex} = req.body;
+    console.log(`**/user/updateUserAddressIndex/서버통신** 사용자 ID:${userId} // 인덱스: ${addressIndex} 사용자가 사용할 주소인덱스 수정`)
+
+    User.findOneAndUpdate({'_id':userId}, {addressIndex:addressIndex})
+        .then((result)=>{
+            console.log(`${userId} 사용자 주소인덱스:${addressIndex} 수정 완료!!`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"updateUserAddressIndex DB오류"});
     })
 });
 

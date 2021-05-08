@@ -15,20 +15,17 @@ router.get('/getPost',function(req, res, next) {
     const userId = req.query.userId;
     console.log(`**/data/getPost/서버통신** ${page} 페이지 게시물 요청/ 사용자 ID: ${userId}`)
 
-    /*const userData = User.findOne({_id:userId});
-    console.log(userData);*/
-    Address.findOne({userId:userId}).then((addressData)=>{
-        console.log(addressData.longitude);
-        const LONGITUDE = addressData.longitude;
-        const LATITUDE = addressData.latitude;
-        const MAXDISTANCE = addressData.radius;
-        console.log(MAXDISTANCE);
-
-        User.findOne({_id:userId}).then((data)=>{
-            //console.log(data);
-            const category = data.category
-            const sort = data.sort
-
+    User.findOne({_id:userId}).then((data)=>{
+        //console.log(data);
+        const category = data.category
+        const sort = data.sort
+        const addressIndex = data.addressIndex
+        Address.findOne({userId:userId, addressIndex:addressIndex}).then((addressData)=>{
+            console.log(addressData.longitude);
+            const LONGITUDE = addressData.longitude;
+            const LATITUDE = addressData.latitude;
+            const MAXDISTANCE = addressData.radius;
+            console.log(MAXDISTANCE);
             if(sort == 0) {//최신순 정렬이면
                 console.log("*****최신순 정렬*****")
                 Post.find({
@@ -68,17 +65,16 @@ router.get('/getPost',function(req, res, next) {
             }
 
 
-
-        }).catch((err)=>{ // User.findOne()
+        }).catch(err=>{ //Address.findOne()
             console.log(err);
-            console.log('사용자 userId Find 실패');
+            console.log('위치정보 Find 에러')
         })
-    }).catch(err=>{ //Address.findOne()
-      console.log(err);
-      console.log('위치정보 Find 에러')
+
+    }).catch((err)=>{ // User.findOne()
+        console.log(err);
+        console.log('사용자 userId Find 실패');
     })
 
-    //.sort({$natural:-1})
 });
 
 
