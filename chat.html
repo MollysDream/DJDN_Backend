@@ -23,17 +23,22 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-	var socket = io();
+
+	var socket = io('localhost:3002');
 
 	var messages = document.getElementById('messages');
 	var form = document.getElementById('form');
 	var input = document.getElementById('input');
+
+	let count = 0;
+
 	form.addEventListener('submit', function(e) {
 		e.preventDefault();
 		if (input.value) {
-			socket.emit('newMessage',
+					socket.emit('chat message to server',
 							[
 								{
+									_id: count++,
 									text: input.value,
 									createdAt: new Date(),
 									user: {
@@ -44,16 +49,22 @@
 								},
 							]
               );
-			console.log('html',input.value);
+
+            console.log('chat message to server 실행 : ',input.value);
 			input.value = '';
 		}
 	});
+	socket.emit('joinRoom','room1');
 
-	socket.on('newMessage', function(msg) {
-		var item = document.createElement('li');
+	socket.on('chat message to client', (msg)=> {
+		let item = document.createElement('li');
 
 		// 이게 페이지에서 보여지는것
 		item.textContent = msg[0].text;
+
+        console.log('chat message to client 실행 : ',input.value);
+        console.log(msg);
+		console.log(item.textContent);
 
 		messages.appendChild(item);
 		window.scrollTo(0, document.body.scrollHeight);
