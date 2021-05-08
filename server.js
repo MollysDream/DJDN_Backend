@@ -64,9 +64,11 @@ io.on('connection', (socket)=>{
 		socket.join(roomName);
 	})
 	// buyerId, sellerId 
-    socket.on('usersId',(buyerId,sellerId)=>{
+    socket.on('usersId',(buyerId, buyerNick, sellerId, sellerNick)=>{
 		console.log("buyerId : ", buyerId );
+		console.log("buyerNick : ", buyerNick );
 		console.log("sellerId : ", sellerId);
+		console.log("sellerNick : ", sellerNick);
 	});
 
 	// 방 퇴장
@@ -74,14 +76,34 @@ io.on('connection', (socket)=>{
 		socket.leave(roomName);
 	})
 
+	socket.on("sellerEntrance",(sellerNick)=>{
+		console.log("여기 오긴 함");
+		// io.to('room1').emit('chat message to client', msg);
+		socket.broadcast.to('room1').emit('chat message to client', 
+		[
+			{
+				_id: count++,
+				text: sellerNick + "님께서 입장하셨습니다.",
+				createdAt: new Date(),
+				user: {
+					_id: '609597c853f5a70c2c23a380',
+					name: 'React Native 2',
+					avatar: 'https://placeimg.com/140/140/any',
+				},
+			},
+		]);
+		//console.log("client한테 emit함 : " + msg[0].text);
+	});
+
+
 	// 메세지
 	socket.on('chat message to server', (msg) => {
 
-		console.log("현재 사용중인 소켓 아이디 : ",socket.id);
-		console.log("server에서 지금 메세지 받음 : " + msg[0].text);
+		//console.log("현재 사용중인 소켓 아이디 : ",socket.id);
+		//console.log("server에서 지금 메세지 받음 : " + msg[0].text);
 		// io.to('room1').emit('chat message to client', msg);
 		socket.broadcast.to('room1').emit('chat message to client', msg);
-		console.log("client한테 emit함 : " + msg[0].text);
+		//console.log("client한테 emit함 : " + msg[0].text);
 	});
 
 
