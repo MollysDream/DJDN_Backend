@@ -19,7 +19,7 @@ let sample = [
 
 // user 몇명 들어왔나 체크 하려고
 var count = 1;
-
+var buyerid;
 // 서버 연결
 var io = socketio(server);
 server.listen(3002, () => console.log('listening on *:3002'));
@@ -69,32 +69,13 @@ io.on('connection', (socket)=>{
 		console.log("buyerNick : ", buyerNick );
 		console.log("sellerId : ", sellerId);
 		console.log("sellerNick : ", sellerNick);
+		buyerid = buyerId;
 	});
 
 	// 방 퇴장
 	socket.on('leaveRoom',(roomName)=>{
 		socket.leave(roomName);
 	})
-
-	socket.on("sellerEntrance",(sellerNick)=>{
-		console.log("여기 오긴 함");
-		// io.to('room1').emit('chat message to client', msg);
-		socket.broadcast.to('room1').emit('chat message to client', 
-		[
-			{
-				_id: count++,
-				text: sellerNick + "님께서 입장하셨습니다.",
-				createdAt: new Date(),
-				user: {
-					_id: '609597c853f5a70c2c23a380',
-					name: 'React Native 2',
-					avatar: 'https://placeimg.com/140/140/any',
-				},
-			},
-		]);
-		//console.log("client한테 emit함 : " + msg[0].text);
-	});
-
 
 	// 메세지
 	socket.on('chat message to server', (msg) => {
