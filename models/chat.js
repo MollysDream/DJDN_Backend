@@ -4,27 +4,12 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const chat_Schema=mongoose.Schema;
 
 const chatSchema=new chat_Schema({
-    content:[{
-        image: {
-            type:String
-        },
-        text:{
-            type:String
-        }
-    }],
-    //채팅 각각의 시간
-    timeStamp:[{
-        type:Date,
-        default:Date.now,
-    }],
-    chatRoom:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'chatRoom'
-    },
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
-    }
+    beforeTime: {type:String},
+    textId : {type:String},
+    createdAt : {type:String},
+    text : {type:String},
+    senderId : {type:String},
+    roomId : {type:String},
 })
 
 // chatSchema.plugin(mongooseAutoInc.plugin, 'chat');

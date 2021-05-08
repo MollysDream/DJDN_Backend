@@ -22,6 +22,7 @@ var dataRouter = require('./routes/data');
 var memberRouter = require('./routes/member');
 var addressRouter = require('./routes/address');
 var tradeRouter = require('./routes/trade');
+var chatRouter = require('./routes/chat');
 
 var app = express();
 
@@ -45,6 +46,8 @@ app.use('/data', dataRouter);
 app.use('/member', memberRouter);
 app.use('/address',addressRouter);
 app.use('/trade', tradeRouter);
+app.use('/chat', chatRouter);
+
 
 
 // //소켓 통신
