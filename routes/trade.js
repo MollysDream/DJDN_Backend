@@ -48,9 +48,9 @@ router.post('/createTradeTime',async (req, res) => {
             // userList:[user1, user2],
             // chatRoom: chatRoom
         }
-        trade = new Trade(obj);
+        const trade = new Trade(obj);
         await trade.save();
-        res.json({ message: "거래 시간 및 장소가 설정되었습니다!" });
+        res.json({ message: "거래 시간 및 장소가 설정되었습니다!", tradeId:trade._id });
     } catch(err){
         console.log(err);
     }
@@ -58,16 +58,18 @@ router.post('/createTradeTime',async (req, res) => {
 
 
 // 거래 시간 연장
-router.post('/updateTradeTime',function (req, res, next){
+router.post('/updateTradeTime',async (req, res) =>{
+
+    try {
     console.log('/trade/updateTradeTime 실행');
 
     // req.body 저장
-    let {tradeId, workTime, endTime} = req.body;
-    console.log(`거래 ID:${tradeId}, 연장한 시간: ${workTime}, 연장된 종료 시간: ${endTime} `);
+    let {tradeId, endTime} = req.body;
+    console.log(`거래 ID:${tradeId}, 연장된 종료 시간: ${endTime} `);
 
 
     // instance 수정
-    Trade.findOneAndUpdate({'_id':tradeId}, {workTime:workTime, endTime:endTime})
+    Trade.findOneAndUpdate({'_id':tradeId}, {endTime:endTime})
       .then((result)=>{
           console.log(`거래 ID ${tradeId}의 시간연장 / workTime  = ${workTime}, endTime  = ${endTime}`);
           console.log('연장된 거래 정보 조회 : '+result);
@@ -75,7 +77,10 @@ router.post('/updateTradeTime',function (req, res, next){
       }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"getPost DB오류"});
-    })
+    })} catch(err){
+        console.log(err);
+        res.json
+    }
 });
 
 
@@ -94,6 +99,20 @@ router.post('/endTrade',function (req, res, next){
         console.log(err);
         res.status(500).send({error:"getPost DB오류"});
     })
+
+});
+
+// 거래 취소
+router.post('/deleteTrade', async(req, res) => {
+    try{
+        await Trade.remove({
+            _id:req.body.tradeId
+        });
+        res.json({message:true});
+    } catch (err){
+        console.log(err);
+        res.json({message:false});
+    }
 
 });
 
