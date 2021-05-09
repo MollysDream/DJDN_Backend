@@ -9,7 +9,7 @@ router.post("/add", async (req, res) => {
 
 });
 
-//현재 위치 받아오기
+//현재 위치 받아오기 (동네)
 router.post("/currentLocation", async (req, res) => {
 
   try {
@@ -24,6 +24,24 @@ router.post("/currentLocation", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({message: "동네인증에 실패하였습니다."})
+  }
+});
+
+//현재 위치 받아오기 (상세주소)
+router.post("/currentAddress", async (req, res) => {
+
+  try {
+    var REST_API_KEY = '68099abb33631383a581fb96b131ca2f'
+    const address = await axios({
+      url: 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x='+req.body.currentX+'&y='+req.body.currentY ,
+      method: 'get',
+      headers: {'Authorization': 'KakaoAK '+ REST_API_KEY },
+    });
+    console.log(address.data.documents[0].address_name);
+    res.json({ message: "거래장소가 설정되었습니다", address:address.data.documents[0].address_name });
+  } catch (err) {
+    console.log(err);
+    res.json({message: "거래장소 설정에 실패하였습니다"})
   }
 });
 
