@@ -16,7 +16,7 @@ router.get('/getChat', function(req, res, next) {
 			res.status(200).json(data);
 		}).catch((err)=>{
 		console.log(err);
-		res.status(500).send({error:"getPost DB오류"});
+		res.status(500).send({error:"chat 가져오기 DB오류"});
 	})
 });
 
@@ -37,27 +37,45 @@ router.post('/createChat', async(req, res)=>{
 
 // 채팅방 조회
 router.get('/getChatRoom', function(req, res, next) {
-	// console.log(`/trade/getTrade/서버통신 : trade 조회`)
-	//let page = req.params.page;
-	//console.log(page);
+
 	ChatRoom.find()
 		.then((data)=>{
 			res.status(200).json(data);
 		}).catch((err)=>{
 		console.log(err);
-		res.status(500).send({error:"getPost DB오류"});
+		res.status(500).send({error:"DB오류"});
 	})
 });
 
-// 채팅방 생성 / user1, user2는 각각의 ObjectId
+
+// 현재 내가 채팅하는 모든 채팅방 조회 : 채팅 탭에서 사용할거 (태섭)
+router.get('/getChatRoomById', function(req, res, next) {
+
+	// 인자로 받아오는거 : 현재 로그인되어있는 사용자 Id
+	const {currentUserId} = req.body
+
+	// 인자로 받아온거 사용 -> buyerId 또는 sellerId 둘 중 하나라도 해당되면 채팅방 return.
+	ChatRoom.find()
+		.or([{postOwnerId: currentUserId},{hostId: currentUserId}])
+		.then((data)=>{
+			res.status(200).json(data);
+		}).catch((err)=>{
+		console.log(err);
+		res.status(500).send({error:"DB오류"});
+	})
+});
+
+
+
+// 채팅방 생성 / postOwnerId, hostId는 각각의 ObjectId
 router.post('/createChatRoom', async(req,res)=>{
 	try{
-		const{user1, user2, postId} = req.body;
+		const{postOwnerId, hostId, postId} = req.body;
 
 		// 새 instance 생성
 		const newChatRoom = new ChatRoom({
-			buyerId: user1,
-			sellerId: user2,
+			postOwnerId: postOwnerId,
+			hostId: hostId,
 			postId: postId
 		})
 

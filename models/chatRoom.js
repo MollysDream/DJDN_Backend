@@ -10,8 +10,8 @@ const chatRoomSchema=new chatRoom_Schema({
     // }],
 
 
-    sellerId:{type:String},
-    buyerId:{type:String},
+    hostId:{type:String},
+    postOwner:{type:String},
     postId:{type:String}
 
 })

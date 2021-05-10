@@ -13,10 +13,10 @@ var server = http.Server(app);
 
 // user 몇명 들어왔나 체크 하려고
 var count = 1;
-var buyerid;
 
 
 
+let postOwnerId;
 // chatRoomId 조회를 위함!
 let chatRoomId;
 
@@ -71,13 +71,14 @@ io.on('connection', (socket)=>{
 		socket.leave(chatRoomId);
 	});
 
-	// buyerId, sellerId
-    socket.on('usersId',(buyerId, buyerNick, sellerId, sellerNick)=>{
-		console.log("buyerId : ", buyerId );
-		console.log("buyerNick : ", buyerNick );
-		console.log("sellerId : ", sellerId);
-		console.log("sellerNick : ", sellerNick);
-		buyerid = buyerId;
+	// postOwnerId, hostId
+    socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId, hostNick)=>{
+		console.log("postOwnerId : ", postOwnerId );
+		console.log("postOwnerNick : ", postOwnerNick );
+		console.log("hostId : ", hostId);
+		console.log("hostNick : ", hostNick);
+
+			// postOwnerId = postOwnerId;
 
 		/*
 		* 여기서 가져온 buyerId, sellerId로 채팅방 조회
