@@ -2,11 +2,11 @@ var express = require('express');
 var http = require('http')
 var socketio = require('socket.io');
 var mongoose = require('mongoose');
-const ChatRoom = require('../models/chatRoom');
+const ChatRoom = require('./models/chatRoom');
 
 
 var ObjectID = mongoose.ObjectID;
-var db = mongoose.connect('mongodb://localhost:27017/CHAT');
+var db = mongoose.connect('mongodb://localhost:27017/DJDN');
 var app = express();
 var server = http.Server(app);
 
