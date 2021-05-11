@@ -11,7 +11,7 @@ const chatRoomSchema=new chatRoom_Schema({
 
 
     hostId:{type:String},
-    postOwner:{type:String},
+    postOwnerId:{type:String},
     postId:{type:String}
 
 })
