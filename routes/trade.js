@@ -60,45 +60,54 @@ router.post('/createTradeTime',async (req, res) => {
 // 거래 시간 연장
 router.post('/updateTradeTime',async (req, res) =>{
 
-    try {
     console.log('/trade/updateTradeTime 실행');
 
-    // req.body 저장
-    let {tradeId, endTime} = req.body;
-    console.log(`거래 ID:${tradeId}, 연장된 종료 시간: ${endTime} `);
+    try {
+        // req.body 저장
+        let {tradeId, endTime} = req.body;
+        console.log(`거래 ID:${tradeId}, 연장된 종료 시간: ${endTime} `);
 
+        await Trade.updateOne(
+            { _id: tradeId },
+                {
+                  $set: {
+                      endTime:endTime   
+                }
+            }
+        );
 
-    // instance 수정
-    Trade.findOneAndUpdate({'_id':tradeId}, {endTime:endTime})
-      .then((result)=>{
-          console.log(`거래 ID ${tradeId}의 시간연장 / workTime  = ${workTime}, endTime  = ${endTime}`);
-          console.log('연장된 거래 정보 조회 : '+result);
-          res.status(200).json(result);
-      }).catch((err)=>{
+       res.json({ message: "거래 연장이 완료되었습니다." });
+    } catch(err){
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
-    })} catch(err){
-        console.log(err);
-        res.json
+        res.json({ message: false });
     }
 });
 
 
 // 거래 완료
-router.post('/endTrade',function (req, res, next){
+router.post('/endTrade',async (req, res) => {
 
     console.log('/trade/endTrade 실행');
-    let tradeId = req.body;
-    console.log(`거래 ID:${tradeId} `);
-    Trade.findOneAndUpdate({'_id':tradeId}, {complete:true})
-      .then((result)=>{
-          console.log(`거래 ID ${tradeId}의 거래 완료 처리`);
-          console.log('거래 완료 처리된 거래 정보 조회 : '+result);
-          res.status(200).json(result);
-      }).catch((err)=>{
+
+    try {
+        // req.body 저장
+        let {tradeId} = req.body;
+        console.log(`거래 ID:${tradeId} `);
+
+        await Trade.updateOne(
+            { _id: tradeId },
+                {
+                    $set: {
+                      complete:true  
+                }
+            }
+        );
+
+       res.json({ message: "거래가 종료되었습니다." });
+    } catch(err){
         console.log(err);
-        res.status(500).send({error:"getPost DB오류"});
-    })
+        res.json({ message: false });
+    }
 
 });
 
