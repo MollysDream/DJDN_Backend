@@ -11,9 +11,12 @@ router.get('/getChat', function(req, res, next) {
 	// console.log(`/trade/getTrade/서버통신 : trade 조회`)
 	//let page = req.params.page;
 	//console.log(page);
-	Chat.find()
+	const chatRoomId = req.query.chatRoomId;
+	console.log("chatRoomID : ", chatRoomId);
+	Chat.find({roomId :chatRoomId})
 		.then((data)=>{
 			res.status(200).json(data);
+			console.log("이건 잘 나오냐... ", data );
 		}).catch((err)=>{
 		console.log(err);
 		res.status(500).send({error:"chat 가져오기 DB오류"});
@@ -68,8 +71,7 @@ router.get('/getChatRoomById', function(req, res, next) {
 
 
 // 채팅방 생성 / postOwnerId, hostId는 각각의 ObjectId
-router.post('/createChatRoom', async(req,res)=>{
-	try{
+router.post('/createChatRoom', function(req,res){
 		const{postOwnerId, hostId, postId} = req.body;
 
 		// 새 instance 생성
@@ -80,11 +82,14 @@ router.post('/createChatRoom', async(req,res)=>{
 		})
 
 		console.log(newChatRoom);
-		await newChatRoom.save();
-		res.json({message:"chatRoom 저장 완료"});
-	} catch(err){
+		newChatRoom.save()
+		.then((data)=>{
+			res.status(200).json(data);
+			console.log("여기다", data);
+		}).catch((err)=>{
 		console.log(err);
-	}
+		res.status(500).send({error:"DB오류"});
+	})
 
 });
 

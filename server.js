@@ -72,11 +72,10 @@ io.on('connection', (socket)=>{
 	});
 
 	// postOwnerId, hostId
-    socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId, hostNick)=>{
+    socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId)=>{
 		console.log("postOwnerId : ", postOwnerId );
 		console.log("postOwnerNick : ", postOwnerNick );
 		console.log("hostId : ", hostId);
-		console.log("hostNick : ", hostNick);
 
 			// postOwnerId = postOwnerId;
 
