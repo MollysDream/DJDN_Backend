@@ -74,7 +74,7 @@ io.on('connection', (socket)=>{
 	// postOwnerId, hostId
     socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId)=>{
 		console.log("postOwnerId : ", postOwnerId );
-		console.log("postOwnerNick : ", postOwnerNick );
+		// console.log("postOwnerNick : ", postOwnerNick );
 		console.log("hostId : ", hostId);
 
 			// postOwnerId = postOwnerId;
@@ -109,7 +109,7 @@ io.on('connection', (socket)=>{
 		* 그래서 여기 'room1'에 chatRoomId 전역변수를 집어 넣는다!?
 		*/
 
-		socket.broadcast.to('room1').emit('chat message to client', msg);
+		socket.broadcast.to('room2').emit('chat message to client', msg);
 	});
 
 
