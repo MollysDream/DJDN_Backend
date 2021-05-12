@@ -55,8 +55,7 @@ router.get('/getChatRoom', function(req, res, next) {
 router.get('/getChatRoomById', function(req, res, next) {
 
 	// 인자로 받아오는거 : 현재 로그인되어있는 사용자 Id
-	const {currentUserId} = req.body
-
+	const currentUserId = req.query.currentUserId;
 	// 인자로 받아온거 사용 -> buyerId 또는 sellerId 둘 중 하나라도 해당되면 채팅방 return.
 	ChatRoom.find()
 		.or([{postOwnerId: currentUserId},{hostId: currentUserId}])
