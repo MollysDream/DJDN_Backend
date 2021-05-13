@@ -16,12 +16,15 @@ const reportSchema=new report_Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'post'
     },
-    //신고유형
-    reportType:[{
+    reportWhat:{ // 0->게시글  1->사용자
+        type:Number
+    },
+    //신고 종류 ex.불법재능, 사기
+    reportCategory:{
         type:String,
-    }],
+    },
     //신고내용
-    description:{
+    text:{
         type:String,
         required:false,
     }
