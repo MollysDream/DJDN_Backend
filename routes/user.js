@@ -46,6 +46,20 @@ router.post('/updateUserAddressIndex', function(req, res, next) {
     })
 });
 
+router.post('/updateUserProfile', function(req, res, next) {
+    const {userId,editNickname, editImage} = req.body;
+    console.log(`**/user/updateUserProfile/서버통신** 닉네임: ${editNickname} // 사용자 ID:${userId} 사용자 프로필 수정`)
+
+    User.findOneAndUpdate({'_id':userId}, {nickname:editNickname, profileImage: editImage})
+        .then((result)=>{
+            console.log(`${userId} 사용자 // 닉네임:${editNickname} 수정 완료!!`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"updateUserProfile DB오류"});
+    })
+});
+
 
 router.get('/testdata', function(req, res, next) {
     console.log('/testdata 서버통신')
