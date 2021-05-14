@@ -5,11 +5,11 @@ const Post = require('../models/post');
 const User = require('../models/user')
 const Category = require('../models/category');
 const Address = require('../models/address')
-
+const ChatRoom = require('../models/chatRoom');
 
 /* GET users listing. */
 router.get('/getPost',function(req, res, next) {
-    const LIMIT = 4
+    const LIMIT = 6
 
     const page = req.query.page;
     const userId = req.query.userId;
@@ -97,7 +97,7 @@ router.get('/getPostBySearch', function(req,res,next){
 
 router.get('/getUserPost', function(req,res,next){
     const userId = req.query.userId;
-    console.log(`**/data/getUserPost/서버통신** ID: ${userId}의 검색 게시물 요청`);
+    console.log(`**/data/getUserPost/서버통신** ID: ${userId}가 작성한 게시물 요청`);
 
 
     Post.find({user_id:userId}).sort({Date:-1}).then((data)=>{
@@ -106,6 +106,33 @@ router.get('/getUserPost', function(req,res,next){
         console.log(err);
         res.status(500).send({error:"getUserPost DB오류"});
     })
+})
+
+router.get('/getUserTradingPost', function(req,res,next){
+    const userId = req.query.userId;
+    console.log(`**/data/getUserTradingPost/서버통신** ID: ${userId}의 거래중인 게시물 요청`);
+
+    ChatRoom.find({hostId:userId},).then((data)=>{
+        //console.log(data);
+        let postIdList = [];
+        data.map((post)=>{
+            postIdList.push(post.postId);
+        })
+        console.log(postIdList);
+
+        Post.find({_id: {$in:postIdList}}).then((postdata)=>{
+            res.status(200).json(postdata);
+        }).catch(err=>{
+            console.log(err);
+            res.status(500).send({error:"getUserTradingPost Post Find DB 오류"})
+        })
+
+        res.status(500);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getUserTradingPost Chatroom Find DB 오류"})
+    })
+
 
 })
 
