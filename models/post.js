@@ -67,6 +67,10 @@ const postSchema=new post_Schema({
     user_id:{
         type:String,
         required: true
+    },
+    tradeStatus:{   //0:아무일 없음, 1:거래중, 2:거래완료
+        type:Number,
+        default:0
     }
 
 })

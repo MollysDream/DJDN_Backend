@@ -100,7 +100,7 @@ router.get('/getUserPost', function(req,res,next){
     console.log(`**/data/getUserPost/서버통신** ID: ${userId}가 작성한 게시물 요청`);
 
 
-    Post.find({user_id:userId}).sort({Date:-1}).then((data)=>{
+    Post.find({user_id:userId}).sort({date:-1}).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
@@ -120,7 +120,7 @@ router.get('/getUserTradingPost', function(req,res,next){
         })
         console.log(postIdList);
 
-        Post.find({_id: {$in:postIdList}}).then((postdata)=>{
+        Post.find({_id: {$in:postIdList}}).sort({date:-1}).then((postdata)=>{
             res.status(200).json(postdata);
         }).catch(err=>{
             console.log(err);
@@ -236,6 +236,20 @@ router.post('/updatePostView', function(req, res, next) {
         }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"updatePostView DB오류"});
+    })
+});
+
+router.post('/updatePostTradeStatus', function(req, res, next) {
+    const {postId, status} = req.body;
+    console.log(`**/data/updatePostTradeStatus/서버통신** 게시글 ID:${postId} 상태: ${status}로 수정`)
+
+    Post.findOneAndUpdate({'_id':postId}, {tradeStatus:status})
+        .then((result)=>{
+            console.log(`${postId} 게시글 거래상태:${status} 수정 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"updatePostTradeStatus DB오류"});
     })
 });
 
