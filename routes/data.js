@@ -80,17 +80,79 @@ router.get('/getPost',function(req, res, next) {
 
 router.get('/getPostBySearch', function(req,res,next){
     const searchValue = req.query.searchValue;
+    const userId = req.query.userId;
     console.log(`**/data/getPostBySearch/서버통신** ${searchValue} 검색 게시물 요청`);
 
     const searchOption = [
         {title: new RegExp(searchValue)},
         {text: new RegExp(searchValue)}
     ]
-    Post.find({$or:searchOption}).sort({$natural:-1}).then((data)=>{
+    /*Post.find({$or:searchOption}).sort({$natural:-1}).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"getPostBySearch DB오류"});
+    })*/
+
+
+    User.findOne({_id:userId}).then((data)=>{
+        //console.log(data);
+        const category = data.category
+        const sort = data.sort
+        const addressIndex = data.addressIndex
+        Address.findOne({userId:userId, addressIndex:addressIndex}).then((addressData)=>{
+            console.log(addressData.longitude);
+            const LONGITUDE = addressData.longitude;
+            const LATITUDE = addressData.latitude;
+            const MAXDISTANCE = addressData.radius;
+            console.log(MAXDISTANCE);
+            if(sort == 0) {//최신순 정렬이면
+                console.log("*****최신순 정렬*****")
+                Post.find({
+                    location: {
+                        $geoWithin: {
+                            $centerSphere: [[LONGITUDE, LATITUDE], (MAXDISTANCE/1000) / 6378.1]
+                        }
+                    },
+                    category: {$in:category},
+                    $or:searchOption
+                })
+                    .sort({date:-1})
+                    .then((data)=>{
+                    res.status(200).json(data);
+                }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPostBySearch DB오류"});
+                })
+            }else{ // 거리순 정렬
+                console.log("*****거리순 정렬*****")
+                Post.find({
+                    location: {
+                        $nearSphere: {
+                            $geometry: {
+                                type: 'Point',
+                                coordinates: [LONGITUDE, LATITUDE]
+                            },
+                            $maxDistance: MAXDISTANCE
+                        }
+                    },
+                    category: {$in:category},
+                    $or:searchOption
+                }).then((data)=>{
+                    res.status(200).json(data);
+                }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPostBySearch DB오류"});
+                })
+            }
+        }).catch(err=>{ //Address.findOne()
+            console.log(err);
+            console.log('위치정보 Find 에러')
+        })
+
+    }).catch((err)=>{ // User.findOne()
+        console.log(err);
+        console.log('사용자 userId Find 실패');
     })
 
 })
@@ -151,10 +213,10 @@ router.get('/getUserTradingPost', function(req,res,next){
 
 })
 
-router.get('/getPostByCategory', function(req,res,next){
+/*router.get('/getPostByCategory', function(req,res,next){
     // const category = req.query.category;
     const category = ['애견', '도움'];
-    console.log(`**/data/getPostByCategory/서버통신** ${category} 카테고리 검색 게시물 요청`);
+    console.log(`**!/data/getPostByCategory/서버통신** ${category} 카테고리 검색 게시물 요청`);
 
     console.log(category);
     Post.find({category: {$in:category}}).then((data)=>{
@@ -164,7 +226,7 @@ router.get('/getPostByCategory', function(req,res,next){
         res.status(500).send({error:"getPostByCategory DB오류"});
     })
 
-})
+})*/
 
 
 
