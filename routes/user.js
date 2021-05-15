@@ -60,6 +60,34 @@ router.post('/updateUserProfile', function(req, res, next) {
     })
 });
 
+router.post('/addKeyword', function(req, res, next) {
+    const {userId,keyword} = req.body;
+    console.log(`**/user/addKeyword/서버통신** 키워드: ${keyword} // 사용자 ID:${userId} 사용자 키워드 추가`)
+
+    User.findOneAndUpdate({'_id':userId}, {$push:{keyword:keyword}})
+        .then((result)=>{
+            console.log(`${userId} 사용자 // 키워드:${keyword} 추가 완료!!`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"addKeyword DB오류"});
+    })
+});
+
+router.post('/deleteKeyword', function(req, res, next) {
+    const {userId,keyword} = req.body;
+    console.log(`**/user/deleteKeyword/서버통신** 키워드: ${keyword} // 사용자 ID:${userId} 사용자 키워드 추가`)
+
+    User.findOneAndUpdate({'_id':userId}, {$pull:{keyword:keyword}})
+        .then((result)=>{
+            console.log(`${userId} 사용자 // 키워드:${keyword} 삭제 완료!!`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"addKeyword DB오류"});
+    })
+});
+
 
 router.get('/testdata', function(req, res, next) {
     console.log('/testdata 서버통신')
