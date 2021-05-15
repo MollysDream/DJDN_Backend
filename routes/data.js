@@ -108,6 +108,21 @@ router.get('/getUserPost', function(req,res,next){
     })
 })
 
+////
+router.get('/getPostTitle', function(req,res,next){
+    const postId = req.query.postId;
+    console.log("postID : ", postId);
+
+    Post.find({_id:postId}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getUserPost DB오류"});
+    })
+})
+////
+
+
 router.get('/getUserTradingPost', function(req,res,next){
     const userId = req.query.userId;
     console.log(`**/data/getUserTradingPost/서버통신** ID: ${userId}의 거래중인 게시물 요청`);
@@ -150,6 +165,8 @@ router.get('/getPostByCategory', function(req,res,next){
     })
 
 })
+
+
 
 router.post('/createPost', function(req,res,next){
     console.log(`**/data/createPost/서버통신** 게시물 작성 요청`);
