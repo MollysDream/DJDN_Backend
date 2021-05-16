@@ -68,6 +68,21 @@ router.get('/getChatRoomById', function(req, res, next) {
 });
 
 
+router.get('/getChatRoomByPost', function(req, res, next) {
+
+	const currentUserId = req.query.currentUserId;
+	const postId = req.query.postId;
+
+	ChatRoom.find({postOwnerId: currentUserId, postId:postId})
+		.then((data)=>{
+			res.status(200).json(data);
+		}).catch((err)=>{
+		console.log(err);
+		res.status(500).send({error:"DB오류"});
+	})
+});
+
+
 
 // 채팅방 생성 / postOwnerId, hostId는 각각의 ObjectId
 router.post('/createChatRoom', function(req,res){
