@@ -107,4 +107,17 @@ router.post('/createChatRoom', function(req,res){
 
 });
 
+router.post('/getLatestChat',function(req,res){
+	const {chatRoomId} = req.body;
+
+	Chat.findOne({roomId:chatRoomId}).sort({$natural:-1})
+		.then(data=>{
+			res.status(200).json(data);
+			console.log(`최근 채팅 불러옴!! 채팅방 Id: ${chatRoomId}`);
+		}).catch(err=>{
+			console.log(err);
+			res.status(500).send({error:"getLatestChat DB오류"})
+	})
+})
+
 module.exports = router;
