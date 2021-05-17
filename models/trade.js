@@ -15,7 +15,7 @@ const tradeSchema=new trade_Schema({
         required:true
     },
     // workTime:{
-    //     type:String,
+    //     type:Number,
     //     required:true
     // },
     // 자동신고가 가능하게 자세히 ...
@@ -32,14 +32,18 @@ const tradeSchema=new trade_Schema({
         type:Boolean,
         required:true
     },
-    // userList:[{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     ref: 'user'
-    // }],
-    // chatRoom:{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     ref: 'chatRoom'
-    // }
+    sender:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    receiver:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    chatRoom:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'chatRoom'
+    }
 })
 
 // tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');

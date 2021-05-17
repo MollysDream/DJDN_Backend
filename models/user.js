@@ -26,6 +26,7 @@ const userSchema=new user_Schema({
     },
     averageRating:{
         type:Number,
+        default:3
     },
     ban:{
         type:Boolean,

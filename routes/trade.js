@@ -5,20 +5,22 @@ const Trade = require('../models/trade');
 const User = require("../models/user");
 
 // 거래 조회
-router.get('/getTrade', function(req, res, next) {
-    console.log(`/trade/getTrade/서버통신 : trade 조회`)
-    //let page = req.params.page;
-    //console.log(page);
-    Trade.find()
-        .populate('userList')
-        .populate('post')
-        .then((data)=>{
-            // console.log('무야호'+data.userList.length);
-             res.status(200).json(data);
-        }).catch((err)=>{
-            console.log(err);
-             res.status(500).send({error:"getPost DB오류"});
-        })
+router.post('/getTrade', async(req, res) => {
+    
+    try{
+        console.log(`/trade/getTrade/서버통신 : trade 조회`)
+
+        const {
+            tradeId
+        } = req.body;
+
+        const Trade= await Trade.find({_id:tradeId})
+        res.json({ message: "거래가 존재합니다."});
+    } catch(err){
+        console.log(err);
+    }
+
+    
 });
 
 
@@ -30,7 +32,7 @@ router.post('/createTradeTime',async (req, res) => {
 
         // req.body 저장
         const{
-            startTime, endTime, location
+            startTime, endTime, location,sender,receiver
         } = req.body;
 
         // User.findOne({name:'user1'}).populate('')
@@ -41,12 +43,11 @@ router.post('/createTradeTime',async (req, res) => {
         obj = {
             startTime: startTime,
             endTime: endTime,
-            // workTime: workTime,
             location: location,
             isSave: true,
             complete: false,
-            // userList:[user1, user2],
-            // chatRoom: chatRoom
+            sender:sender,
+            receiver:receiver,
         }
         const trade = new Trade(obj);
         await trade.save();
@@ -118,6 +119,28 @@ router.post('/deleteTrade', async(req, res) => {
             _id:req.body.tradeId
         });
         res.json({message:true});
+    } catch (err){
+        console.log(err);
+        res.json({message:false});
+    }
+
+});
+
+//사용자 평가
+router.post('/userRate', async(req, res) => {
+    try{
+        let {userId, rating} = req.body;
+        console.log(`평가할 유저 ID:${userId} `);
+
+        await User.updateOne(
+            { _id: userId },
+                {
+                    $set: {
+                      averageRating: rating
+                }
+            }
+        );
+        res.json({message:"사용자 평가를 완료했습니다."});
     } catch (err){
         console.log(err);
         res.json({message:false});
