@@ -9,7 +9,7 @@ const ChatRoom = require('../models/chatRoom');
 
 /* GET users listing. */
 router.get('/getPost',function(req, res, next) {
-    const LIMIT = 6
+    const LIMIT = 8
 
     const page = req.query.page;
     const userId = req.query.userId;
