@@ -33,16 +33,13 @@ const tradeSchema=new trade_Schema({
         required:true
     },
     sender:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        type:String
     },
     receiver:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        type:String
     },
     chatRoom:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'chatRoom'
+        type:String
     }
 })
 

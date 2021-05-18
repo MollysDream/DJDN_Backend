@@ -11,11 +11,17 @@ router.post('/getTrade', async(req, res) => {
         console.log(`/trade/getTrade/서버통신 : trade 조회`)
 
         const {
-            tradeId
+            chatRoom
         } = req.body;
 
-        const Trade= await Trade.find({_id:tradeId})
-        res.json({ message: "거래가 존재합니다."});
+        const trade= await Trade.findOne({chatRoom:chatRoom})
+        if(trade){
+            console.log("거래가 있어요...."+trade)
+            res.json({ message: "거래가 존재합니다.", trade: trade});
+        } else{
+            console.log("거래가 없어요...")
+        }
+        
     } catch(err){
         console.log(err);
     }
@@ -32,26 +38,48 @@ router.post('/createTradeTime',async (req, res) => {
 
         // req.body 저장
         const{
-            startTime, endTime, location,sender,receiver
+            startTime, endTime, location,sender,receiver,chatRoom
         } = req.body;
 
-        // User.findOne({name:'user1'}).populate('')
+        let trade = await Trade.findOne({chatRoom:chatRoom});
+        console.log("이미 존재하는 trade "+trade);
 
-        console.log(startTime)
+        if(trade){
+            //중복된 값 제거
+            await Trade.remove({
+                chatRoom:chatRoom
+            });
 
-        // 새 instance 생성
-        obj = {
-            startTime: startTime,
-            endTime: endTime,
-            location: location,
-            isSave: true,
-            complete: false,
-            sender:sender,
-            receiver:receiver,
+            // 새 instance 생성
+            obj = {
+                startTime: startTime,
+                endTime: endTime,
+                location: location,
+                isSave: true,
+                complete: false,
+                sender:sender,
+                receiver:receiver,
+                chatRoom:chatRoom
+            }
+            const trade = new Trade(obj);
+            await trade.save();
+            res.json({ message: "거래 시간 및 장소가 설정되었습니다!", tradeId:trade._id });
+        } else{
+            // 새 instance 생성
+            obj = {
+                startTime: startTime,
+                endTime: endTime,
+                location: location,
+                isSave: true,
+                complete: false,
+                sender:sender,
+                receiver:receiver,
+                chatRoom:chatRoom
+            }
+            const trade = new Trade(obj);
+            await trade.save();
+            res.json({ message: "거래 시간 및 장소가 설정되었습니다!", tradeId:trade._id });
         }
-        const trade = new Trade(obj);
-        await trade.save();
-        res.json({ message: "거래 시간 및 장소가 설정되었습니다!", tradeId:trade._id });
     } catch(err){
         console.log(err);
     }
