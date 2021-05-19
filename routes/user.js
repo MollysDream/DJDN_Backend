@@ -94,11 +94,15 @@ router.get('/testdata', function(req, res, next) {
 
     const category = new Category({
         category: {
-            'a':false,
-            'b':false,
-            'c':false,
-            'd':false,
-            'e':false
+            '조립':false,
+            '수리':false,
+            '운반':false,
+            '퇴치':false,
+            '설치':false,
+            '청소':false,
+            '과외':false,
+            '디자인':false,
+            '제작':false,
         }
     })
 
