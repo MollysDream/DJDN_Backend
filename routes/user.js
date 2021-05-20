@@ -113,6 +113,18 @@ router.post('/addCertificate', function(req, res, next) {
 
 });
 
+router.get('/getUserCertificate', function(req, res, next) {
+    const userId = req.query.userId;
+    console.log(`**/user/getUserCertificate/서버통신** userID: ${userId}의 자격증 정보 요청`);
+
+    Certificate.find({'user_id': userId}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getUserCertificate DB오류"});
+    })
+});
+
 
 router.get('/testdata', function(req, res, next) {
     console.log('/testdata 서버통신')
