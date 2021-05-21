@@ -125,6 +125,20 @@ router.get('/getUserCertificate', function(req, res, next) {
     })
 });
 
+router.post('/deleteCertificate', function(req, res, next) {
+    const {userId,certificateId} = req.body;
+    console.log(`**/user/deleteCertificate/서버통신** 자격증: ${certificateId} // 사용자 ID:${userId} 사용자 키워드 추가`)
+
+    Certificate.findOneAndDelete({'_id':certificateId})
+        .then((result)=>{
+            console.log(`${certificateId} 자격 삭제 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"deleteCertificate DB오류"});
+    })
+});
+
 
 router.get('/testdata', function(req, res, next) {
     console.log('/testdata 서버통신')
