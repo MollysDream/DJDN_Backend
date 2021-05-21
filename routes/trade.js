@@ -55,7 +55,7 @@ router.post('/createTradeTime',async (req, res) => {
                 startTime: startTime,
                 endTime: endTime,
                 location: location,
-                isSave: true,
+                isSave: false,
                 complete: false,
                 sender:sender,
                 receiver:receiver,
@@ -70,7 +70,7 @@ router.post('/createTradeTime',async (req, res) => {
                 startTime: startTime,
                 endTime: endTime,
                 location: location,
-                isSave: true,
+                isSave: false,
                 complete: false,
                 sender:sender,
                 receiver:receiver,
@@ -85,6 +85,31 @@ router.post('/createTradeTime',async (req, res) => {
     }
 });
 
+//거래동의
+router.post('/agreeTrade',async (req, res) =>{
+
+    console.log('/trade/agreeTrade 실행');
+
+    try {
+        // req.body 저장
+        let {tradeId} = req.body;
+        console.log(`거래 ID:${tradeId}`);
+
+        await Trade.updateOne(
+            { _id: tradeId },
+                {
+                  $set: {
+                      isSave:true   
+                }
+            }
+        );
+
+       res.json({ message: "거래 연장이 완료되었습니다." });
+    } catch(err){
+        console.log(err);
+        res.json({ message: false });
+    }
+});
 
 // 거래 시간 연장
 router.post('/updateTradeTime',async (req, res) =>{
@@ -157,16 +182,18 @@ router.post('/deleteTrade', async(req, res) => {
 //사용자 평가
 router.post('/userRate', async(req, res) => {
     try{
-        let {userId, rating} = req.body;
+        let {userId, rate} = req.body;
         console.log(`평가할 유저 ID:${userId} `);
 
-        await User.updateOne(
+        await User.update(
             { _id: userId },
                 {
-                    $set: {
-                      averageRating: rating
-                }
-            }
+                    $inc: {
+                      rating: rate,
+                      ratingCount: 1
+                },
+            },
+            {upsert: true, new: true,setDefaultsOnInsert: true},
         );
         res.json({message:"사용자 평가를 완료했습니다."});
     } catch (err){
