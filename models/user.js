@@ -24,14 +24,23 @@ const userSchema=new user_Schema({
     profileImage:{
         type:String,
     },
-    averageRating:{
+    rating:{
         type:Number,
         default:3
     },
-    averageRatingCount:{
+    ratingCount:{
         type:Number,
-        default:0
+        default:1
     },
+    averageRating:{
+        type:Number
+    },
+    // averageRating:{
+    //     type:Number,
+    //     default: function(){
+    //         return this.rating / this.ratingCount
+    //     }
+    // },
     ban:{
         type:Boolean,
     },
@@ -66,8 +75,23 @@ const userSchema=new user_Schema({
     }
     ]
 
-
 })
+
+userSchema
+.pre('save', function(next){
+  this.averageRating = this.rating/this.ratingCount
+  next();   
+});
+
+userSchema
+.pre('update', function(next){
+  console.log("업데이트 확인")
+  const update = this.getUpdate();
+  console.log("업데이트된 점수 확인 "+update.$inc.rating);
+  this.update({},{averageRating: update.$inc.rating/update.$inc.ratingCount});
+  
+  next();   
+});
 
 // userSchema.plugin(mongooseAutoInc.plugin, 'user');
 // mongooseAutoInc.initialize(mongoose.connection);
@@ -77,4 +101,5 @@ const userSchema=new user_Schema({
 //     startAt: 1,
 //     incrementBy: 1
 // });
+//hi
 module.exports = mongoose.model('user',userSchema);
