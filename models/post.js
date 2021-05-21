@@ -75,7 +75,7 @@ const postSchema=new post_Schema({
 
 })
 
-postSchema.index({location:'2dsphere', title:'text', text:'text'});
+postSchema.index({location:'2dsphere'/*, title:'text', text:'text'*/});
 
 // postSchema.plugin(mongooseAutoInc.plugin, 'post');
 // mongooseAutoInc.initialize(mongoose.connection);
