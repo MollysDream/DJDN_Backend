@@ -29,6 +29,31 @@ router.post('/getTrade', async(req, res) => {
     
 });
 
+// 종료 혹은 종료 제안된 거래 조회
+router.post('/getEndTrade', async(req, res) => {
+    
+    try{
+        console.log(`/trade/getEndTrade/서버통신 : trade 조회`)
+
+        const {
+            tradeId
+        } = req.body;
+
+        console.log('검색된 trade '+tradeId)
+        const trade= await Trade.findOne({_id:tradeId})
+
+        if(trade){
+            console.log("종료 혹은 종료 제안된 거래가 있어요!")
+            res.json({ message: "거래가 존재합니다.", trade: trade});
+        } else{
+            console.log("종료 혹은 종료 제안된 거래가 없어요...")
+        }
+        
+    } catch(err){
+        console.log(err);
+    }
+});
+
 
 // 거래 설정
 // location, userList, post ??
@@ -137,6 +162,33 @@ router.post('/updateTradeTime',async (req, res) =>{
     }
 });
 
+// 거래 완료 제안
+router.post('/endSuggestTrade',async (req, res) => {
+
+    console.log('/trade/endSuggestTrade 실행');
+
+    try {
+        // req.body 저장
+        let {tradeId} = req.body;
+        console.log(`거래 ID:${tradeId} `);
+
+        await Trade.updateOne(
+            { _id: tradeId },
+                {
+                    $set: {
+                      completeSuggest:true  
+                }
+            }
+        );
+
+       res.json({ message: "거래 종료 제안이 완료되었습니다." });
+    } catch(err){
+        console.log(err);
+        res.json({ message: false });
+    }
+
+});
+
 
 // 거래 완료
 router.post('/endTrade',async (req, res) => {
@@ -195,6 +247,11 @@ router.post('/userRate', async(req, res) => {
             },
             {upsert: true, new: true,setDefaultsOnInsert: true},
         );
+
+        await Trade.remove({
+            _id:req.body.tradeId
+        });
+        
         res.json({message:"사용자 평가를 완료했습니다."});
     } catch (err){
         console.log(err);
