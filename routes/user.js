@@ -4,6 +4,7 @@ var router = express.Router();
 const User = require("../models/user");
 const Post = require("../models/post");
 const Category = require("../models/category");
+const Certificate = require("../models/certificate");
 
 
 router.get('/getUserData', function(req, res, next) {
@@ -85,6 +86,56 @@ router.post('/deleteKeyword', function(req, res, next) {
         }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"addKeyword DB오류"});
+    })
+});
+
+router.post('/addCertificate', function(req, res, next) {
+    const {userId,title,text,certificateImage} = req.body;
+    console.log(`**/user/addCertificate/서버통신** 자격증: ${title} // 사용자 ID:${userId} 사용자 키워드 추가`)
+
+
+    const certificate = new Certificate({
+        title:title,
+        text:text,
+        certificateImage:certificateImage,
+        user_id:userId
+    })
+
+    certificate.save((err, certificate)=>{
+        if(err){
+            console.log(err);
+            res.status(500).send({error:"DB오류"});
+        }else {
+            console.log("자격증 DB 저장완료");
+            res.status(200).json(certificate);
+        }
+    })
+
+});
+
+router.get('/getUserCertificate', function(req, res, next) {
+    const userId = req.query.userId;
+    console.log(`**/user/getUserCertificate/서버통신** userID: ${userId}의 자격증 정보 요청`);
+
+    Certificate.find({'user_id': userId}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getUserCertificate DB오류"});
+    })
+});
+
+router.post('/deleteCertificate', function(req, res, next) {
+    const {userId,certificateId} = req.body;
+    console.log(`**/user/deleteCertificate/서버통신** 자격증: ${certificateId} // 사용자 ID:${userId} 사용자 키워드 추가`)
+
+    Certificate.findOneAndDelete({'_id':certificateId})
+        .then((result)=>{
+            console.log(`${certificateId} 자격 삭제 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"deleteCertificate DB오류"});
     })
 });
 

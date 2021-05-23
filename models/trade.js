@@ -30,7 +30,11 @@ const tradeSchema=new trade_Schema({
     },
     complete:{
         type:Boolean,
-        required:true
+        default:false
+    },
+    completeSuggest:{
+        type:Boolean,
+        default:false
     },
     sender:{
         type:String
