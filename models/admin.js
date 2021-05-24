@@ -4,7 +4,7 @@ const mongooseAutoInc = require('mongoose-auto-increment');
 const admin_Schema=mongoose.Schema;
 
 const adminSchema=new admin_Schema({
-    name:{
+    /*name:{
         type:String,
         required: true
     },
@@ -13,6 +13,10 @@ const adminSchema=new admin_Schema({
         required: true
     },
     password:{
+        type:String,
+        required: true
+    }*/
+    user_id:{
         type:String,
         required: true
     }
