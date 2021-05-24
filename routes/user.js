@@ -5,6 +5,7 @@ const User = require("../models/user");
 const Post = require("../models/post");
 const Category = require("../models/category");
 const Certificate = require("../models/certificate");
+const Admin = require("../models/admin");
 
 
 router.get('/getUserData', function(req, res, next) {
@@ -139,8 +140,40 @@ router.post('/deleteCertificate', function(req, res, next) {
     })
 });
 
+router.post('/checkAdmin', function(req, res, next) {
+    const userId = req.body.userId;
+    console.log(`**/user/checkAdmin/서버통신** userID: ${userId}이 ADMIN인지 확인`);
 
-router.get('/testdata', function(req, res, next) {
+    Admin.findOne({'user_id':userId}).then((data)=>{
+        console.log(`${userId}의 ADMIN 확인 완료`);
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"checkAdmin DB오류"});
+    })
+
+});
+
+router.get('/adminTest', function(req, res, next) {
+    console.log('/adminTest 서버통신')
+
+    const admin = new Admin({
+        user_id:"60ab7e06a1e9cc4704de0667"
+    })
+
+    admin.save((err, user)=>{
+        if(err){
+            console.log(err);
+            res.status(500).send({error:"DB오류"});
+        }else {
+            console.log("DB 저장완료");
+            res.status(200).json(user);
+        }
+    })
+
+});
+
+router.get('/categoryTest', function(req, res, next) {
     console.log('/testdata 서버통신')
 
     const category = new Category({
