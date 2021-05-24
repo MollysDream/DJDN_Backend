@@ -101,5 +101,4 @@ userSchema
 //     startAt: 1,
 //     incrementBy: 1
 // });
-//hi
 module.exports = mongoose.model('user',userSchema);
