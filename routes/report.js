@@ -46,4 +46,41 @@ router.get('/getAllReport', function(req,res,next){
     })
 })
 
+router.delete('/deleteReport', function(req, res, next) {
+    const reportId = req.query.reportId;
+    console.log(`**/data/deleteReport/서버통신** 신고 ID:${reportId} 신고 삭제`)
+
+    Report.findOneAndDelete({'_id':reportId})
+        .then((result)=>{
+            console.log(`${reportId} 신고 삭제 완료`);
+            res.status(200).json(result);
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"deleteReport DB오류"});
+    })
+});
+
+router.delete('/deletePostandReport', function(req, res, next) {
+    const postId = req.query.postId;
+    console.log(`**/data/deletePostandReport/서버통신** 게시글 ID:${postId} 게시글 및 신고 삭제`)
+
+    Post.findOneAndDelete({'_id':postId})
+        .then((result)=>{
+            console.log(`${postId} 게시물 삭제 완료`);
+
+            Report.deleteMany({'targetPost':postId})
+            .then(result=>{
+                console.log('신고 삭제 완료')
+                res.status(200).json(result);
+            }).catch((err)=>{
+                console.log(err);
+                res.status(500).send({error:"deletePostandReport 신고삭제 DB오류"});
+            })
+
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"deletePostandReport DB오류"});
+    })
+});
+
 module.exports = router;
