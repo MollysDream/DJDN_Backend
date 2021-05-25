@@ -47,6 +47,53 @@ router.get('/getAllReport', function(req,res,next){
     })
 })
 
+router.get('/getPostReport', function(req,res,next){
+    const category = req.query.category;
+    console.log(`**/report/getPostReport/서버통신**`);
+
+    if(category == '')
+    {
+        Report.find({reportWhat:0}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getPostReport DB오류"});
+        })
+    }else{
+        Report.find({reportWhat:0, reportCategory:category}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getPostReport DB오류"});
+        })
+    }
+
+})
+
+router.get('/getUserReport', function(req,res,next){
+    const category = req.query.category;
+    console.log(`**/report/getUserReport/서버통신**`);
+
+    console.log(category);
+    if(category == '')
+    {
+        Report.find({reportWhat:1}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getUserReport DB오류"});
+        })
+    }else{
+        Report.find({reportWhat:1, reportCategory:category}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getUserReport DB오류"});
+        })
+    }
+
+})
+
 router.delete('/deleteReport', function(req, res, next) {
     const reportId = req.query.reportId;
     console.log(`**/data/deleteReport/서버통신** 신고 ID:${reportId} 신고 삭제`)
