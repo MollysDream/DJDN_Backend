@@ -2,19 +2,21 @@ const mongoose =require('mongoose');
 const mongooseAutoInc = require('mongoose-auto-increment');
 
 const report_Schema=mongoose.Schema;
+const user = require('./user');
+const post = require('./post');
 
 const reportSchema=new report_Schema({
     reportUser:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: "user"
     },
     targetUser:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: "user"
     },
     targetPost:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'post'
+        ref: "post"
     },
     reportWhat:{ // 0->게시글  1->사용자
         type:Number
@@ -27,7 +29,12 @@ const reportSchema=new report_Schema({
     text:{
         type:String,
         required:false,
-    }
+    },
+    date:{
+        type:Date,
+        default:Date.now,
+        required: true
+    },
 })
 
 // reportSchema.plugin(mongooseAutoInc.plugin, 'report');
