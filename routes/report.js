@@ -4,6 +4,7 @@ const Address = require("../models/address");
 const axios = require("axios")
 const Report = require("../models/report");
 const Post = require("../models/post");
+const User = require("../models/user");
 
 //내 동네 인증
 router.post("/reportDataParam", (req, res) => {
@@ -80,6 +81,50 @@ router.delete('/deletePostandReport', function(req, res, next) {
         }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"deletePostandReport DB오류"});
+    })
+});
+
+router.post('/banUser', function(req, res, next) {
+    const {userId} = req.body;
+    console.log(`**/report/banUser/서버통신** 사용자 ID:${userId} 밴: True 로 수정`)
+
+    User.findOneAndUpdate({'_id':userId}, {ban:true})
+        .then((result)=>{
+            console.log(`사용자 ID:${userId} 밴: True 로 수정 완료`);
+
+            Report.updateMany({'targetUser':userId}, {done:true})
+                .then((result)=>{
+                    console.log(`신고 처리상태 True 로 수정 완료`);
+                    res.status(200).json(result);
+                }).catch((err)=>{
+                console.log(err);
+                res.status(500).send({error:"banUser DB오류"});
+            })
+
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"banUser DB오류"});
+    })
+});
+
+router.post('/unBanUser', function(req, res, next) {
+    const {userId} = req.body;
+    console.log(`**/report/unBanUser/서버통신** 사용자 ID:${userId} 밴: False 로 수정`)
+
+    User.findOneAndUpdate({'_id':userId}, {ban:false})
+        .then((result)=>{
+            console.log(`사용자 ID:${userId} 밴: False 로 수정 완료`);
+            Report.updateMany({'targetUser':userId}, {done:false})
+                .then((result)=>{
+                    console.log(`신고 처리상태 True 로 수정 완료`);
+                    res.status(200).json(result);
+                }).catch((err)=>{
+                console.log(err);
+                res.status(500).send({error:"banUser DB오류"});
+            })
+        }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"unBanUser DB오류"});
     })
 });
 

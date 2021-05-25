@@ -43,6 +43,7 @@ const userSchema=new user_Schema({
     // },
     ban:{
         type:Boolean,
+        default:false
     },
     keyword:[{
         type:String

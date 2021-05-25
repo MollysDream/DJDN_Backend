@@ -35,6 +35,10 @@ const reportSchema=new report_Schema({
         default:Date.now,
         required: true
     },
+    done:{
+        type:Boolean,
+        default:false,
+    }
 })
 
 // reportSchema.plugin(mongooseAutoInc.plugin, 'report');
