@@ -158,7 +158,7 @@ router.get('/adminTest', function(req, res, next) {
     console.log('/adminTest 서버통신')
 
     const admin = new Admin({
-        user_id:"60ab7e06a1e9cc4704de0667"
+        user_id:"6094d7b97d434e1d682c2899"
     })
 
     admin.save((err, user)=>{

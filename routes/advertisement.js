@@ -37,4 +37,13 @@ router.post("/createAdver", function(req,res,next){
 
 })
 
+router.get('/getRequestAdver', function(req,res,next){
+    Advertisement.find({active : false}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getRequestAdver DB 오류"});
+    })
+})
+
 module.exports = router;
