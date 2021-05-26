@@ -109,14 +109,17 @@ router.delete('/deletePostandReport', function(req, res, next) {
 });
 
 router.post('/setBanUser', function(req, res, next) {
-    const {userId, TF} = req.body;
-    console.log(`**/report/banUser/서버통신** 사용자 ID:${userId} 밴: True 로 수정`)
+    let {userId, TF, banDate} = req.body;
+    console.log(`**/report/banUser/서버통신** 사용자 ID:${userId} 밴: True 로 수정/ 날짜: ${banDate}`)
 
-    User.findOneAndUpdate({'_id':userId}, {ban:TF})
+    if(TF == false)
+        banDate = null;
+
+    User.findOneAndUpdate({'_id':userId}, {ban:TF, banDate})
         .then((result)=>{
             console.log(`사용자 ID:${userId} 밴: ${TF} 로 수정 완료`);
 
-            Report.updateMany({'targetUser':userId}, {done:TF})
+            Report.updateMany({'targetUser':userId}, {done:TF, banDate:banDate})
                 .then((result)=>{
                     console.log(`신고 처리상태 ${TF} 로 수정 완료`);
                     res.status(200).json(result);
