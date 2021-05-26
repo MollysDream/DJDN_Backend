@@ -45,6 +45,10 @@ const userSchema=new user_Schema({
         type:Boolean,
         default:false
     },
+    banDate:{
+        type:Date,
+        default:null
+    },
     keyword:[{
         type:String
     }],

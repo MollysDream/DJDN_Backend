@@ -47,48 +47,25 @@ router.get('/getAllReport', function(req,res,next){
     })
 })
 
-router.get('/getPostReport', function(req,res,next){
+router.get('/getPostOrUserReport', function(req,res,next){
     const category = req.query.category;
-    console.log(`**/report/getPostReport/서버통신**`);
+    const postOrUser = req.query.postOrUser;
+    console.log(`**/report/getPostOrUserReport/서버통신**`);
 
     if(category == '')
     {
-        Report.find({reportWhat:0}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+        Report.find({reportWhat:postOrUser}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
             res.status(200).json(data);
         }).catch((err)=>{
             console.log(err);
-            res.status(500).send({error:"getPostReport DB오류"});
+            res.status(500).send({error:"getPostOrUserReport DB오류"});
         })
     }else{
-        Report.find({reportWhat:0, reportCategory:category}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
+        Report.find({reportWhat:postOrUser, reportCategory:category}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
             res.status(200).json(data);
         }).catch((err)=>{
             console.log(err);
-            res.status(500).send({error:"getPostReport DB오류"});
-        })
-    }
-
-})
-
-router.get('/getUserReport', function(req,res,next){
-    const category = req.query.category;
-    console.log(`**/report/getUserReport/서버통신**`);
-
-    console.log(category);
-    if(category == '')
-    {
-        Report.find({reportWhat:1}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
-            res.status(200).json(data);
-        }).catch((err)=>{
-            console.log(err);
-            res.status(500).send({error:"getUserReport DB오류"});
-        })
-    }else{
-        Report.find({reportWhat:1, reportCategory:category}).populate('targetUser').populate('reportUser').populate('targetPost').sort({date:-1}).then((data)=>{
-            res.status(200).json(data);
-        }).catch((err)=>{
-            console.log(err);
-            res.status(500).send({error:"getUserReport DB오류"});
+            res.status(500).send({error:"getPostOrUserReport DB오류"});
         })
     }
 
@@ -131,48 +108,31 @@ router.delete('/deletePostandReport', function(req, res, next) {
     })
 });
 
-router.post('/banUser', function(req, res, next) {
-    const {userId} = req.body;
-    console.log(`**/report/banUser/서버통신** 사용자 ID:${userId} 밴: True 로 수정`)
+router.post('/setBanUser', function(req, res, next) {
+    let {userId, TF, banDate} = req.body;
+    console.log(`**/report/banUser/서버통신** 사용자 ID:${userId} 밴: True 로 수정/ 날짜: ${banDate}`)
 
-    User.findOneAndUpdate({'_id':userId}, {ban:true})
+    if(TF == false)
+        banDate = null;
+
+    User.findOneAndUpdate({'_id':userId}, {ban:TF, banDate})
         .then((result)=>{
-            console.log(`사용자 ID:${userId} 밴: True 로 수정 완료`);
+            console.log(`사용자 ID:${userId} 밴: ${TF} 로 수정 완료`);
 
-            Report.updateMany({'targetUser':userId}, {done:true})
+            Report.updateMany({'targetUser':userId}, {done:TF, banDate:banDate})
                 .then((result)=>{
-                    console.log(`신고 처리상태 True 로 수정 완료`);
+                    console.log(`신고 처리상태 ${TF} 로 수정 완료`);
                     res.status(200).json(result);
                 }).catch((err)=>{
                 console.log(err);
-                res.status(500).send({error:"banUser DB오류"});
+                res.status(500).send({error:"setBanUser DB오류"});
             })
 
         }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"banUser DB오류"});
+        res.status(500).send({error:"setBanUser DB오류"});
     })
 });
 
-router.post('/unBanUser', function(req, res, next) {
-    const {userId} = req.body;
-    console.log(`**/report/unBanUser/서버통신** 사용자 ID:${userId} 밴: False 로 수정`)
-
-    User.findOneAndUpdate({'_id':userId}, {ban:false})
-        .then((result)=>{
-            console.log(`사용자 ID:${userId} 밴: False 로 수정 완료`);
-            Report.updateMany({'targetUser':userId}, {done:false})
-                .then((result)=>{
-                    console.log(`신고 처리상태 True 로 수정 완료`);
-                    res.status(200).json(result);
-                }).catch((err)=>{
-                console.log(err);
-                res.status(500).send({error:"banUser DB오류"});
-            })
-        }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({error:"unBanUser DB오류"});
-    })
-});
 
 module.exports = router;
