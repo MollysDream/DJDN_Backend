@@ -10,31 +10,47 @@ const advertisementSchema=new advertisement_Schema({
         default:true,
         required: true
     },
-    content:{
-        image:{
-            type:String,
-            required: false
-        },
-        text:{
-            type:String,
-            required: false
-        }
-    },
-    duration:{
+    title:{
         type:String,
         required:true
     },
-    //광고 노출 동네
-    area:[{
-        addressName:{
-            type:String,
-            required:true
-        }
+
+    image:[{
+        type:String,
+        required: false
     }],
+    
+    text:{
+        type:String,
+        required: false
+    },
+    price:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    count:{
+        type:Number,
+        required:true,
+        default:0
+    },
     shopOwner:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'shopOwner'
-    }
+    },
+    latitude:{
+        type:String,
+    },
+    longitude:{
+        type:String,
+    },
+    addressName:{
+        type:String,
+    },
+    location: {
+        type:{type:String, default: 'Point'},
+        coordinates:{type:[Number]}
+        },
 })
 
 // advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');
