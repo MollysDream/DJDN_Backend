@@ -52,8 +52,8 @@ router.post('/updateAdverActive', function(req, res, next) {
 });
 
 
-router.get('/getRequestAdver', function(req,res,next){
-    Advertisement.find({active : false}).then((data)=>{
+router.get('/getAdver', function(req,res,next){
+    Advertisement.find().then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
