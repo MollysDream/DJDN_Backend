@@ -7,7 +7,7 @@ const advertisementSchema=new advertisement_Schema({
 
     active:{
         type:Boolean,
-        default:true,
+        default:false,
         required: true
     },
     title:{
