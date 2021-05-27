@@ -11,6 +11,7 @@ router.post("/createAdver", function(req,res,next){
     console.log(adverData);
 
     const adver=new Advertisement({
+        approve: adverData.approve,
         active: adverData.active,
         title: adverData.title,
         image: adverData.image,
@@ -37,18 +38,17 @@ router.post("/createAdver", function(req,res,next){
     })
 
 })
-router.post('/updateAdverActive', function(req, res, next) {
-    const {_id, active} = req.body;
-    console.log(`**/advertisement/updateAdverActive/서버통신** 광고 ID:${_id} 상태: ${active}로 수정`)
+router.post('/updateAdverApprove', function(req, res, next) {
+    const {_id, approve} = req.body;
+    console.log(`**/advertisement/updateAdverApprove/서버통신** 광고 ID:${_id} 상태: ${approve}로 수정`)
     console.log(_id);
-    console.log(active);
-    Advertisement.findOneAndUpdate({'_id':_id}, {active:active})
+    Advertisement.findOneAndUpdate({'_id':_id}, {approve:approve})
         .then((result)=>{
-            console.log(`${_id} 광고 활성화상태:${active} 수정 완료`);
+            console.log(`${_id} 광고 활성화상태:${approve} 수정 완료`);
             res.status(200).json(result);
         }).catch((err)=>{
         console.log(err);
-        res.status(500).send({error:"updateAdverActive DB오류"});
+        res.status(500).send({error:"updateAdverApprove DB오류"});
     })
 });
 

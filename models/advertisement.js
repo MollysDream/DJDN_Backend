@@ -5,6 +5,11 @@ const advertisement_Schema=mongoose.Schema;
 
 const advertisementSchema=new advertisement_Schema({
 
+    approve:{
+        type:Boolean,
+        default:false,
+        required: true
+    },
     active:{
         type:Boolean,
         default:false,
