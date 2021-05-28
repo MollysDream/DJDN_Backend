@@ -122,7 +122,7 @@ router.get('/getMyAdver', function(req,res,next){
 
 
 router.get('/getAdver', function(req,res,next){
-    Advertisement.find().then((data)=>{
+    Advertisement.find().populate('shopOwner').then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
