@@ -122,11 +122,21 @@ router.get('/getMyAdver', function(req,res,next){
 
 
 router.get('/getAdver', function(req,res,next){
-    Advertisement.find().populate('shopOwner').then((data)=>{
+    Advertisement.find().populate('shopOwner').sort({date:-1}).then((data)=>{
         res.status(200).json(data);
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"getAdver DB 오류"});
+    })
+})
+
+router.get('/getAdverByAddressName', function(req,res,next){
+    const addressName = req.query.addressName;
+    Advertisement.find({addressName:addressName}).populate('shopOwner').sort({date:-1}).then((data)=>{
+        res.status(200).json(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({error:"getAdverByAddressName DB 오류"});
     })
 })
 
