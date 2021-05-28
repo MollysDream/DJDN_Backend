@@ -2,6 +2,7 @@ const mongoose =require('mongoose');
 const mongooseAutoInc = require('mongoose-auto-increment');
 
 const advertisement_Schema=mongoose.Schema;
+const user = require('./user');
 
 const advertisementSchema=new advertisement_Schema({
 
@@ -41,7 +42,7 @@ const advertisementSchema=new advertisement_Schema({
     },
     shopOwner:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'shopOwner'
+        ref: 'user'
     },
     latitude:{
         type:String,
@@ -56,6 +57,11 @@ const advertisementSchema=new advertisement_Schema({
         type:{type:String, default: 'Point'},
         coordinates:{type:[Number]}
         },
+    date:{
+        type:Date,
+        default:Date.now,
+        required: true
+    },
 })
 
 // advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');
