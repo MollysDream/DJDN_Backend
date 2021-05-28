@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const Advertisement = require("../models/advertisement");
+
 const axios = require("axios");
+
+const Point = require("../models/point");
+const User = require("../models/user");
+
+
 
 router.post("/createAdver", function(req,res,next){
     console.log(`**/data/createAdber/서버통신** 광고 작성 요청`);
@@ -122,6 +128,40 @@ router.get('/getAdver', function(req,res,next){
         console.log(err);
         res.status(500).send({error:"getAdver DB 오류"});
     })
+})
+
+router.post("/createPoint", function(req,res,next){
+    console.log(`**/advertisement/createPoint/서버통신** 사용자 포인트 생성`);
+    const {email} = req.body;
+    console.log(email);
+    User.findOne({email:email}).then((userData)=>{
+
+        //console.log(userData);
+        const point = new Point({
+            point:0,
+            user_id:userData._id
+        })
+
+        point.save((err, user)=>{
+            if(err){
+                console.log(err);
+                res.status(500).send({error:"DB오류"});
+            }else {
+                console.log("Point DB 저장완료");
+                res.status(200).json(user);
+            }
+        })
+
+
+    }).catch(err=>{ //Address.findOne()
+        console.log(err);
+        console.log('위치정보 Find 에러')
+    })
+
+
+
+
+
 })
 
 module.exports = router;
