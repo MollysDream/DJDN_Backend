@@ -12,7 +12,7 @@ var app = express();
 var server = http.Server(app);
 
 var admin = require('firebase-admin');
-var serviceAccount = require("./appKey.json");
+var serviceAccount = require("./key/appKey.json");
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
