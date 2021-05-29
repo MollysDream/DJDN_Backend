@@ -2,3 +2,5 @@
 /node_modules/
 /.idea
 
+#firebase app key
+/appKey.json/

@@ -113,6 +113,16 @@ router.post("/login", async (req, res) => {
                                 // console.log(user2);
 
                                 if (user2) {
+                                    console.log("user2 id는 "+user2._id);
+
+                                    await User.updateOne(
+                                        { _id: user2._id },
+                                        {
+                                            $set:{
+                                                firebaseFCM: req.body.token
+                                            }
+                                        })
+
                                     res.json({
                                         message: "로그인 되었습니다!",
                                         login: "1",
@@ -132,6 +142,31 @@ router.post("/login", async (req, res) => {
     } catch (err) {
         console.log(err);
         res.json({ message: "로그인 실패" });
+    }
+});
+
+router.post('/autoLogin',async (req, res) =>{
+
+    console.log('/member/autoLogin 실행');
+
+    try {
+        // req.body 저장
+        let {userId, token} = req.body;
+        console.log(`사용자 ID:${userId}, firebase token값: ${token} `);
+
+        await User.updateOne(
+            { _id: userId },
+                {
+                  $set: {
+                      firebaseFCM : token   
+                }
+            }
+        );
+
+       res.json({ message: "자동 로그인에 성공했습니다." });
+    } catch(err){
+        console.log(err);
+        res.json({ message: false });
     }
 });
 
