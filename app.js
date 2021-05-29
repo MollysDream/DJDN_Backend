@@ -25,6 +25,7 @@ var tradeRouter = require('./routes/trade');
 var chatRouter = require('./routes/chat');
 var reportRouter = require('./routes/report');
 var advertisementRouter = require('./routes/advertisement');
+var pointRouter = require('./routes/point');
 var app = express();
 
 app.use(cors());
@@ -50,6 +51,7 @@ app.use('/trade', tradeRouter);
 app.use('/chat', chatRouter);
 app.use('/report', reportRouter);
 app.use('/advertisement', advertisementRouter);
+app.use('/point', pointRouter);
 
 
 // //소켓 통신
