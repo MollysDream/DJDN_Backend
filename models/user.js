@@ -35,12 +35,9 @@ const userSchema=new user_Schema({
     averageRating:{
         type:Number
     },
-    // averageRating:{
-    //     type:Number,
-    //     default: function(){
-    //         return this.rating / this.ratingCount
-    //     }
-    // },
+    firebaseFCM:{
+        type:String
+    },
     ban:{
         type:Boolean,
         default:false
