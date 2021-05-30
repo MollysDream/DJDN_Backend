@@ -35,3 +35,5 @@ router.get('/getPointById', function(req, res, next) {
 		res.status(500).send({error:"getPointById DB오류"});
 	})
 });
+
+module.exports = router;
