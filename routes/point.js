@@ -17,6 +17,7 @@ router.post('/addPoint', function(req,res,next){
 		})
 		.then((result)=>{
 			console.log(`Point ${amount}만큼 충전 완료`);
+			console.log("추가, 조회된 포인트 : "+ result.point);
 			res.status(200).json(result);
 		}).catch((err)=>{
 		console.log(err);
@@ -26,11 +27,16 @@ router.post('/addPoint', function(req,res,next){
 
 //포인트 조회
 router.get('/getPointById', function(req, res, next) {
-	const userId = req.query.userId;
-	console.log(`/point/addPoint 실행`);
+	const userId = req.query.user_id;
+	console.log(`/point/getPointById 실행`);
+	console.log(`조회에 쓰이는 userID : ` + userId );
 
-	Point.find({'user_id': userId}).then((data)=>{
+	Point.findOne({'user_id': userId}).then((data)=>{
+
+		console.log("조회된 포인트 : "+ data.point);
+
 		res.status(200).json(data);
+
 	}).catch((err)=>{
 		console.log(err);
 		res.status(500).send({error:"getPointById DB오류"});
