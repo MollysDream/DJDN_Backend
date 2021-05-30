@@ -132,7 +132,7 @@ io.on('connection', (socket)=>{
 		);
 
 		const chat = await Chat.findOne(
-			{roomId: roomId}
+			{roomId:roomId}).sort({$natural:-1}
 		)
 
 		if(!room){
@@ -144,9 +144,17 @@ io.on('connection', (socket)=>{
 			{_id: room.postOwnerId},
 		)
 
+		if(postOwner){
+			console.log("postOwner를 찾았습니다! "+postOwner.firebaseFCM)
+		}
+
 		const host = await User.findOne(
 			{_id: room.hostId},
 		)
+
+		if(host){
+			console.log("host를 찾았습니다! "+host.firebaseFCM)
+		}
 
 		const _room ={
 			postOwnerId: postOwner._id,
@@ -160,32 +168,30 @@ io.on('connection', (socket)=>{
 		let notifyNickName;
 		// let notifyProfile;
 
-		if (chat.senderId === _room.postOwnerId) {
+		if (chat.senderId == _room.postOwnerId) {
 			notifyNickName = _room.postOwnerNickName;
-			fcm = [_room.postOwnerFCM,_room.hostFCM];
+			fcm = _room.hostFCM;
 			console.log('host fcm: ', fcm);
 		} else {
+			console.log("현재 id는 "+chat.senderId);
+			console.log("현재 상대방 id는 "+ _room.postOwnerId);
 			notifyNickName = _room.hostNickName;
-			fcm = [_room.postOwnerFCM,_room.hostFCM];
+			fcm = _room.postOwnerFCM;
 			console.log("host nickname")
-			console.log('postOwner fcm: ', fcm);
+			console.log('postOwner fcm:'+fcm);
 		}
 
 		const message = {
-			// notification: {
-			//   title: notifyNickName,
-			//   tag: notifyNickName,
-			//   body: msg[0].text ? msg[0].text : '',
-			//   // "clickAction":
-			// },
-			// data: {
-			//   type: 'Chat',
-			//   senderId: chat.senderId,
-			// },
-			notification:{
-				title: "Portugal vs. Denmark",
-				body: "great match!"
-			  }
+			notification: {
+			  title: notifyNickName,
+			  tag: notifyNickName,
+			  body: msg[0].text ? msg[0].text : '',
+			  // "clickAction":
+			},
+			data: {
+			  type: 'Chat',
+			  senderId: chat.senderId,
+			},
 		  };
 		  if (fcm){
 		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
