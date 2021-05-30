@@ -14,6 +14,7 @@ router.get('/getUserData', function(req, res, next) {
 
     User.findOne({'_id': userId}).then((data)=>{
         res.status(200).json(data);
+        // console.log(data.nickname);
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"getUserData DB오류"});
