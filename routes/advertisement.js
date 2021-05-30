@@ -48,7 +48,7 @@ router.post('/updateAdver', function(req,res,next){
     const adverData = req.body;
 
     console.log(adverData);
-    
+
     Advertisement.findOneAndUpdate({'_id':adverData._id},
         {
             title:adverData.title,
@@ -139,39 +139,4 @@ router.get('/getAdverByAddressName', function(req,res,next){
         res.status(500).send({error:"getAdverByAddressName DB 오류"});
     })
 })
-
-router.post("/createPoint", function(req,res,next){
-    console.log(`**/advertisement/createPoint/서버통신** 사용자 포인트 생성`);
-    const {email} = req.body;
-    console.log(email);
-    User.findOne({email:email}).then((userData)=>{
-
-        //console.log(userData);
-        const point = new Point({
-            point:0,
-            user_id:userData._id
-        })
-
-        point.save((err, user)=>{
-            if(err){
-                console.log(err);
-                res.status(500).send({error:"DB오류"});
-            }else {
-                console.log("Point DB 저장완료");
-                res.status(200).json(user);
-            }
-        })
-
-
-    }).catch(err=>{ //Address.findOne()
-        console.log(err);
-        console.log('위치정보 Find 에러')
-    })
-
-
-
-
-
-})
-
 module.exports = router;
