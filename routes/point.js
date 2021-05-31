@@ -43,7 +43,7 @@ router.get('/getPointById', function(req, res, next) {
 	})
 });
 
-
+//회원가입시 포인트 생성
 router.post("/createPoint", function(req,res,next){
 	console.log(`**/advertisement/createPoint/서버통신** 사용자 포인트 생성`);
 	const {email} = req.body;
@@ -65,6 +65,26 @@ router.post("/createPoint", function(req,res,next){
 		})
 	}).catch(err=>{
 		console.log(err);
+	})
+})
+
+//포인트 차감
+router.post('/deductPoint', function(req,res,next){
+	console.log(`/point/addPoint 실행`);
+	const {user_id, amount} = req.body;
+	// console.log(targetId);
+
+	Point.findOneAndUpdate({'user_id':user_id},
+		{
+			$inc:{point: -amount}
+		})
+		.then((result)=>{
+			console.log(`Point ${amount}만큼 차감 완료`);
+			console.log("차감, 조회된 포인트 : "+ result.point);
+			res.status(200).json(result);
+		}).catch((err)=>{
+		console.log(err);
+		res.status(500).send({error:"addPoint DB오류"});
 	})
 })
 
