@@ -115,7 +115,7 @@ io.on('connection', (socket)=>{
 		* 요기서 전역변수로 저장해놓은 chatRoomId를 불러온다!
 		* 그래서 여기 'room1'에 chatRoomId 전역변수를 집어 넣는다!?
 		*/
-		
+
 		/*
 		* 푸시알림을 해봅시다.
 		* 먼저, chatroom정보를 가져와요
@@ -126,7 +126,7 @@ io.on('connection', (socket)=>{
 		* sendFCM 메시지를 통해 메시지 보냅시다!
 		 */
 
-		console.log("채팅방 아이디 "+roomId);
+		console.log("채팅방 아이디 : " + roomId);
 		const room = await ChatRoom.findOne(
 			{_id: roomId},
 		);
@@ -204,8 +204,12 @@ io.on('connection', (socket)=>{
 				return false;
 			});
 		  }
-		  
-		socket.broadcast.to('room2').emit('chat message to client', msg);
+
+
+		  console.log(msg);
+		socket.join(chatRoomId);
+		// msg[0].user._id = 2;
+		socket.broadcast.to(chatRoomId).emit('rChat', msg);
 	});
 
 	// * 테스트용
