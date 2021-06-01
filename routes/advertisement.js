@@ -58,6 +58,13 @@ router.post('/updateAdver', function(req,res,next){
             text:adverData.text,
             price:adverData.price,
 
+            latitude: adverData.P1.latitude,
+            longitude: adverData.P1.longitude,
+            addressName: adverData.addressName,
+            location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
+            radius:adverData.radius,
+            endDate:adverData.endDate
+
         })
         .then((result)=>{
             console.log(`${adverData._id} 광고 완료`);
