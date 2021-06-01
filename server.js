@@ -64,12 +64,16 @@ io.on('connection', (socket)=>{
 	// 방 입장
 	socket.on('joinRoom',(chatRoomId)=>{
 		socket.join(chatRoomId);
+		console.log("joinRoom 실행됐다!! 방 번호 : " + chatRoomId);
 	});
 
 	// 방 퇴장
 	socket.on('leaveRoom',(chatRoomId)=>{
 		socket.leave(chatRoomId);
+		console.log("leaveRoom 실행됐다!! 방 번호 : " + chatRoomId);
+
 	});
+
 
 	// postOwnerId, hostId
     socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId)=>{
@@ -170,6 +174,7 @@ io.on('connection', (socket)=>{
 			// console.log('postOwner fcm:'+fcm);
 		}
 
+		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 새메세지 출력해야돼! 메세지 내용은, "+ msg[0].text)
 		socket.join(chatRoomId);
 		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
 

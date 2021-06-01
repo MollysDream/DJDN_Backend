@@ -26,15 +26,40 @@ router.get('/getChat', function(req, res, next) {
 
 // 채팅 저장
 router.post('/createChat', async(req, res)=>{
-	try{
-		// 새 instance 생성
-		const newChat = new Chat(req.body)
-		console.log(newChat);
-		await newChat.save();
-		res.json({message:"chat 저장 완료"});
-	} catch(err){
-		console.log(err);
-	}
+	// try{
+	// 	// 새 instance 생성
+	// 	const newChat = new Chat(req.body)
+	// 	console.log(newChat);
+	// 	await newChat.save();
+	// 	res.json({message:"chat 저장 완료"});
+	// } catch(err){
+	// 	console.log(err);
+	// }
+
+
+	console.log(`**/chat/createChat/서버통신** `);
+
+	const chatData = req.body;
+	const chat = new Chat({
+		beforeTime: chatData.beforeTime,
+		textId: chatData.textId,
+		createdAt: chatData.createdAt,
+		text: chatData.text,
+		senderId: chatData.senderId,
+		roomId: chatData.roomId
+	});
+
+	console.log(chat);
+
+	chat.save((err, user)=>{
+		if(err){
+			console.log(err);
+			res.status(500).send({error:"DB오류"});
+		}else {
+			console.log("DB 저장완료");
+			res.status(200).json(user);
+		}
+	})
 });
 
 
