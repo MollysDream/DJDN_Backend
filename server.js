@@ -21,9 +21,8 @@ admin.initializeApp({
 // user 몇명 들어왔나 체크 하려고
 var count = 1;
 
-
-
 let postOwnerId;
+
 // chatRoomId 조회를 위함!
 let chatRoomId;
 
@@ -43,28 +42,22 @@ app.get('/', (req, res) => {
 
 //소켓 연결됨
 io.on('connection', (socket)=>{
-	// console.log('user connect: ', socket.id);
-
 
 	console.log('현재 소켓 아이디 :' + socket.id);
 	var name = 'user' + count++;
 	console.log(name);
 
-	// 이거 일단 필요 없음
-	io.to(socket.id).emit('change name',name);
-
 
 	socket.on('connect', (chatRoomId) => {
 		// console.log('user connect: ', socket.id);
 		// console.log('채팅룸 : ' + chatRoomId);
-		// socket.join('room1');
+
 	});
 
 
 	socket.on('disconnect', (chatRoomId) => {
 		// console.log('user disconnected: ', socket.id);
 		// console.log('채팅룸 : ',chatRoomId)
-		// socket.leave(chatRoomId);
 	});
 
 
@@ -81,7 +74,6 @@ io.on('connection', (socket)=>{
 	// postOwnerId, hostId
     socket.on('searchChatRoom',(postOwnerId, postOwnerNick, hostId)=>{
 		console.log("postOwnerId : ", postOwnerId );
-		// console.log("postOwnerNick : ", postOwnerNick );
 		console.log("hostId : ", hostId);
 
 			// postOwnerId = postOwnerId;
@@ -93,17 +85,14 @@ io.on('connection', (socket)=>{
 		* 해서 위에 전역변수로 설정해놓은 chatRoomId에 찾은 ChatRoom의 Id 저장
 		*  chatRoomId = ChatrRoom._id(우리가 찾은거,)
 		*
-		* socket.join까지 하면 좋겠다~
-		*
+		* socket.join까지 하면 좋겠다~		*
 		*/
-
 
 	});
 
 
 	// 메세지
 	socket.on('chat message to server', async (msg, roomId) => {
-
 		//console.log("현재 사용중인 소켓 아이디 : ",socket.id);
 		//console.log("server에서 지금 메세지 받음 : " + msg[0].text);
 		// io.to('room1').emit('chat message to client', msg);
@@ -115,7 +104,7 @@ io.on('connection', (socket)=>{
 		* 요기서 전역변수로 저장해놓은 chatRoomId를 불러온다!
 		* 그래서 여기 'room1'에 chatRoomId 전역변수를 집어 넣는다!?
 		*/
-		
+
 		/*
 		* 푸시알림을 해봅시다.
 		* 먼저, chatroom정보를 가져와요
@@ -126,7 +115,7 @@ io.on('connection', (socket)=>{
 		* sendFCM 메시지를 통해 메시지 보냅시다!
 		 */
 
-		console.log("채팅방 아이디 "+roomId);
+		console.log("채팅방 아이디 : " + roomId);
 		const room = await ChatRoom.findOne(
 			{_id: roomId},
 		);
@@ -145,7 +134,7 @@ io.on('connection', (socket)=>{
 		)
 
 		if(postOwner){
-			console.log("postOwner를 찾았습니다! "+postOwner.firebaseFCM)
+			// console.log("postOwner를 찾았습니다! "+postOwner.firebaseFCM)
 		}
 
 		const host = await User.findOne(
@@ -153,7 +142,7 @@ io.on('connection', (socket)=>{
 		)
 
 		if(host){
-			console.log("host를 찾았습니다! "+host.firebaseFCM)
+			// console.log("host를 찾았습니다! "+host.firebaseFCM)
 		}
 
 		const _room ={
@@ -171,14 +160,14 @@ io.on('connection', (socket)=>{
 		if (chat.senderId == _room.postOwnerId) {
 			notifyNickName = _room.postOwnerNickName;
 			fcm = _room.hostFCM;
-			console.log('host fcm: ', fcm);
+			// console.log('host fcm: ', fcm);
 		} else {
-			console.log("현재 id는 "+chat.senderId);
-			console.log("현재 상대방 id는 "+ _room.postOwnerId);
+			// console.log("현재 id는 "+chat.senderId);
+			// console.log("현재 상대방 id는 "+ _room.postOwnerId);
 			notifyNickName = _room.hostNickName;
 			fcm = _room.postOwnerFCM;
-			console.log("host nickname")
-			console.log('postOwner fcm:'+fcm);
+			// console.log("host nickname")
+			// console.log('postOwner fcm:'+fcm);
 		}
 
 		const message = {
@@ -195,32 +184,25 @@ io.on('connection', (socket)=>{
 		  if (fcm){
 		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
 			.then((response) => {
-				console.log(response.results);
+				// console.log(response.results);
 				return true;
 			})
 			.catch((error) => {
-				console.log('Error sending message:', error);
+				// console.log('Error sending message:', error);
 				return false;
 			});
 		  }
-		  
-		socket.broadcast.to('room2').emit('chat message to client', msg);
+
+
+		  console.log(msg);
+		socket.join(chatRoomId);
+		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
 	});
-
-	// * 테스트용
-	// socket.on('newMessage', (msg) => {
-	// 	// we tell the client to execute 'new message'
-	// 	// io.emit('newMessage', msg)
-	// 	socket.broadcast.emit('newMessage', msg);
-	// 	console.log(msg);
-	// 	console.log("server에서 지금 메세지 보내는 중");
-	// });
-
 
 
 });
 
-// 신경 쓰지마 테스트용
+// 테스트
 setInterval(() => {
 	io.emit('message', new Date().toISOString());
 	// console.log("지금 시간 보내는 중");
