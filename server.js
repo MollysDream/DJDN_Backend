@@ -157,7 +157,7 @@ io.on('connection', (socket)=>{
 		let notifyNickName;
 		// let notifyProfile;
 
-		if (chat.senderId == _room.postOwnerId) {
+		if (msg[0].user._id == _room.postOwnerId) {
 			notifyNickName = _room.postOwnerNickName;
 			fcm = _room.hostFCM;
 			// console.log('host fcm: ', fcm);
@@ -170,6 +170,9 @@ io.on('connection', (socket)=>{
 			// console.log('postOwner fcm:'+fcm);
 		}
 
+		socket.join(chatRoomId);
+		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
+
 		const message = {
 			notification: {
 			  title: notifyNickName,
@@ -179,7 +182,7 @@ io.on('connection', (socket)=>{
 			},
 			data: {
 			  type: 'Chat',
-			  senderId: chat.senderId,
+			  senderId: msg[0].user._id,
 			},
 		  };
 		  if (fcm){
@@ -196,8 +199,7 @@ io.on('connection', (socket)=>{
 
 
 		  console.log(msg);
-		socket.join(chatRoomId);
-		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
+
 	});
 
 
