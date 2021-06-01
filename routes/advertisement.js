@@ -23,10 +23,12 @@ router.post("/createAdver", function(req,res,next){
         price: adverData.price,
         count: adverData.count,
         shopOwner: adverData.shopOwner,
-        latitude: adverData.area.latitude,
-        longitude: adverData.area.longitude,
-        addressName: adverData.area.addressName,
-        location:{coordinates: [adverData.area.longitude, adverData.area.latitude]}
+        latitude: adverData.P1.latitude,
+        longitude: adverData.P1.longitude,
+        addressName: adverData.addressName,
+        location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
+        radius:adverData.radius,
+        endDate:adverData.endDate
     })
     console.log(adver);
 
@@ -55,6 +57,13 @@ router.post('/updateAdver', function(req,res,next){
             image: adverData.image,
             text:adverData.text,
             price:adverData.price,
+
+            latitude: adverData.P1.latitude,
+            longitude: adverData.P1.longitude,
+            addressName: adverData.addressName,
+            location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
+            radius:adverData.radius,
+            endDate:adverData.endDate
 
         })
         .then((result)=>{

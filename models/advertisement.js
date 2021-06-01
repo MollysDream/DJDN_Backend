@@ -66,6 +66,9 @@ const advertisementSchema=new advertisement_Schema({
         default:Date.now,
         required: true
     },
+    endDate:{
+        type:Date,
+    }
 })
 
 // advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');
