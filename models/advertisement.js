@@ -57,6 +57,10 @@ const advertisementSchema=new advertisement_Schema({
         type:{type:String, default: 'Point'},
         coordinates:{type:[Number]}
         },
+    radius:{
+        type:Number,
+        default: 500
+    },
     date:{
         type:Date,
         default:Date.now,
