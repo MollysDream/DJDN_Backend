@@ -19,7 +19,10 @@ const adminSchema=new admin_Schema({
     user_id:{
         type:String,
         required: true
-    }
+    },
+    firebaseFCM:{
+        type:String
+    },
 })
 
 // adminSchema.plugin(mongooseAutoInc.plugin, 'admin');

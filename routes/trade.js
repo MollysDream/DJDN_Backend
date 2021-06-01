@@ -63,7 +63,7 @@ router.post('/createTradeTime',async (req, res) => {
 
         // req.body 저장
         const{
-            startTime, endTime, location,sender,receiver,chatRoom
+            startTime, endTime, location,sender,receiver,chatRoom,longitude,latitude
         } = req.body;
 
         let trade = await Trade.findOne({chatRoom:chatRoom});
@@ -84,7 +84,9 @@ router.post('/createTradeTime',async (req, res) => {
                 complete: false,
                 sender:sender,
                 receiver:receiver,
-                chatRoom:chatRoom
+                chatRoom:chatRoom,
+                longitude:longitude,
+                latitude:latitude
             }
             const trade = new Trade(obj);
             await trade.save();
@@ -99,7 +101,9 @@ router.post('/createTradeTime',async (req, res) => {
                 complete: false,
                 sender:sender,
                 receiver:receiver,
-                chatRoom:chatRoom
+                chatRoom:chatRoom,
+                longitude:longitude,
+                latitude:latitude
             }
             const trade = new Trade(obj);
             await trade.save();
@@ -130,6 +134,33 @@ router.post('/agreeTrade',async (req, res) =>{
         );
 
        res.json({ message: "거래 연장이 완료되었습니다." });
+    } catch(err){
+        console.log(err);
+        res.json({ message: false });
+    }
+});
+
+//장소 위,경도 저장
+router.post('/updateTradeLocation',async (req, res) =>{
+
+    console.log('/trade/updateTradeLocation 실행');
+
+    try {
+        // req.body 저장
+        let {tradeId,longitude,latitude} = req.body;
+        console.log(`거래 ID:${tradeId}`);
+
+        await Trade.updateOne(
+            { _id: tradeId },
+                {
+                  $set: {
+                      longitude:longitude,
+                      latitude:latitude   
+                }
+            }
+        );
+
+       res.json({ message: "거래 장소 위, 경도가 저장되었습니다." });
     } catch(err){
         console.log(err);
         res.json({ message: false });

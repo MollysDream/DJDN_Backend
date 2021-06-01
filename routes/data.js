@@ -7,6 +7,13 @@ const Category = require('../models/category');
 const Address = require('../models/address')
 const ChatRoom = require('../models/chatRoom');
 
+var admin = require('firebase-admin');
+var serviceAccount = require("../key/appKey.json");
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount)
+  });
+
 /* GET users listing. */
 router.get('/getPost',function(req, res, next) {
     const LIMIT = 8
@@ -262,6 +269,44 @@ router.post('/createPost', function(req,res,next){
         }else {
             console.log("DB 저장완료");
             res.status(200).json(user);
+
+            /*
+            * 푸시알림을 해봅시다.
+            * 먼저, user에서 키워드 정보, addressIndex를 가져와요
+            * 다음으로, 키워드와 post.title이 같은 사용자 id를 가져옵시다.
+            * 해당되는 id의 사용자의 fcm token값을 가져옵시다.
+            * 푸시 알림 메시지의 포맷을 정해줍니다 -> title,tag 등..
+            * sendFCM 메시지를 통해 메시지 보냅시다!
+            */
+
+            // const keywordOwner = await User.findOne(
+            //     {keyword: postData.title},
+            // )
+
+            // const fcm = keywordOwner.firebaseFCM
+
+            // const message = {
+            //     notification: {
+            //       title: keywordOwner.keyword,
+            //       tag: keywordOwner.keyword,
+            //       body: postData.title,
+            //     },
+            //     data: {
+            //       type: 'Keyword'
+            //     },
+            //   };
+
+            //   if (fcm){
+            //    admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
+            //     .then((response) => {
+            //         console.log(response.results);
+            //         return true;
+            //     })
+            //     .catch((error) => {
+            //         console.log('Error sending message:', error);
+            //         return false;
+            //     });
+            //   }
         }
     })
 })
