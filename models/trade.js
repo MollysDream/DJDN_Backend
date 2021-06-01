@@ -24,6 +24,14 @@ const tradeSchema=new trade_Schema({
         type:String,
         required:true
     },
+    latitude:{
+        type:Number,
+        required:false
+    },
+    longitude:{
+        type:Number,
+        required:false
+    },
     isSave:{
         type:Boolean,
         required:true

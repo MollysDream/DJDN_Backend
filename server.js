@@ -186,7 +186,6 @@ io.on('connection', (socket)=>{
 			  title: notifyNickName,
 			  tag: notifyNickName,
 			  body: msg[0].text ? msg[0].text : '',
-			  // "clickAction":
 			},
 			data: {
 			  type: 'Chat',
