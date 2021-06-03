@@ -145,4 +145,16 @@ router.post('/getLatestChat',function(req,res){
 	})
 })
 
+router.post('/getChatRoomDataById',function(req,res){
+	const {chatRoomId} = req.body;
+
+	ChatRoom.findOne({_id:chatRoomId})
+		.then(data=>{
+			res.status(200).json(data);
+			console.log(`채팅방 불러옴!! 채팅방 Id: ${chatRoomId}`);
+		}).catch(err=>{
+		console.log(err);
+		res.status(500).send({error:"getChatRoomDataById DB오류"})
+	})
+})
 module.exports = router;
