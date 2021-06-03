@@ -383,8 +383,15 @@ router.delete('/deletePost', function(req, res, next) {
 
     Post.findOneAndDelete({'_id':postId})
         .then((result)=>{
-            console.log(`${postId} 게시글 삭제 완료`);
-            res.status(200).json(result);
+
+            ChatRoom.deleteMany({'postId':postId}).then(result=>{
+                console.log(`${postId} 게시글 삭제 완료`);
+                res.status(200).json(result);
+            }).catch(err=>{
+                console.log(err);
+                res.status(500).send({error:"deletePost DB오류"});
+            })
+
         }).catch((err)=>{
         console.log(err);
         res.status(500).send({error:"deletePost DB오류"});
