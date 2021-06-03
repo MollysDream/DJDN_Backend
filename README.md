@@ -1,20 +1,48 @@
+<h1 align="center">Welcome to DJDN-Backend 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <a href=" " target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+</p>
 
-# DJDN (다재다능) 
-Molly's Dream Capstone Design Project
+> 개요
 
---------------------
+### 🏠 [Homepage]( )
 
-### 프로젝트 개요
-동네를 기반으로 하여 주변 이웃의 재능을 거래하는 플랫폼 및 서비스입니다.
+### ✨ [Demo]( )
 
-### 환경
-* npm >= 6.14.11
-* Node.JS = 14.16.0 
-* Database: MongoDb 2.6.10
+## Install
 
+```sh
+npm install
+```
 
+## Usage
 
-### how to setup 📱
-#### ```npm install```
-#### ```npm run```
-#### ```node server.js```
+```sh
+npm run start , node server.js
+```
+
+## Run tests
+
+```sh
+npm run test
+```
+
+## Author
+
+👤 **JunYeop**
+
+* Github: [@JUNYEOP](https://github.com/JUNYEOP)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page]( ). You can also take a look at the [contributing guide]( ).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
