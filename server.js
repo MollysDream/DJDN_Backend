@@ -210,7 +210,7 @@ io.on('connection', (socket)=>{
 
 		console.log("첫 메시지 받기")
 		socket.join(chatRoomId);
-		socket.broadcast.to(chatRoomId).emit('chat message to client');
+		//socket.broadcast.to(chatRoomId).emit('chat message to client');
 
 	});
 
