@@ -69,6 +69,7 @@ io.on('connection', (socket)=>{
 	socket.on('joinRoom',(chatRoomId)=>{
 		socket.join(chatRoomId);
 		console.log("joinRoom 실행됐다!! 방 번호 : " + chatRoomId);
+		chatRoomId = chatRoomId;
 	});
 
 	// 방 퇴장
@@ -179,8 +180,8 @@ io.on('connection', (socket)=>{
 		}
 
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 새메세지 출력해야돼! 메세지 내용은, "+ msg[0].text)
-		socket.join(chatRoomId);
-		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
+		socket.join(roomId);
+		socket.broadcast.to(roomId).emit('chat message to client', msg);
 
 		const message = {
 			notification: {
@@ -211,14 +212,17 @@ io.on('connection', (socket)=>{
 	});
 
 	// 방 입장
-	socket.on('joinTradeRoom',(tradeRoomId)=>{
-		socket.join(tradeRoomId);
-		console.log("tradeRoom 실행됐다!! 방 번호 : " + tradeRoomId);
+	socket.on('joinTradeRoom',(tradeId)=>{
+		socket.join(tradeId);
+		console.log("tradeRoom 실행됐다!! 방 번호 : " + tradeId);
+		tradeRoomId = tradeId;
 	});
 
 	// 거래 연장
-	socket.on('extend endTime',async(tradeId,endDateTime)=>{
-		
+	socket.on('extend endTime',async(tradeId,endDateTime, userId)=>{
+
+
+
 		console.log("안녕 연장");
 		const trade = await Trade.findOne(
 			{_id: tradeId},
@@ -245,33 +249,48 @@ io.on('connection', (socket)=>{
 			// console.log("receiver를 찾았습니다! "+receiver.firebaseFCM)
 		}
 
+
+		let fcm;
+		let notifyNickName;
+		// let notifyProfile;
+
+		if (userId == sender._id) {
+			notifyNickName = sender.nickname;
+			fcm = receiver.firebaseFCM;
+
+		} else {
+			notifyNickName = receiver.nickname;
+			fcm = sender.firebaseFCM;
+		}
+
+
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 새 연장 시간 출력해야돼! 새로운 종료시간은, "+ endDateTime)
 		socket.join(tradeRoomId);
 		socket.broadcast.to(tradeRoomId).emit('extend endTime to client', endDateTime);
 
 		const message = {
 			notification: {
-			  title: sender.nickname +"님이",
-			  tag: sender.nickname,
+			  title:notifyNickName +"님이",
+			  tag: notifyNickName,
 			  body: "거래시간이 10분 연장하였습니다.",
 			},
 			data: {
 			  type: 'Extend',
-			  senderId: sender._id,
+			  senderId: userId.toString(),
 			},
 		  };
 
-		  if (receiver.firebaseFCM){
-		   console.log("fcm token은 "+receiver.firebaseFCM)
+		  if (fcm){
+		   console.log("fcm token은 "+fcm)
 		   console.log("message는 "+message.data.type)
 
-		   admin.messaging().sendToDevice(receiver.firebaseFCM, message, { priority: 'high' })
+		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
 			.then((response) => {
 				console.log("연장 알림이 성공적으로 되었습니다!");
 				return true;
 			})
 			.catch((error) => {
-				// console.log('Error sending message:', error);
+				console.log('Error sending message:', error);
 				return false;
 			});
 		  }
