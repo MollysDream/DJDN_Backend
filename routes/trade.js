@@ -140,33 +140,6 @@ router.post('/agreeTrade',async (req, res) =>{
     }
 });
 
-//장소 위,경도 저장
-router.post('/updateTradeLocation',async (req, res) =>{
-
-    console.log('/trade/updateTradeLocation 실행');
-
-    try {
-        // req.body 저장
-        let {tradeId,longitude,latitude} = req.body;
-        console.log(`거래 ID:${tradeId}`);
-
-        await Trade.updateOne(
-            { _id: tradeId },
-                {
-                  $set: {
-                      longitude:longitude,
-                      latitude:latitude   
-                }
-            }
-        );
-
-       res.json({ message: "거래 장소 위, 경도가 저장되었습니다." });
-    } catch(err){
-        console.log(err);
-        res.json({ message: false });
-    }
-});
-
 // 거래 시간 연장
 router.post('/updateTradeTime',async (req, res) =>{
 
