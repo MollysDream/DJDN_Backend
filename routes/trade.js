@@ -173,14 +173,19 @@ router.post('/endSuggestTrade',async (req, res) => {
 
     try {
         // req.body 저장
-        let {tradeId} = req.body;
+        let {tradeId,suggester,suggestee} = req.body;
+
+        console.log("suggester은 "+suggester)
+        console.log("suggestee는 "+suggestee)
         console.log(`거래 ID:${tradeId} `);
 
         await Trade.updateOne(
             { _id: tradeId },
                 {
                     $set: {
-                      completeSuggest:true  
+                      completeSuggest:true,
+                      sender: suggester,
+                      receiver: suggestee 
                 }
             }
         );
