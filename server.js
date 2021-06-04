@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 const User = require('./models/user');
 const ChatRoom = require('./models/chatRoom');
 const Chat = require('./models/chat');
+const Trade = require('./models/trade');
 
 var ObjectID = mongoose.ObjectID;
 var db = mongoose.connect('mongodb://localhost:27017/DJDN');
@@ -25,6 +26,9 @@ let postOwnerId;
 
 // chatRoomId 조회를 위함!
 let chatRoomId;
+
+// tradeRoomId 조회를 위함!
+let tradeRoomId;
 
 
 
@@ -65,6 +69,7 @@ io.on('connection', (socket)=>{
 	socket.on('joinRoom',(chatRoomId)=>{
 		socket.join(chatRoomId);
 		console.log("joinRoom 실행됐다!! 방 번호 : " + chatRoomId);
+		chatRoomId = chatRoomId;
 	});
 
 	// 방 퇴장
@@ -175,8 +180,8 @@ io.on('connection', (socket)=>{
 		}
 
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 새메세지 출력해야돼! 메세지 내용은, "+ msg[0].text)
-		socket.join(chatRoomId);
-		socket.broadcast.to(chatRoomId).emit('chat message to client', msg);
+		socket.join(roomId);
+		socket.broadcast.to(roomId).emit('chat message to client', msg);
 
 		const message = {
 			notification: {
@@ -203,6 +208,244 @@ io.on('connection', (socket)=>{
 
 
 		  console.log(msg);
+
+	});
+
+	// 방 입장
+	socket.on('joinTradeRoom',(tradeId)=>{
+		socket.join(tradeId);
+		console.log("tradeRoom 실행됐다!! 방 번호 : " + tradeId);
+		tradeRoomId = tradeId;
+	});
+
+	// 거래 연장
+	socket.on('extend endTime',async(tradeId,endDateTime, userId)=>{
+
+
+
+		// console.log("안녕 연장");
+		const trade = await Trade.findOne(
+			{_id: tradeId},
+		);
+
+		if(!trade){
+			console.log("거래가 존재하지 않습니다")
+			return;
+		}
+
+		const sender = await User.findOne(
+			{_id: trade.sender},
+		)
+
+		if(sender){
+			// console.log("sender를 찾았습니다! "+sender.firebaseFCM)
+		}
+
+		const receiver = await User.findOne(
+			{_id: trade.receiver},
+		)
+
+		if(receiver){
+			// console.log("receiver를 찾았습니다! "+receiver.firebaseFCM)
+		}
+
+
+		let fcm;
+		let notifyNickName;
+		// let notifyProfile;
+
+		if (userId == sender._id) {
+			notifyNickName = sender.nickname;
+			fcm = receiver.firebaseFCM;
+
+		} else {
+			notifyNickName = receiver.nickname;
+			fcm = sender.firebaseFCM;
+		}
+
+
+		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 새 연장 시간 출력해야돼! 새로운 종료시간은, "+ endDateTime)
+		socket.join(tradeRoomId);
+		socket.broadcast.to(tradeRoomId).emit('extend endTime to client', endDateTime);
+
+		const message = {
+			notification: {
+			  title:notifyNickName +"님이",
+			  tag: notifyNickName,
+			  body: "거래시간이 10분 연장하였습니다.",
+			},
+			data: {
+			  type: 'Extend',
+			  senderId: userId.toString(),
+			},
+		  };
+
+		  if (fcm){
+		   console.log("fcm token은 "+fcm)
+		   console.log("message는 "+message.data.type)
+
+		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
+			.then((response) => {
+				console.log("연장 알림이 성공적으로 되었습니다!");
+				return true;
+			})
+			.catch((error) => {
+				console.log('Error sending message:', error);
+				return false;
+			});
+		  }
+
+	});
+
+	// 거래 종료 제안
+	socket.on('suggest tradeEnd',async(tradeId,userId)=>{
+		const trade = await Trade.findOne(
+			{_id: tradeId},
+		);
+
+		if(!trade){
+			console.log("거래가 존재하지 않습니다")
+			return;
+		}
+
+		const sender = await User.findOne(
+			{_id: trade.sender},
+		)
+
+		if(sender){
+			// console.log("sender를 찾았습니다! "+sender.firebaseFCM)
+		}
+
+		const receiver = await User.findOne(
+			{_id: trade.receiver},
+		)
+
+		if(receiver){
+			// console.log("receiver를 찾았습니다! "+receiver.firebaseFCM)
+		}
+
+
+		let fcm;
+		let notifyNickName;
+		// let notifyProfile;
+
+		if (userId == sender._id) {
+			notifyNickName = sender.nickname;
+			fcm = receiver.firebaseFCM;
+
+		} else {
+			notifyNickName = receiver.nickname;
+			fcm = sender.firebaseFCM;
+		}
+
+
+		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래종료제안 출력해야돼!")
+		socket.join(tradeRoomId);
+		socket.broadcast.to(tradeRoomId).emit('suggest tradeEnd to client');
+
+		const message = {
+			notification: {
+			  title:notifyNickName +"님이",
+			  tag: notifyNickName,
+			  body: "거래종료를 제안했습니다.",
+			},
+			data: {
+			  type: 'Suggest',
+			  senderId: userId.toString(),
+			},
+		  };
+
+		  if (fcm){
+		   console.log("fcm token은 "+fcm)
+		   console.log("message는 "+message.data.type)
+
+		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
+			.then((response) => {
+				console.log("거래종료 제안 알림이 성공적으로 되었습니다!");
+				return true;
+			})
+			.catch((error) => {
+				console.log('Error sending message:', error);
+				return false;
+			});
+		  }
+
+
+	});
+
+	// 거래 종료 동의
+	socket.on('end trade',async(tradeId,userId)=>{
+
+		const trade = await Trade.findOne(
+			{_id: tradeId},
+		);
+
+		if(!trade){
+			console.log("거래가 존재하지 않습니다")
+			return;
+		}
+
+		const sender = await User.findOne(
+			{_id: trade.sender},
+		)
+
+		if(sender){
+			// console.log("sender를 찾았습니다! "+sender.firebaseFCM)
+		}
+
+		const receiver = await User.findOne(
+			{_id: trade.receiver},
+		)
+
+		if(receiver){
+			// console.log("receiver를 찾았습니다! "+receiver.firebaseFCM)
+		}
+
+
+		let fcm;
+		let notifyNickName;
+		// let notifyProfile;
+
+		if (userId == sender._id) {
+			notifyNickName = sender.nickname;
+			fcm = receiver.firebaseFCM;
+
+		} else {
+			notifyNickName = receiver.nickname;
+			fcm = sender.firebaseFCM;
+		}
+
+
+		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래종료동의 출력해야돼!")
+		socket.join(tradeRoomId);
+		socket.broadcast.to(tradeRoomId).emit('end trade to client');
+
+		const message = {
+			notification: {
+			  title:notifyNickName +"님이",
+			  tag: notifyNickName,
+			  body: "거래종료를 동의했습니다.",
+			},
+			data: {
+			  type: 'EndTrade',
+			  senderId: userId.toString(),
+			},
+		  };
+
+		  if (fcm){
+		   console.log("fcm token은 "+fcm)
+		   console.log("message는 "+message.data.type)
+
+		   admin.messaging().sendToDevice(fcm, message, { priority: 'high' })
+			.then((response) => {
+				console.log("거래종료 동의 알림이 성공적으로 되었습니다!");
+				return true;
+			})
+			.catch((error) => {
+				console.log('Error sending message:', error);
+				return false;
+			});
+		  }
 
 	});
 
