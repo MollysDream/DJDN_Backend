@@ -60,7 +60,7 @@ const userSchema=new user_Schema({
         default:['조립','수리','운반','퇴치','설치','청소','과외','디자인','제작']
     },
     sort:{
-        type:Number,   //최신순: 0, 거리순: 1
+        type:Number,   //최신순: 0, 거리순: 1, 키워드: 2
         required: false,
         default:0
     },

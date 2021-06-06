@@ -50,7 +50,7 @@ router.get('/getPost',function(req, res, next) {
                     console.log(err);
                     res.status(500).send({error:"getPost DB오류"});
                 })
-            }else{ // 거리순 정렬
+            }else if(sort == 1){ // 거리순 정렬
                 console.log("*****거리순 정렬*****")
                 Post.find({
                     location: {
@@ -68,6 +68,30 @@ router.get('/getPost',function(req, res, next) {
                 }).catch((err)=>{
                     console.log(err);
                     res.status(500).send({error:"getPost DB오류"});
+                })
+            }else{ //키워드 정렬
+                console.log("*****키워드 정렬*****")
+                let searchOption=[];
+                data.keyword.map(keyword=>{
+                    searchOption.push({title: new RegExp(keyword)});
+                    searchOption.push({text: new RegExp(keyword)});
+                })
+
+                Post.find({
+                    location: {
+                        $geoWithin: {
+                            $centerSphere: [[LONGITUDE, LATITUDE], (MAXDISTANCE/1000) / 6378.1]
+                        }
+                    },
+                    category: {$in:category},
+                    $or:searchOption
+                })
+                    .sort({date:-1}).skip(page*LIMIT).limit(LIMIT)
+                    .then((data)=>{
+                        res.status(200).json(data);
+                    }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPostBySearch DB오류"});
                 })
             }
 
@@ -94,13 +118,6 @@ router.get('/getPostBySearch', function(req,res,next){
         {title: new RegExp(searchValue)},
         {text: new RegExp(searchValue)}
     ]
-    /*Post.find({$or:searchOption}).sort({$natural:-1}).then((data)=>{
-        res.status(200).json(data);
-    }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({error:"getPostBySearch DB오류"});
-    })*/
-
 
     User.findOne({_id:userId}).then((data)=>{
         //console.log(data);
