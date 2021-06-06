@@ -207,10 +207,9 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
             let distance = haversine(start,end,{unit:'meter'});
 
             if(distance < ad.radius){
-
                 //사용자 포인트 남았는지 확인
                 let pointData = await Point.findOne({user_id:ad.shopOwner})
-                if(pointData.point<=0){
+                if(pointData.point<=1){
                     console.log("포인트 부족으로 광고 정지");
                     await Advertisement.findOneAndUpdate({'_id':ad._id},{active:false})
                 }
@@ -219,11 +218,18 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
             }
             return false
         })
-        console.log(filteredAdvertisementList);
+        //console.log(filteredAdvertisementList);
 
+        if(filteredAdvertisementList.length==0){
+            console.log('보여줄 광고 없음!!!')
+            res.status(200).json(null);
+            return
+        }
         //랜덤으로 하나 뽑음
         let randomAdvertisement = filteredAdvertisementList[Math.floor(Math.random() * filteredAdvertisementList.length)]
-        //console.log(randomAdvertisement);
+        console.log(randomAdvertisement);
+
+        await Advertisement.findOneAndUpdate({'_id':randomAdvertisement._id},{$inc:{count:1}})
 
         res.status(200).json(randomAdvertisement);
 
