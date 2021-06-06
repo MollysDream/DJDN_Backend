@@ -63,7 +63,7 @@ router.post('/updateAdver', function(req,res,next){
             latitude: adverData.P1.latitude,
             longitude: adverData.P1.longitude,
             addressName: adverData.addressName,
-            location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
+            location:{type:'Point',coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
             radius:adverData.radius,
             endDate:adverData.endDate
 
@@ -158,44 +158,58 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
     const userId ='60b6464773c9ce52e88986e3'
 
     try{
+        //주소 인덱스 얻기위해 현재 사용자 정보 받음
         const userData = await User.findOne({'_id':userId})
-        //console.log(user);
         const addressIndex = userData.addressIndex;
-        //console.log(addressIndex);
 
+        //현재 위치 주소를 얻기위해 정보요청
         const addressData = await Address.findOne({userId:userId, addressIndex:addressIndex});
-        //console.log(addressData);
         const LONGITUDE = addressData.longitude;
         const LATITUDE = addressData.latitude;
-        const MAXDISTANCE = addressData.radius;
 
-        //console.log(MAXDISTANCE);
+        //한국 시간 얻기
+        Date.prototype.addHours= function(h){
+            this.setHours(this.getHours()+h);
+            return this;
+        }
+        let krDate = new Date().addHours(9);
+
+        console.log(krDate);
 
         const advertisementData = await Advertisement.find({
+            approve:true,
+            active:true,
+            endDate:{$gte:krDate},
             location:{
                 $geoWithin:{
                     $centerSphere: [[LONGITUDE,LATITUDE],2/6378.1]
                 }
             }
         })
+        //console.log(advertisementData);
 
+        //거리에 속하는 광고만 표시
         const filteredAdvertisementList = advertisementData.filter(ad =>{
-            console.log(ad);
+            let start = {
+                latitude: LATITUDE,
+                longitude: LONGITUDE
+            }
+            let end = {
+                latitude: ad.latitude,
+                longitude: ad.longitude
+            }
+            let distance = haversine(start,end,{unit:'meter'});
+
+            if(distance < ad.radius)
+                return true;
+            return false
         })
 
+        //랜덤으로 하나 뽑음
+        let randomAdvertisement = filteredAdvertisementList[Math.floor(Math.random() * filteredAdvertisementList.length)]
+        //console.log(randomAdvertisement);
 
-
-        /*const ad = await Advertisement.aggregate([{
-            $match:{
-                'location':{
-                    $geoWithin:{
-                        $centerSphere: [[LONGITUDE,LATITUDE], ("$$radius"/1000)/6378.1]
-                    }
-                }
-            }
-        }]).limit(1)*/
-
-        //console.log(advertisementData);
+        res.status(200).json(randomAdvertisement);
 
 
     }catch(e){
