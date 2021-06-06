@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to DJDN-Backend 👋</h1>
+<h1 align="center">DJDN-Backend에 오신 것을 환영합니다! 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href=" " target="_blank">
@@ -61,17 +61,14 @@ npm run test
 
 ## Author
 
-👤 **나준엽**, **정수범**
+👤 **김영웅**, **나준엽**, **윤태섭**, **이병훈**, **정수범**
 
-* Github: [@junyeoop](https://github.com/junyeoop), [@teller2016](https://github.com/teller2016)
+* Github: [@Kim234](https://github.com/Kim234), [@junyeoop](https://github.com/junyeoop), [@styy1124](https://github.com/styy1124), [@LeeByeongHoon](https://github.com/LeeByeongHoon), [@teller2016](https://github.com/teller2016)
 
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page]( ). You can also take a look at the [contributing guide]( ).
 
 ## Show your support
 
-Give a ⭐️ if this project helped you!
+프로젝트가 도움이 되었다면 ⭐️ 을 눌러주세요!
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
