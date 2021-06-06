@@ -6,6 +6,8 @@ const axios = require("axios");
 
 const Point = require("../models/point");
 const User = require("../models/user");
+const Address = require('../models/address')
+
 
 
 
@@ -148,4 +150,99 @@ router.get('/getAdverByAddressName', function(req,res,next){
         res.status(500).send({error:"getAdverByAddressName DB 오류"});
     })
 })
+
+const haversine = require('haversine');
+
+router.get('/getAdvertisementPost', async (req,res,next)=>{
+    //const userId = req.query.userId;
+    const userId ='60b6464773c9ce52e88986e3'
+
+    try{
+        const userData = await User.findOne({'_id':userId})
+        //console.log(user);
+        const addressIndex = userData.addressIndex;
+        //console.log(addressIndex);
+
+        const addressData = await Address.findOne({userId:userId, addressIndex:addressIndex});
+        //console.log(addressData);
+        const LONGITUDE = addressData.longitude;
+        const LATITUDE = addressData.latitude;
+        const MAXDISTANCE = addressData.radius;
+
+        //console.log(MAXDISTANCE);
+
+        const advertisementData = await Advertisement.find({
+            location:{
+                $geoWithin:{
+                    $centerSphere: [[LONGITUDE,LATITUDE],2/6378.1]
+                }
+            }
+        })
+
+        const filteredAdvertisementList = advertisementData.filter(ad =>{
+            console.log(ad);
+        })
+
+
+
+        /*const ad = await Advertisement.aggregate([{
+            $match:{
+                'location':{
+                    $geoWithin:{
+                        $centerSphere: [[LONGITUDE,LATITUDE], ("$$radius"/1000)/6378.1]
+                    }
+                }
+            }
+        }]).limit(1)*/
+
+        //console.log(advertisementData);
+
+
+    }catch(e){
+        console.log(e);
+        res.status(500).send({err:e});
+    }
+
+
+    /*User.findOne({_id:userId}).then((data)=>{
+        //console.log(data);
+        const addressIndex = data.addressIndex
+
+        Address.findOne({userId:userId, addressIndex:addressIndex}).then((addressData)=>{
+            console.log(addressData.longitude);
+            const LONGITUDE = addressData.longitude;
+            const LATITUDE = addressData.latitude;
+            const MAXDISTANCE = addressData.radius;
+            console.log(MAXDISTANCE);
+            if(sort == 0) {//최신순 정렬이면
+                console.log("*****최신순 정렬*****")
+                Post.find({
+                    location: {
+                        $geoWithin: {
+                            $centerSphere: [[LONGITUDE, LATITUDE], (MAXDISTANCE/1000) / 6378.1]
+                        }
+                    }
+                    ,category: {$in:category}
+                })
+                    .sort({date:-1})
+                    .skip(page*LIMIT).limit(LIMIT).then((data)=>{
+                    res.status(200).json(data);
+                }).catch((err)=>{
+                    console.log(err);
+                    res.status(500).send({error:"getPost DB오류"});
+                })
+            }
+
+
+        }).catch(err=>{ //Address.findOne()
+            console.log(err);
+            console.log('위치정보 Find 에러')
+        })
+
+    }).catch((err)=>{ // User.findOne()
+        console.log(err);
+        console.log('사용자 userId Find 실패');
+    })*/
+})
+
 module.exports = router;

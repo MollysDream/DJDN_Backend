@@ -71,6 +71,8 @@ const advertisementSchema=new advertisement_Schema({
     }
 })
 
+advertisementSchema.index({location:'2dsphere'});
+
 // advertisementSchema.plugin(mongooseAutoInc.plugin, 'advertisement');
 // mongooseAutoInc.initialize(mongoose.connection);
 // advertisementSchema.plugin(mongooseAutoInc.plugin, {
