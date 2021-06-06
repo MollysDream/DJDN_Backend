@@ -23,6 +23,8 @@ router.post("/createAdver", function(req,res,next){
         image: adverData.image,
         text: adverData.text,
         price: adverData.price,
+        phoneNumber:adverData.phoneNumber,
+
         count: adverData.count,
         shopOwner: adverData.shopOwner,
         latitude: adverData.P1.latitude,
@@ -52,13 +54,19 @@ router.post('/updateAdver', function(req,res,next){
     const adverData = req.body;
 
     console.log(adverData);
+    let price=adverData.price
+
+    if(adverData.price==''){
+        price=0
+    }
 
     Advertisement.findOneAndUpdate({'_id':adverData._id},
         {
             title:adverData.title,
             image: adverData.image,
             text:adverData.text,
-            price:adverData.price,
+            price:price,
+            phoneNumber:adverData.phoneNumber,
 
             latitude: adverData.P1.latitude,
             longitude: adverData.P1.longitude,
@@ -173,8 +181,6 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
             return this;
         }
         let krDate = new Date().addHours(9);
-
-        console.log(krDate);
 
         const advertisementData = await Advertisement.find({
             approve:true,

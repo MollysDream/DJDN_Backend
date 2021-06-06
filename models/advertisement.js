@@ -32,8 +32,13 @@ const advertisementSchema=new advertisement_Schema({
     },
     price:{
         type:Number,
-        required:true,
+        required:false,
         default:0
+    },
+    phoneNumber:{
+        type:String,
+        required:false,
+        default:null
     },
     count:{
         type:Number,
