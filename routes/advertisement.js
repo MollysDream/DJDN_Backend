@@ -195,7 +195,7 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
         //console.log(advertisementData);
 
         //거리에 속하는 광고만 표시
-        const filteredAdvertisementList = advertisementData.filter(ad =>{
+        const filteredAdvertisementList = advertisementData.filter(async ad =>{
             let start = {
                 latitude: LATITUDE,
                 longitude: LONGITUDE
@@ -206,10 +206,20 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
             }
             let distance = haversine(start,end,{unit:'meter'});
 
-            if(distance < ad.radius)
+            if(distance < ad.radius){
+
+                //사용자 포인트 남았는지 확인
+                let pointData = await Point.findOne({user_id:ad.shopOwner})
+                if(pointData.point<=0){
+                    console.log("포인트 부족으로 광고 정지");
+                    await Advertisement.findOneAndUpdate({'_id':ad._id},{active:false})
+                }
+
                 return true;
+            }
             return false
         })
+        console.log(filteredAdvertisementList);
 
         //랜덤으로 하나 뽑음
         let randomAdvertisement = filteredAdvertisementList[Math.floor(Math.random() * filteredAdvertisementList.length)]
@@ -223,46 +233,6 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
         res.status(500).send({err:e});
     }
 
-
-    /*User.findOne({_id:userId}).then((data)=>{
-        //console.log(data);
-        const addressIndex = data.addressIndex
-
-        Address.findOne({userId:userId, addressIndex:addressIndex}).then((addressData)=>{
-            console.log(addressData.longitude);
-            const LONGITUDE = addressData.longitude;
-            const LATITUDE = addressData.latitude;
-            const MAXDISTANCE = addressData.radius;
-            console.log(MAXDISTANCE);
-            if(sort == 0) {//최신순 정렬이면
-                console.log("*****최신순 정렬*****")
-                Post.find({
-                    location: {
-                        $geoWithin: {
-                            $centerSphere: [[LONGITUDE, LATITUDE], (MAXDISTANCE/1000) / 6378.1]
-                        }
-                    }
-                    ,category: {$in:category}
-                })
-                    .sort({date:-1})
-                    .skip(page*LIMIT).limit(LIMIT).then((data)=>{
-                    res.status(200).json(data);
-                }).catch((err)=>{
-                    console.log(err);
-                    res.status(500).send({error:"getPost DB오류"});
-                })
-            }
-
-
-        }).catch(err=>{ //Address.findOne()
-            console.log(err);
-            console.log('위치정보 Find 에러')
-        })
-
-    }).catch((err)=>{ // User.findOne()
-        console.log(err);
-        console.log('사용자 userId Find 실패');
-    })*/
 })
 
 module.exports = router;
