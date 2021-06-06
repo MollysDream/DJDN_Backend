@@ -162,8 +162,7 @@ router.get('/getAdverByAddressName', function(req,res,next){
 const haversine = require('haversine');
 
 router.get('/getAdvertisementPost', async (req,res,next)=>{
-    //const userId = req.query.userId;
-    const userId ='60b6464773c9ce52e88986e3'
+    const userId = req.query.userId;
 
     try{
         //주소 인덱스 얻기위해 현재 사용자 정보 받음
