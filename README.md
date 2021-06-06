@@ -61,9 +61,9 @@ npm run test
 
 ## Author
 
-👤 **JunYeop**
+👤 **나준엽**, **정수범**
 
-* Github: [@JUNYEOP](https://github.com/JUNYEOP)
+* Github: [@junyeoop](https://github.com/junyeoop), [@teller2016](https://github.com/teller2016)
 
 ## 🤝 Contributing
 
