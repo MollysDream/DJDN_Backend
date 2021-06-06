@@ -19,7 +19,7 @@ admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
   });
 
-// user 몇명 들어왔나 체크 하려고
+// user 수 체크
 var count = 1;
 
 let postOwnerId;
@@ -35,12 +35,6 @@ let tradeRoomId;
 // 서버 연결
 var io = socketio(server);
 server.listen(3002, () => console.log('listening on *:3002'));
-
-
-
-app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/chat.html');
-});
 
 
 
@@ -103,27 +97,6 @@ io.on('connection', (socket)=>{
 
 	// 메세지
 	socket.on('chat message to server', async (msg, roomId) => {
-		//console.log("현재 사용중인 소켓 아이디 : ",socket.id);
-		//console.log("server에서 지금 메세지 받음 : " + msg[0].text);
-		// io.to('room1').emit('chat message to client', msg);
-
-
-		/*
-		* 여기서 이제 room1을 어떻게 처리할것이냐!? 이게 문제지요!
-		* 위에 socket.on('usersId',(buyerId, buyerNick, sellerId, sellerNick)
-		* 요기서 전역변수로 저장해놓은 chatRoomId를 불러온다!
-		* 그래서 여기 'room1'에 chatRoomId 전역변수를 집어 넣는다!?
-		*/
-
-		/*
-		* 푸시알림을 해봅시다.
-		* 먼저, chatroom정보를 가져와요
-		* 다음으로, 각 id를 이용해 chatRoom에 속해 있는 사용자 두 명을 가져옵시다.
-		* 가져온 사용자의 두 명의 닉네임과 fcm token값을 가져옵시다.
-		* 지금 보내는 메시지(msg)가 누구냐에 따라 각 상대방에게 알림이 가도록 합시다.
-		* 푸시 알림 메시지의 포맷을 정해줍니다 -> title,tag 등..
-		* sendFCM 메시지를 통해 메시지 보냅시다!
-		 */
 
 		console.log("채팅방 아이디 : " + roomId);
 		const room = await ChatRoom.findOne(
@@ -213,13 +186,6 @@ io.on('connection', (socket)=>{
 	});
 
 
-//거래 세팅 알림 및 실시간 통신
-	// //거래 세팅 방 입장
-	// socket.on('joinTradeSetRoom',(chatRoom)=>{
-	// 	socket.join(chatRoom);
-	// 	console.log("tradeSetRoom 실행됐다!! 방 번호 : " + chatRoom);
-	// 	tradeRoomId = chatRoom;
-	// });
 
 	// 거래 종료 제안
 	socket.on('suggest trade',async(chatRoom,userId)=>{
@@ -375,7 +341,7 @@ io.on('connection', (socket)=>{
 
 
 
-//거래 타이머 알림 및 실시간 통신	
+//거래 타이머 알림 및 실시간 통신
 	//거래 타이머 방 입장
 	socket.on('joinTradeRoom',(tradeId)=>{
 		socket.join(tradeId);
@@ -692,10 +658,3 @@ io.on('connection', (socket)=>{
 
 
 });
-
-// 테스트
-setInterval(() => {
-	io.emit('message', new Date().toISOString());
-	// console.log("지금 시간 보내는 중");
-}, 1000);
-

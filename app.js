@@ -54,33 +54,6 @@ app.use('/advertisement', advertisementRouter);
 app.use('/point', pointRouter);
 
 
-// //소켓 통신
-// const server = require("http").createServer(app).listen(3001,()=>
-// {
-//   console.log("포트 3001번 연결")
-// });
-// const io = require("socket.io")(server);
-// const NEW_MESSAGE_EVENT = "new-message-event";
-// const room = "general"
-
-
-// io.on("connection", (socket) => {
-//   // socket.join(room);
-//
-//   // socket.on(NEW_MESSAGE_EVENT, (data) => {
-//   //   io.in(room).emit(NEW_MESSAGE_EVENT, data);
-//   // });
-//
-//   // socket.on("disconnect", () => {
-//   //   socket.leave(room);
-//   // });
-//   console.log("a user connected :D");
-//   socket.on("chat message", (msg) => {
-//     console.log("hi메세지 "+msg);
-//     io.emit("chat message", msg);
-//   });
-// })
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
