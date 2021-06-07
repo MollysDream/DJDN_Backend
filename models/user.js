@@ -21,9 +21,6 @@ const userSchema=new user_Schema({
         type:String,
         required: true
     },
-    profileImage:{
-        type:String,
-    },
     rating:{
         type:Number,
         default:3
@@ -46,9 +43,6 @@ const userSchema=new user_Schema({
         type:Date,
         default:null
     },
-    keyword:[{
-        type:String
-    }],
     // 비밀번호 암호화
     salt:{
         type:String,
