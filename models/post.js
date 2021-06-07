@@ -27,13 +27,6 @@ const postSchema=new post_Schema({
         type:String,
         required: true
     }],
-
-    //게시물에 붙이는 태그
-    tag:[{
-        type:String,
-        required: true
-    }],
-
     //조회수
     view:{
         type:Number,
