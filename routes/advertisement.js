@@ -6,46 +6,93 @@ const axios = require("axios");
 
 const Point = require("../models/point");
 const User = require("../models/user");
+const Admin = require("../models/admin");
 const Address = require('../models/address')
 
+var admin = require('firebase-admin');
+// var serviceAccount = require("../key/appKey.json");
+
+// admin.initializeApp({
+// 	credential: admin.credential.cert(serviceAccount)
+//   });
 
 
+router.post("/createAdver", async(req,res)=>{
+    try{
+        console.log(`**/data/createAdber/서버통신** 광고 작성 요청`);
+        const adverData = req.body;
+        console.log(adverData);
 
-router.post("/createAdver", function(req,res,next){
-    console.log(`**/data/createAdber/서버통신** 광고 작성 요청`);
-    const adverData = req.body;
-    console.log(adverData);
+        const adver=new Advertisement({
+            approve: adverData.approve,
+            active: adverData.active,
+            title: adverData.title,
+            image: adverData.image,
+            text: adverData.text,
+            price: adverData.price,
+            phoneNumber:adverData.phoneNumber,
 
-    const adver=new Advertisement({
-        approve: adverData.approve,
-        active: adverData.active,
-        title: adverData.title,
-        image: adverData.image,
-        text: adverData.text,
-        price: adverData.price,
-        phoneNumber:adverData.phoneNumber,
+            count: adverData.count,
+            shopOwner: adverData.shopOwner,
+            latitude: adverData.P1.latitude,
+            longitude: adverData.P1.longitude,
+            addressName: adverData.addressName,
+            location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
+            radius:adverData.radius,
+            endDate:adverData.endDate
+        })
 
-        count: adverData.count,
-        shopOwner: adverData.shopOwner,
-        latitude: adverData.P1.latitude,
-        longitude: adverData.P1.longitude,
-        addressName: adverData.addressName,
-        location:{coordinates: [adverData.P1.longitude, adverData.P1.latitude]},
-        radius:adverData.radius,
-        endDate:adverData.endDate
-    })
-    console.log(adver);
+        const advertisement = new Advertisement(adver);
+        await advertisement.save();
+        res.json({ message: "광고가 저장되었습니다!"});
 
-    adver.save((err, user)=>{
-        if(err){
-            console.log("여기");
-            console.log(err);
-            res.status(500).send({error:"DB오류"});
-        }else {
-            console.log("DB 저장완료");
-            res.status(200).json(user);
+        //알림 구현
+        const sender = await User.findOne(
+            {_id: adverData.shopOwner},
+        )
+
+        if(sender){
+            console.log("sender를 찾았습니다! "+sender.firebaseFCM)
         }
-    })
+
+        const receiver = await Admin.findOne(
+            {}
+        )
+
+        if(receiver){
+            console.log("receiver를 찾았습니다! "+receiver)
+        }
+
+        const message = {
+            notification: {
+              title:sender.nickname +"님이 광고를 신청했습니다.",
+              tag: sender.nickname,
+              body: adverData.title,
+            },
+            data: {
+              type: 'Advertise',
+              senderId: sender._id.toString(),
+            },
+          };
+
+          if (receiver.firebaseFCM){
+           console.log("fcm token은 "+receiver.firebaseFCM)
+           console.log("message는 "+message.data.type)
+
+           admin.messaging().sendToDevice(receiver.firebaseFCM, message, { priority: 'high' })
+            .then((response) => {
+                console.log("광고 신청 알림이 성공적으로 되었습니다!");
+                return true;
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+                return false;
+            });
+          }
+        
+    }catch(err){
+        console.log(err);
+    }
 
 })
 

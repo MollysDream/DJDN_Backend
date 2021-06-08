@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const Admin = require("../models/admin");
 const crypto = require("crypto");
 
 // 회원가입
@@ -122,6 +123,15 @@ router.post("/login", async (req, res) => {
                                                 firebaseFCM: req.body.token
                                             }
                                         })
+                                    
+                                    //admin일때도 token 저장
+                                    await Admin.updateOne(
+                                        { user_id: user2._id },
+                                        {
+                                            $set:{
+                                                firebaseFCM: req.body.token
+                                            }
+                                        })    
 
                                     res.json({
                                         message: "로그인 되었습니다!",
@@ -156,6 +166,16 @@ router.post('/autoLogin',async (req, res) =>{
 
         await User.updateOne(
             { _id: userId },
+                {
+                  $set: {
+                      firebaseFCM : token   
+                }
+            }
+        );
+        
+        //admin일 때도 token 저장
+        await Admin.updateOne(
+            { user_id: userId },
                 {
                   $set: {
                       firebaseFCM : token   
