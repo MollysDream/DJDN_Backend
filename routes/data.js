@@ -16,7 +16,7 @@ admin.initializeApp({
 
 /* GET users listing. */
 router.get('/getPost',function(req, res, next) {
-    const LIMIT = 4
+    const LIMIT = 6
 
     const page = req.query.page;
     const userId = req.query.userId;
