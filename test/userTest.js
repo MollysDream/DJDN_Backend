@@ -22,16 +22,11 @@ describe('Drop all collections before each test',()=>{
 describe('Create a User instance', ()=>{
     it('Saves a user to the DB',()=>{
         let sampleTrade = new User({
-            nickname:'대장 강아지',
-            name:'몰리',
-            email:'molly@ajou.ac.kr',
+            nickname:'mochaTestUser',
+            name:'mochaTestUser',
+            email:'mochaTestUser@ajou.ac.kr',
             password:'qwerty1234@@',
-            // profileImage:,
-            averageRating:4.5,
-            ban:false,
-            // keyword:,
-            // salt:,
-            // category:
+            category:['조립','수리','운반','퇴치','설치','청소','과외','디자인','제작'],
         });
         sampleTrade.save().then(()=>{
             assert(sampleTrade.isNew === false);
@@ -43,24 +38,46 @@ describe('Create a User instance', ()=>{
 
 // 회원가입 테스트
 describe('Test for POST /join',()=>{
-    it('Join Ok, fine',(done)=>{
+
+    let userId;
+
+    it('회원가입 확인',(done)=>{
         request(app).post('/member/join')
             .send({
-                email: 'user1@ajou.ac.kr',
+                email: 'mochaTest@ajou.ac.kr',
                 password: 'qwerty1234@@',
-                name: 'user1',
-                nickname: 'user1'
+                name: 'mochaTest',
+                nickname: 'mochaTest'
             })
             .then((res)=>{
-                // const body = res.body;
-                // console.log(body);
+                userId = res._id;
                 console.log(res.name);
-                // console.log(res.json);
-                // expect(body.length).to.equal(1);
+                expect(res.name).equal("mochaTest");
                 done();
             })
             .catch((err)=> done(err));
     }) ;
+
+    it('Point 생성 확인',(done)=>{
+
+        request(app).get('/point/getPointById')
+          .then((res)=>{
+              expect(res.user_id).equal(userId);
+              expect(res.point).equal(0);
+              done();
+          })
+          .catch((err)=> done(err));
+    });
+
+    it('생성한 데이터 삭제',(done)=>{
+
+        mongoose.connection.collections.users.deleteOne({_id: userId})
+          .then(()=>{
+              done();
+          });
+
+    });
+
 });
 
 // 로그인 테스트
