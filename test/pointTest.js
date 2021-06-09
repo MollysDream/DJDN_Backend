@@ -10,9 +10,9 @@ mongoose.set('useCreateIndex', true)
 
 
 
-
+// 기존의 user에 point field 추가
 describe('Create a Point instance', ()=>{
-	it('Saves a point to the DB',()=>{
+	it.skip('Saves a point to the DB',()=>{
 		let samplePoint = new Point({
 			point:10,
 			user_id: '60a47cabcff1311284a10d98'
@@ -22,5 +22,8 @@ describe('Create a Point instance', ()=>{
 			done();
 		});
 	});
+
+
+
 });
 
