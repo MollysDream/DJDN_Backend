@@ -5,6 +5,7 @@ const axios = require("axios")
 const Report = require("../models/report");
 const Post = require("../models/post");
 const User = require("../models/user");
+const ChatRoom = require('../models/chatRoom');
 
 //내 동네 인증
 router.post("/reportDataParam", (req, res) => {
@@ -96,7 +97,15 @@ router.delete('/deletePostandReport', function(req, res, next) {
             Report.deleteMany({'targetPost':postId})
             .then(result=>{
                 console.log('신고 삭제 완료')
-                res.status(200).json(result);
+
+                ChatRoom.deleteMany({'postId':postId}).then(result=>{
+                    console.log(`${postId} 게시글 삭제 완료`);
+                    res.status(200).json(result);
+                }).catch(err=>{
+                    console.log(err);
+                    res.status(500).send({error:"deletePost DB오류"});
+                })
+
             }).catch((err)=>{
                 console.log(err);
                 res.status(500).send({error:"deletePostandReport 신고삭제 DB오류"});
