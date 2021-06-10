@@ -76,6 +76,8 @@ router.get('/getPost',function(req, res, next) {
                     searchOption.push({title: new RegExp(keyword)});
                     searchOption.push({text: new RegExp(keyword)});
                 })
+                if(searchOption.length==0)
+                    res.status(200).json([]);
 
                 Post.find({
                     location: {
