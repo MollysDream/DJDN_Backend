@@ -417,4 +417,46 @@ router.delete('/deletePost', function(req, res, next) {
     })
 });
 
+router.get('/getAdminPost',function(req, res, next) {
+
+    const searchValue = req.query.searchValue;
+
+    const searchOption = [
+        {title: new RegExp(searchValue)},
+        {text: new RegExp(searchValue)},
+        {addressName: new RegExp(searchValue)}
+    ]
+
+    console.log(`**/data/getAdminPost/서버통신**  게시물 요청/ 사용자 :관리자`)
+
+    if(searchValue == ''){
+        Post.find({})
+            .sort({date:-1})
+            .then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getAdminPost DB오류"});
+        })
+
+    }
+    else{
+        Post.find({
+            $or:searchOption
+        })
+            .sort({date:-1})
+            .then((data)=>{
+            res.status(200).json(data);
+        }).catch((err)=>{
+            console.log(err);
+            res.status(500).send({error:"getAdminPost DB오류"});
+        })
+    }
+
+
+
+
+
+});
+
 module.exports = router;
