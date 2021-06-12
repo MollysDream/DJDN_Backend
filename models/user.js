@@ -21,6 +21,10 @@ const userSchema=new user_Schema({
         type:String,
         required: true
     },
+    phoneNumber:{
+        type:String,
+        required: true
+    },
     rating:{
         type:Number,
         default:3
