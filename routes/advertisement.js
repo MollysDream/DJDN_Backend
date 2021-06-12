@@ -277,6 +277,13 @@ router.get('/getAdvertisementPost', async (req,res,next)=>{
 
         await Advertisement.findOneAndUpdate({'_id':randomAdvertisement._id},{$inc:{count:1}})
 
+        //포인트 차감
+        await Point.findOneAndUpdate({'user_id':randomAdvertisement.shopOwner},
+            {
+                $inc:{point: -1}
+            }
+            )
+
         res.status(200).json(randomAdvertisement);
 
 
