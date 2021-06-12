@@ -257,9 +257,9 @@ router.post('/userRate', async(req, res) => {
             {upsert: true, new: true,setDefaultsOnInsert: true},
         );
 
-        await Trade.remove({
-            _id:req.body.tradeId
-        });
+        // await Trade.remove({
+        //     _id:req.body.tradeId
+        // });
         
         res.json({message:"사용자 평가를 완료했습니다."});
     } catch (err){

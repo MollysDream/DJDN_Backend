@@ -52,7 +52,7 @@ const tradeSchema=new trade_Schema({
     },
     chatRoom:{
         type:String
-    }
+    },
 })
 
 // tradeSchema.plugin(mongooseAutoInc.plugin, 'trade');
