@@ -27,6 +27,9 @@ let postOwnerId;
 // chatRoomId 조회를 위함!
 let chatRoomId;
 
+// tradeSetRoomId 조회를 위함!
+let tradeSetRoomId;
+
 // tradeRoomId 조회를 위함!
 let tradeRoomId;
 
@@ -185,6 +188,13 @@ io.on('connection', (socket)=>{
 
 	});
 
+//거래 세팅 알림 및 실시간 통신
+	//거래 세팅 방 입장
+	socket.on('joinTradeSetRoom',(chatRoom)=>{
+		socket.join(chatRoom);
+		console.log("tradeRoom 실행됐다!! 방 번호 : " + chatRoom);
+		tradeSetRoomId = chatRoom;
+	});
 
 
 	// 거래 종료 제안
@@ -230,8 +240,8 @@ io.on('connection', (socket)=>{
 
 
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래제안 출력해야돼!")
-		socket.join(tradeRoomId);
-		socket.broadcast.to(tradeRoomId).emit('suggest trade to client');
+		socket.join(tradeSetRoomId);
+		socket.broadcast.to(tradeSetRoomId).emit('suggest trade to client');
 
 		const message = {
 			notification: {
@@ -307,8 +317,8 @@ io.on('connection', (socket)=>{
 
 
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래동의 출력해야돼!")
-		socket.join(tradeRoomId);
-		socket.broadcast.to(tradeRoomId).emit('end trade to client');
+		socket.join(tradeSetRoomId);
+		socket.broadcast.to(tradeSetRoomId).emit('end trade to client');
 
 		const message = {
 			notification: {
@@ -623,9 +633,9 @@ io.on('connection', (socket)=>{
 		}
 
 
-		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래종료동의 출력해야돼!")
-		socket.join(chatRoomId);
-		socket.broadcast.to(chatRoomId).emit('delete trade to client');
+		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래삭제 출력해야돼!")
+		socket.join(tradeSetRoomId);
+		socket.broadcast.to(tradeSetRoomId).emit('delete trade to client');
 
 		const message = {
 			notification: {
