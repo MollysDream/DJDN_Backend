@@ -54,7 +54,8 @@ router.post("/join", async (req, res) => {
                                     name: req.body.name,
                                     nickname: req.body.nickname,
                                     password: key.toString("base64"),
-                                    salt: buf.toString("base64")
+                                    salt: buf.toString("base64"),
+                                    phoneNumber: req.body.phoneNumber
                                 };
                                 user = new User(obj);
                                 await user.save();
