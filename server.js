@@ -318,7 +318,7 @@ io.on('connection', (socket)=>{
 
 		console.log("이제 다시 클라이언트에게 보낸다. 프론트에서 받은 거래동의 출력해야돼!")
 		socket.join(tradeSetRoomId);
-		socket.broadcast.to(tradeSetRoomId).emit('end trade to client');
+		socket.broadcast.to(tradeSetRoomId).emit('agree trade to client');
 
 		const message = {
 			notification: {
