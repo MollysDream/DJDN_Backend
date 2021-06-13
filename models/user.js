@@ -23,7 +23,7 @@ const userSchema=new user_Schema({
     },
     phoneNumber:{
         type:String,
-        required: true
+        // required: true
     },
     rating:{
         type:Number,
@@ -80,7 +80,7 @@ const userSchema=new user_Schema({
 userSchema
 .pre('save', function(next){
   this.averageRating = this.rating/this.ratingCount
-  next();   
+  next();
 });
 
 userSchema
@@ -89,8 +89,8 @@ userSchema
   const update = this.getUpdate();
   console.log("업데이트된 점수 확인 "+update.$inc.rating);
   this.update({},{averageRating: update.$inc.rating/update.$inc.ratingCount});
-  
-  next();   
+
+  next();
 });
 
 // userSchema.plugin(mongooseAutoInc.plugin, 'user');
