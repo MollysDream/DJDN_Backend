@@ -67,7 +67,7 @@ const userSchema=new user_Schema({
     },
     profileImage:{
         type:String,
-        default:'https://mollysdreampostdata.s3.ap-northeast-2.amazonaws.com/%EC%95%84%EC%9D%B4%EC%BD%98/default-image.jpg'
+        default:'https://mollysdreampostdata.s3.ap-northeast-2.amazonaws.com/---%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80---/DefaultImage/default-image.jpg'
     },
     keyword:[{
         type:String,
