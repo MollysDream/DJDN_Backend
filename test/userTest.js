@@ -20,6 +20,9 @@ describe.skip('Drop all collections before each test',()=>{
 
 
 describe('Test for login', ()=>{
+
+    let userId;
+
     it('Saves a user to the DB',()=>{
         let sampleTrade = new User({
             nickname:'mochaTestUser',
@@ -30,6 +33,7 @@ describe('Test for login', ()=>{
         });
         sampleTrade.save().then(()=>{
             assert(sampleTrade.isNew === false);
+           userId = res._id;
             // console.log(sampleTrade);
             done();
         });
@@ -41,8 +45,8 @@ describe('Test for login', ()=>{
           password: 'qwerty1234@@'
         })
         .then((res)=>{
-          console.log('test 출력! '+ res.body.email);
-          expect(res.body.email).to.equal('mochaTestUser@ajou.ac.kr');
+          console.log("로그인 확인");
+          expect(res.body.user_id).to.equal(userId);
           done();
         })
         .catch((err)=> done(err));
@@ -61,6 +65,8 @@ describe('Test for login', ()=>{
 describe('Test for POST /join',()=>{
 
     let userId;
+    let email ='mochaTest@ajou.ac.kr';
+    let name;
 
     it('회원가입 확인',(done)=>{
         request(app).post('/member/join')
@@ -71,20 +77,29 @@ describe('Test for POST /join',()=>{
                 nickname: 'mochaTest'
             })
             .then((res)=>{
-                userId = res._id;
-                console.log(res.name);
-                expect(res.name).equal("mochaTest");
+                // console.log(userId);
+                // expect(name).equal("mochaTest");
                 done();
             })
             .catch((err)=> done(err));
+
+
+        request(app).post('/point/createPoint')
+          .send({
+            email: email
+          }).then((res)=>{
+            console.log("무야호!!"+res.data);
+            expect(res.data).equal(0)
+        })
     }) ;
 
     it('Point 생성 확인',(done)=>{
 
         request(app).get('/point/getPointById')
           .then((res)=>{
+              console.log(userId)
               expect(res.user_id).equal(userId);
-              expect(res.point).equal(0);
+              // expect(res.point).equal(0);
               done();
           })
           .catch((err)=> done(err));
