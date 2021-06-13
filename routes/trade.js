@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 // 거래 조회
 router.post('/getTrade', async(req, res) => {
-    
+
     try{
         console.log(`/trade/getTrade/서버통신 : trade 조회`)
 
@@ -21,17 +21,17 @@ router.post('/getTrade', async(req, res) => {
         } else{
             console.log("거래가 없어요...")
         }
-        
+
     } catch(err){
         console.log(err);
     }
 
-    
+
 });
 
 // 종료 혹은 종료 제안된 거래 조회
 router.post('/getEndTrade', async(req, res) => {
-    
+
     try{
         console.log(`/trade/getEndTrade/서버통신 : trade 조회`)
 
@@ -48,7 +48,7 @@ router.post('/getEndTrade', async(req, res) => {
         } else{
             console.log("종료 혹은 종료 제안된 거래가 없어요...")
         }
-        
+
     } catch(err){
         console.log(err);
     }
@@ -128,7 +128,7 @@ router.post('/agreeTrade',async (req, res) =>{
             { _id: tradeId },
                 {
                   $set: {
-                      isSave:true   
+                      isSave:true
                 }
             }
         );
@@ -154,7 +154,7 @@ router.post('/updateTradeTime',async (req, res) =>{
             { _id: tradeId },
                 {
                   $set: {
-                      endTime:endTime   
+                      endTime:endTime
                 }
             }
         );
@@ -185,7 +185,7 @@ router.post('/endSuggestTrade',async (req, res) => {
                     $set: {
                       completeSuggest:true,
                       sender: sender,
-                      receiver: receiver 
+                      receiver: receiver
                 }
             }
         );
@@ -213,7 +213,7 @@ router.post('/endTrade',async (req, res) => {
             { _id: tradeId },
                 {
                     $set: {
-                      complete:true  
+                      complete:true
                 }
             }
         );
@@ -246,21 +246,38 @@ router.post('/userRate', async(req, res) => {
         let {userId, rate} = req.body;
         console.log(`평가할 유저 ID:${userId} `);
 
-        await User.update(
-            { _id: userId },
-                {
+
+
+        let originalData = await User.findOne({_id: userId});
+          // .then((data)=>{
+          //     // console.log("찾았다!!");
+          //     // console.log("data.rating!! " + data.rating);
+          //     // console.log("data!! " + data);
+          // });
+        console.log("originalData "+ originalData);
+        let ratingFromOriginal = originalData.rating;
+        let ratingCountFromOriginal = originalData.ratingCount;
+
+        console.log("원래 rating " +ratingFromOriginal);
+        console.log("원래 ratingCount "+ratingCountFromOriginal);
+
+        await User.findOneAndUpdate(
+          { _id: userId},
+          {
                     $inc: {
                       rating: rate,
                       ratingCount: 1
-                },
-            },
-            {upsert: true, new: true,setDefaultsOnInsert: true},
+                    }, $set: {
+                        averageRating:(ratingFromOriginal+rate)/(ratingCountFromOriginal+1)
+                    }
+                    },
+            {returnNewDocument: true}
         );
 
         // await Trade.remove({
         //     _id:req.body.tradeId
         // });
-        
+
         res.json({message:"사용자 평가를 완료했습니다."});
     } catch (err){
         console.log(err);

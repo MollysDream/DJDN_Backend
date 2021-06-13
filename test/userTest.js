@@ -101,7 +101,20 @@ describe('Test for POST /join',()=>{
 
 });
 
-
+describe('사용자 평가 테스트',()=>{
+  it('사용자 평가 테스트',(done)=>{
+    request(app).post('/trade/userRate')
+      .send({
+        userId:"60c5a52cca12c958f8a3e04d" ,
+        rate: 3.7
+      })
+      .then((res)=>{
+        // console.log(res.message);
+        done();
+      })
+      .catch((err)=> done(err));
+  });
+});
 
 
 
