@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www", 
-    "test": "mocha ./test/connectionTest.js test/postTest.js test/tradeTest.js --exit"
+    "start": "nodemon ./bin/www",
+    "test": "mocha ./test/connectionTest.js test/userTest.js test/pointTest.js test/postTest.js test/tradeTest.js --exit"
   },
   "dependencies": {
     "axios": "^0.21.1",

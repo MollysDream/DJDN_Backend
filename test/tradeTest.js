@@ -10,7 +10,7 @@ const expect = require('chai').expect;
 mongoose.set('useCreateIndex', true)
 
 
-describe('Drop all collections before each test',()=>{
+describe.skip('Drop all collections before each test',()=>{
     it('Before start, drop all collections',(done)=>{
         // Drop the collection
         mongoose.connection.collections.trades.drop(()=>{

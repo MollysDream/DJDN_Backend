@@ -47,9 +47,21 @@ describe('Drop all collections before each test',()=>{
 
     it.skip('Before start, drop all collections',(done)=>{
         // Drop the collection
+        mongoose.connection.collections.addresses.drop(()=>{
+        });
+        mongoose.connection.collections.advertisements.drop(()=>{
+        });
+        mongoose.connection.collections.chatrooms.drop(()=>{
+        });
+        mongoose.connection.collections.chats.drop(()=>{
+        });
         mongoose.connection.collections.categories.drop(()=>{
         });
+        mongoose.connection.collections.points.drop(()=>{
+        });
         mongoose.connection.collections.posts.drop(()=>{
+        });
+        mongoose.connection.collections.reports.drop(()=>{
         });
         mongoose.connection.collections.users.drop(()=>{
         });
