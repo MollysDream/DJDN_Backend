@@ -9,7 +9,7 @@ const expect = require('chai').expect;
 mongoose.set('useCreateIndex', true)
 
 
-describe('Drop all collections before each test',()=>{
+describe.skip('Drop all collections before each test',()=>{
     it('Before start, drop all collections',(done)=>{
         // Drop the collection
         mongoose.connection.collections.users.drop(()=>{
@@ -19,7 +19,7 @@ describe('Drop all collections before each test',()=>{
 });
 
 
-describe('Create a User instance', ()=>{
+describe('Test for login', ()=>{
     it('Saves a user to the DB',()=>{
         let sampleTrade = new User({
             nickname:'mochaTestUser',
@@ -34,6 +34,27 @@ describe('Create a User instance', ()=>{
             done();
         });
     });
+    it('Login Ok, fine',(done)=>{
+      request(app).post('/member/login')
+        .send({
+          email: 'mochaTestUser@ajou.ac.kr',
+          password: 'qwerty1234@@'
+        })
+        .then((res)=>{
+          console.log('test 출력! '+ res.body.email);
+          expect(res.body.email).to.equal('mochaTestUser@ajou.ac.kr');
+          done();
+        })
+        .catch((err)=> done(err));
+    }) ;
+
+    it('생성한 데이터 삭제',(done)=>{
+      mongoose.connection.collections.users.deleteOne({email:'mochaTestUser@ajou.ac.kr' })
+        .then(()=>{
+          done();
+        });
+    });
+
 });
 
 // 회원가입 테스트
@@ -80,46 +101,8 @@ describe('Test for POST /join',()=>{
 
 });
 
-// 로그인 테스트
-describe('Test for POST /login',()=>{
-    it('Login Ok, fine',(done)=>{
-        request(app).post('/member/login')
-            .send({
-                email: 'user1@ajou.ac.kr',
-                password: 'qwerty1234@@'
-            })
-            .then((res)=>{
-                // const body = res.body;
-                // console.log(body);
-                console.log('test 출력! '+ res.body.email);
-                // console.log(res.json);
-                // expect(body.length).to.equal(1);
-                done();
-            })
-            .catch((err)=> done(err));
-    }) ;
-});
 
-// describe.skip('Post /createPost',()=>{
-//     it('Ok, fine',(done)=>{
-//         request(app).post('/data/createPost')
-//             .send({   title : "몰리 산책시키기22",
-//                 price : 123,
-//                 category : ['애완동물'],
-//                 tag : ['몰리','산책','귀여움','사나움'],
-//                 view : 3,
-//                 date : Date.now() })
-//             .expect(200)
-//             // .expect({ title: "몰리 산책시키기22" })
-//             .then((res)=>{
-//                 const body = res.body;
-//                 console.log(body);
-//                 expect(body.title).equal("몰리 산책시키기22");
-//                 done();
-//             })
-//             .catch((err)=> done(err));
-//     }) ;
-// });
+
 
 
 
