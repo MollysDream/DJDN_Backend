@@ -39,10 +39,6 @@ const postSchema=new post_Schema({
         default:Date.now,
         required: true
     },
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'chatRoom'
-    },
     latitude:{
         type:String,
     },

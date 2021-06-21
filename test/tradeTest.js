@@ -10,6 +10,9 @@ const expect = require('chai').expect;
 mongoose.set('useCreateIndex', true)
 
 
+let tradeId;
+let chatRoomId="60b61f41126c7956909bf627";
+
 describe.skip('Drop all collections before each test',()=>{
     it('Before start, drop all collections',(done)=>{
         // Drop the collection
@@ -23,11 +26,12 @@ describe.skip('Drop all collections before each test',()=>{
 
 
 // ++ 테스트용 User 2명이상, Post 1개 이상 생성할것
-describe('Create a Trade instance , 2 User instances , and 1 Post instance', ()=>{
+describe.skip('샘플 거래 생성', ()=>{
 
     var userId1 = mongoose.Types.ObjectId().toString();
     let userId2 = mongoose.Types.ObjectId().toString();
     let postId = mongoose.Types.ObjectId().toString();
+
 
 
     console.log(userId1 +"   " +typeof userId1);
@@ -96,7 +100,6 @@ describe('Create a Trade instance , 2 User instances , and 1 Post instance', ()=
             complete: false,
             userList:[userId1, `${userId2}`],
             post:'60938df57ff84e3f14cf8a59'
-            // post: post
         });
 
         console.log(userId1);
@@ -108,28 +111,66 @@ describe('Create a Trade instance , 2 User instances , and 1 Post instance', ()=
     });
 });
 
+describe('거래 생성 테스트',()=>{
+  it('거래 생성 확인',(done)=>{
+    request(app).post('/trade/createTradeTime')
+      .send({
+        startTime:"2021-6-3 23:4",
+        endTime:"2021-6-4 2:9",
+        location:"경기도 수원시 팔달구 우만동",
+        sender:"60a47cabcff1311284a10d98",
+        receiver:"60b34977c60fab5aa479d220",
+        chatRoom:"60b61f41126c7956909bf627",
+        longitude:127.03977524357128,
+        latitude:37.277006254746084
+      })
+      .then((res)=>{
+        const body = res.body;
+        done();
+      })
+      .catch((err)=> done(err));
+  }) ;
 
-describe('GET /getTrade',()=>{
-    it('Ok, fine',(done)=>{
+  mongoose.connection.collections.trades.findOne({chatRoom:'60b61f41126c7956909bf627' })
+    .then((res)=>{
+      tradeId = res._id;
+      chatRoomId = res.chatRoom;
+      done();
+    });
+});
+
+
+describe('거래 조회 테스트',()=>{
+    it('거래 조회 확인',(done)=>{
         request(app).get('/trade/getTrade')
-            .then((res)=>{
+          .send({chatRoomId})
+          .then((res)=>{
                 const body = res.body;
                 console.log(body);
-                // expect(body.userList).to.equal(1);
                 done();
-            })
-            .catch((err)=> done(err));
+          })
+          .catch((err)=> done(err));
     }) ;
 });
 
-describe('POST /updateTradeTime',()=>{
-  it('Ok, fine',(done)=>{
-    request(app).get('/trade/getTrade')
-      .send()
+describe('거래 시간 연장 테스트',()=>{
+  it('거래 시간 연장',(done)=>{
+    request(app).post('/trade/updateTradeTime')
+      .send({tradeId:tradeId,endTime:'2021-6-4 2:19'})
       .then((res)=>{
-        const body = res.body;
-        console.log(body);
-        // expect(body.userList).to.equal(1);
+
+        done();
+      })
+      .catch((err)=> done(err));
+  }) ;
+});
+
+describe('거래 완료 테스트',()=>{
+  it('거래 완료 확인',(done)=>{
+    request(app).post('/trade/endSuggestTrade')
+      .send({tradeId:tradeId,sender:'60a47cabcff1311284a10d98',receiver:'60b34977c60fab5aa479d220'})
+      .then((res)=>{
+
         done();
       })
       .catch((err)=> done(err));
